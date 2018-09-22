@@ -1,0 +1,176 @@
+buildscript {
+    repositories {
+        maven { url 'https://nexus.vemilyus.com/repository/maven-all/' }
+    }
+    dependencies {
+        //noinspection DifferentKotlinGradleVersion
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
+        classpath "net.researchgate:gradle-release:$releasePluginVersion"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'java'
+
+apply plugin: 'jacoco'
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+apply plugin: "net.researchgate.release"
+apply plugin: 'org.jetbrains.dokka'
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir 'src'
+            srcDir 'src-gen'
+        }
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+            srcDir 'resources-gen'
+        }
+    }
+    test {
+        kotlin {
+            srcDir 'test'
+        }
+        java {
+            srcDir 'test'
+        }
+        resources {
+            srcDir 'test-resources'
+        }
+    }
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
+        kotlinOptions.jvmTarget = '11'
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '11'
+}
+
+repositories {
+    maven { url 'https://nexus.vemilyus.com/repository/maven-all/' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+
+    testCompile "ch.qos.logback:logback-classic:$logbackVersion"
+
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+}
+
+detekt {
+    input = files('src')
+    config = files('detekt.yml')
+    filters = '.*test.*,.*/resources/.*,.*/tmp/.*'
+
+    reports {
+        xml {
+            enabled = true
+            destination = file("$buildDir/reports/detekt.xml")
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/test.exec")
+    }
+}
+
+release {
+    tagTemplate = 'v$version'
+}
+
+dokka {
+    moduleName = project.name
+
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/kdoc"
+
+    jdkVersion = 11
+
+    impliedPlatforms = ["JVM"]
+
+    noStdlibLink = false
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+task packageJavadoc(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
+}
+
+task packageSources(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts.archives packageSources
+
+publishing {
+    publications {
+        mavenProject(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            artifact packageSources {
+                classifier 'sources'
+            }
+
+            artifact packageJavadoc {
+                classifier 'javadoc'
+            }
+        }
+    }
+
+    def nexusUser = project.hasProperty('nexusUser') ? project.property('nexusUser') : System.getenv('NEXUS_USER')
+    def nexusPass = project.hasProperty('nexusPass') ? project.property('nexusPass') : System.getenv('NEXUS_PASS')
+
+    if (nexusUser != null && nexusPass != null) {
+        repositories {
+            maven {
+                name 'vemilyus-nexus'
+
+                if (project.version.endsWith('-SNAPSHOT'))
+                    url 'https://nexus.vemilyus.com/repository/snapshots/'
+                else
+                    url 'https://nexus.vemilyus.com/repository/releases/'
+
+                credentials(PasswordCredentials) {
+                    username nexusUser
+                    password nexusPass
+                }
+            }
+        }
+    }
+}
