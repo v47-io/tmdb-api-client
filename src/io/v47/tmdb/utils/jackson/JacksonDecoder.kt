@@ -35,8 +35,6 @@ internal class JacksonDecoder(private val objectMapper: ObjectMapper) {
         val parser = objectMapper.factory.createNonBlockingByteArrayParser()
         val tokenizer = JacksonTokenizer(parser, parseAsArray)
 
-
-
         return Flowable.fromPublisher(input)
                 .flatMap(tokenizer::tokenize, tokenizer::error, tokenizer::endOfInput)
     }
