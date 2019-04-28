@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.msgpack.jackson.dataformat.MessagePackFactory
 
-private val objectMapper = ObjectMapper(MessagePackFactory())
+private val objectMapper = ObjectMapper(MessagePackFactory()).apply {
+    findAndRegisterModules()
+}
 
 fun pack(value: Any): ByteArray =
     objectMapper.writeValueAsBytes(value)

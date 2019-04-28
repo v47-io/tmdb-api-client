@@ -82,6 +82,7 @@ dependencies {
 
     testImplementation libraries.logback
 
+    testImplementation libraries.ehcache
     testImplementation libraries.reflect
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.junitApi

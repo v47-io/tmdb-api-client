@@ -16,6 +16,7 @@ ext {
     zeroAllocationHashingVersion = '0.9'
 
     // Testing Libraries
+    ehcacheVersion = '3.7.0'
     mockitoKotlinVersion = '2.1.0'
     junitJupiterVersion = '5.4.0'
     logbackVersion = '1.2.3'
@@ -45,6 +46,7 @@ ext {
             zeroAllocationHashing: "net.openhft:zero-allocation-hashing:$zeroAllocationHashingVersion",
 
             // Testing Libraries
+            ehcache: "org.ehcache:ehcache:$ehcacheVersion",
             mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion",
             junitApi: "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
             junitEngine: "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",

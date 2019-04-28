@@ -35,7 +35,7 @@ internal class TmdbClientResilience(
     circuitBreakerRegistry: CircuitBreakerRegistry?,
     rateLimiterRegistry: RateLimiterRegistry?,
     private val retryConfig: RetryConfig?,
-    cache: Cache<ByteArray, ByteArray>?,
+    cache: Cache<String, ByteArray>?,
     timeLimiterConfig: TimeLimiterConfig?
 ) {
     private val jacksonDecoder = JacksonDecoder(objectMapper)
@@ -76,8 +76,8 @@ internal class TmdbClientResilience(
                     )
                 )
                 .flatMap { Flowable.fromPublisher(it) }
-                .lift(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker("tmdb-api")))
                 .lift(RateLimiterOperator.of(rateLimiterRegistry.rateLimiter("tmdb-api")))
+                .lift(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker("tmdb-api")))
                 .compose(RetryTransformer.of(createRetry("tmdb-api")))
                 .onErrorResumeNext { throwable: Throwable ->
                     runCatching { cache?.computeIfAbsent(httpRequest, noSuchElement()) }
@@ -86,7 +86,7 @@ internal class TmdbClientResilience(
                         .fold(
                             { ba ->
                                 usingCachedResult = true
-                                Flowable.fromIterable(unpack(ba))
+                                Flowable.fromIterable(unpack<Iterable<CachedHttpResponse>>(ba))
                             },
                             { x ->
                                 throwable.addSuppressed(x)
@@ -99,8 +99,8 @@ internal class TmdbClientResilience(
                         httpResponsesToCache += next
                 }
                 .doOnComplete {
-                    if (cache != null && !usingCachedResult)
-                        cache.computeIfAbsent(httpRequest, CheckedFunction0 { httpResponsesToCache as Any })
+                    if (!usingCachedResult)
+                        cache?.computeIfAbsent(httpRequest, CheckedFunction0 { httpResponsesToCache as Any })
                 }
         }
 
@@ -134,4 +134,32 @@ internal class TmdbClientResilience(
             ?: Retry.ofDefaults(name)
 
     private fun noSuchElement(): CheckedFunction0<Any> = CheckedFunction0 { throw NoSuchElementException() }
+
+    private data class CachedHttpResponse(
+        override val status: Int,
+        override val headers: Map<String, List<String>>,
+        override val body: ByteArray?
+    ) : HttpResponse {
+        @Suppress("ComplexMethod")
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is HttpResponse) return false
+
+            if (status != other.status) return false
+            if (headers != other.headers) return false
+            if (body != null) {
+                if (other.body == null) return false
+                if (!body.contentEquals(other.body!!)) return false
+            } else if (other.body != null) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = status
+            result = 31 * result + headers.hashCode()
+            result = 31 * result + (body?.contentHashCode() ?: 0)
+            return result
+        }
+    }
 }

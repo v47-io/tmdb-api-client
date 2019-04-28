@@ -16,7 +16,7 @@ class TmdbClient(
     circuitBreakerRegistry: CircuitBreakerRegistry? = null,
     rateLimiterRegistry: RateLimiterRegistry? = null,
     private val retryConfig: RetryConfig? = null,
-    cache: Cache<ByteArray, ByteArray>? = null,
+    cache: Cache<String, ByteArray>? = null,
     timeLimiterConfig: TimeLimiterConfig? = null
 ) {
     private val resilience =
