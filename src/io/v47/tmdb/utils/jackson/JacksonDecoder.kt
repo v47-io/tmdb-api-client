@@ -3,7 +3,6 @@
 package io.v47.tmdb.utils.jackson
 
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.core.async.ByteArrayFeeder
 import com.fasterxml.jackson.core.type.TypeReference
@@ -11,13 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.util.TokenBuffer
 import io.reactivex.Flowable
 import org.reactivestreams.Publisher
-import java.io.IOException
 import java.lang.reflect.ParameterizedType
 
 internal class JacksonDecoder(private val objectMapper: ObjectMapper) {
     fun <T : Any> decode(input: Publisher<ByteArray>, resultType: TypeReference<T>): Publisher<T> {
-        val parseAsArray = isIterableType(resultType)
-        val tokens = tokenize(input, parseAsArray)
+        val tokenizeAsArray = isIterableType(resultType)
+        val tokens = JacksonTokenizer.tokenize(input, objectMapper, tokenizeAsArray)
 
         val reader = objectMapper.readerFor(resultType)
 
@@ -31,14 +29,6 @@ internal class JacksonDecoder(private val objectMapper: ObjectMapper) {
         }
     }
 
-    private fun tokenize(input: Publisher<ByteArray>, parseAsArray: Boolean): Publisher<TokenBuffer> {
-        val parser = objectMapper.factory.createNonBlockingByteArrayParser()
-        val tokenizer = JacksonTokenizer(parser, parseAsArray)
-
-        return Flowable.fromPublisher(input)
-                .flatMap(tokenizer::tokenize, tokenizer::error, tokenizer::endOfInput)
-    }
-
     private fun isIterableType(typeRef: TypeReference<*>): Boolean {
         val baseType = when {
             typeRef.type is Class<*> -> typeRef.type as Class<*>
@@ -50,39 +40,39 @@ internal class JacksonDecoder(private val objectMapper: ObjectMapper) {
     }
 }
 
-private class JacksonTokenizer(private val parser: JsonParser, private val parseAsArray: Boolean = false) {
+private class JacksonTokenizer(private val parser: JsonParser, private val tokenizeAsArray: Boolean = false) {
+    companion object {
+        fun tokenize(
+            input: Publisher<ByteArray>,
+            objectMapper: ObjectMapper,
+            tokenizeAsArray: Boolean
+        ): Publisher<TokenBuffer> {
+            val parser = objectMapper.factory.createNonBlockingByteArrayParser()
+            val tokenizer = JacksonTokenizer(parser, tokenizeAsArray)
+            return Flowable.fromPublisher(input)
+                .concatMapIterable(tokenizer::tokenize).concatWith(tokenizer.endOfInput())
+        }
+    }
+
     private var tokenBuffer = TokenBuffer(parser)
     private val inputFeeder = parser.nonBlockingInputFeeder as ByteArrayFeeder
 
     private var arrayDepth = 0
     private var objectDepth = 0
 
-    fun tokenize(bytes: ByteArray): Publisher<TokenBuffer> {
-        return try {
-            inputFeeder.feedInput(bytes, 0, bytes.size)
-            parseTokenBuffer()
-        } catch (x: JsonProcessingException) {
-            error(x)
-        } catch (x: IOException) {
-            error(x)
-        }
+    fun tokenize(bytes: ByteArray): List<TokenBuffer> {
+        inputFeeder.feedInput(bytes, 0, bytes.size)
+        return parseTokenBuffer()
     }
 
     fun endOfInput(): Publisher<TokenBuffer> {
-        this.inputFeeder.endOfInput()
-        return try {
-            parseTokenBuffer()
-        } catch (x: JsonProcessingException) {
-            error(x)
-        } catch (x: IOException) {
-            error(x)
+        return Flowable.defer {
+            this.inputFeeder.endOfInput()
+            Flowable.fromIterable(parseTokenBuffer())
         }
     }
 
-    fun error(throwable: Throwable): Publisher<TokenBuffer> =
-            Flowable.error(throwable)
-
-    private fun parseTokenBuffer(): Publisher<TokenBuffer> {
+    private fun parseTokenBuffer(): List<TokenBuffer> {
         val result = mutableListOf<TokenBuffer>()
 
         while (true) {
@@ -95,7 +85,7 @@ private class JacksonTokenizer(private val parser: JsonParser, private val parse
             processToken(token, result)
         }
 
-        return Flowable.fromIterable(result)
+        return result
     }
 
     private fun updateDepth(token: JsonToken) {
@@ -110,13 +100,13 @@ private class JacksonTokenizer(private val parser: JsonParser, private val parse
 
     @Suppress("ComplexCondition")
     private fun processToken(token: JsonToken, result: MutableList<TokenBuffer>) {
-        if (parseAsArray || arrayDepth != 1 || token != JsonToken.START_ARRAY)
+        if (tokenizeAsArray || arrayDepth != 1 || token != JsonToken.START_ARRAY)
             tokenBuffer.copyCurrentEvent(parser)
 
         if (
-                (parseAsArray && token == JsonToken.END_ARRAY && arrayDepth == 0 && objectDepth == 0) ||
-                (((!parseAsArray && token == JsonToken.END_OBJECT) || token.isScalarValue) &&
-                        objectDepth == 0 && (arrayDepth == 0 || arrayDepth == 1))
+            (tokenizeAsArray && token == JsonToken.END_ARRAY && arrayDepth == 0 && objectDepth == 0) ||
+            (((!tokenizeAsArray && token == JsonToken.END_OBJECT) || token.isScalarValue) &&
+                    objectDepth == 0 && (arrayDepth == 0 || arrayDepth == 1))
         ) {
             result.add(tokenBuffer)
             tokenBuffer = TokenBuffer(parser)
