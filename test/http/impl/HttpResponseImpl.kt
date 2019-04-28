@@ -3,9 +3,9 @@ package io.v47.tmdb.http.impl
 import io.v47.tmdb.http.HttpResponse
 
 data class HttpResponseImpl(
-        override val status: Int,
-        override val headers: Map<String, List<String>> = emptyMap(),
-        override val body: ByteArray? = null
+    override val status: Int,
+    override val headers: Map<String, List<String>> = emptyMap(),
+    override val body: ByteArray? = null
 ) : HttpResponse {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

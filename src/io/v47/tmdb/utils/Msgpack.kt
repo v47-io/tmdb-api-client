@@ -8,10 +8,10 @@ import org.msgpack.jackson.dataformat.MessagePackFactory
 private val objectMapper = ObjectMapper(MessagePackFactory())
 
 fun pack(value: Any): ByteArray =
-        objectMapper.writeValueAsBytes(value)
+    objectMapper.writeValueAsBytes(value)
 
 fun <T : Any> unpack(value: ByteArray, targetType: TypeReference<T>): T =
-        objectMapper.readValue(value, targetType)
+    objectMapper.readValue(value, targetType)
 
 inline fun <reified T : Any> unpack(value: ByteArray): T =
-        unpack(value, jacksonTypeRef())
+    unpack(value, jacksonTypeRef())

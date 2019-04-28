@@ -20,6 +20,7 @@ import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.HttpResponse
 import io.v47.tmdb.utils.jackson.JacksonDecoder
 import io.v47.tmdb.utils.unpack
+import io.v47.tmdb.utils.vavr.invoke
 import io.vavr.CheckedFunction0
 import org.reactivestreams.Publisher
 import java.time.Duration
@@ -29,108 +30,108 @@ import java.util.function.Supplier
 private val emptyByteArray = ByteArray(0)
 
 internal class TmdbClientResilience(
-        private val httpClient: HttpClient,
-        objectMapper: ObjectMapper,
-        circuitBreakerRegistry: CircuitBreakerRegistry?,
-        rateLimiterRegistry: RateLimiterRegistry?,
-        private val retryConfig: RetryConfig?,
-        cache: Cache<ByteArray, ByteArray>?,
-        timeLimiterConfig: TimeLimiterConfig?
+    private val httpClient: HttpClient,
+    objectMapper: ObjectMapper,
+    circuitBreakerRegistry: CircuitBreakerRegistry?,
+    rateLimiterRegistry: RateLimiterRegistry?,
+    private val retryConfig: RetryConfig?,
+    cache: Cache<ByteArray, ByteArray>?,
+    timeLimiterConfig: TimeLimiterConfig?
 ) {
     private val jacksonDecoder = JacksonDecoder(objectMapper)
 
     private val circuitBreakerRegistry =
-            circuitBreakerRegistry ?: CircuitBreakerRegistry.ofDefaults()
+        circuitBreakerRegistry ?: CircuitBreakerRegistry.ofDefaults()
 
     @Suppress("MagicNumber")
     private val rateLimiterRegistry =
-            rateLimiterRegistry ?: RateLimiterRegistry.of(
-                    RateLimiterConfig.custom()
-                            .limitForPeriod(4)
-                            .limitRefreshPeriod(Duration.ofSeconds(1))
-                            .build()
-            )
+        rateLimiterRegistry ?: RateLimiterRegistry.of(
+            RateLimiterConfig.custom()
+                .limitForPeriod(4)
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .build()
+        )
 
     private val cache = cache?.let { PackedCache(it) }
 
     @Suppress("MagicNumber")
     private val timeLimiter =
-            timeLimiterConfig?.let { TimeLimiter.of(it) }
-                    ?: TimeLimiter.of(Duration.ofSeconds(3))
+        timeLimiterConfig?.let { TimeLimiter.of(it) }
+            ?: TimeLimiter.of(Duration.ofSeconds(3))
 
     fun decorate(httpRequest: HttpRequest): CheckedFunction0<Publisher<HttpResponse>> =
-            CheckedFunction0 {
-                var usingCachedResult = false
-                val httpResponsesToCache = mutableListOf<HttpResponse>()
+        CheckedFunction0 {
+            var usingCachedResult = false
+            val httpResponsesToCache = mutableListOf<HttpResponse>()
 
-                Flowable
-                        .fromCallable(
-                                TimeLimiter.decorateFutureSupplier(
-                                        timeLimiter,
-                                        Supplier {
-                                            CompletableFuture.supplyAsync {
-                                                httpClient.execute(httpRequest)
-                                            }
-                                        }
-                                )
+            Flowable
+                .fromCallable(
+                    TimeLimiter.decorateFutureSupplier(
+                        timeLimiter,
+                        Supplier {
+                            CompletableFuture.supplyAsync {
+                                httpClient.execute(httpRequest)
+                            }
+                        }
+                    )
+                )
+                .flatMap { Flowable.fromPublisher(it) }
+                .lift(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker("tmdb-api")))
+                .lift(RateLimiterOperator.of(rateLimiterRegistry.rateLimiter("tmdb-api")))
+                .compose(RetryTransformer.of(createRetry("tmdb-api")))
+                .onErrorResumeNext { throwable: Throwable ->
+                    runCatching { cache?.computeIfAbsent(httpRequest, noSuchElement()) }
+                        .recoverCatching { if (it is NoSuchElementException) null else throw it }
+                        .mapCatching { it ?: throw NoSuchElementException() }
+                        .fold(
+                            { ba ->
+                                usingCachedResult = true
+                                Flowable.fromIterable(unpack(ba))
+                            },
+                            { x ->
+                                throwable.addSuppressed(x)
+                                Flowable.error(throwable)
+                            }
                         )
-                        .flatMap { Flowable.fromPublisher(it) }
-                        .lift(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker("tmdb-api")))
-                        .lift(RateLimiterOperator.of(rateLimiterRegistry.rateLimiter("tmdb-api")))
-                        .compose(RetryTransformer.of(createRetry("tmdb-api")))
-                        .onErrorResumeNext { throwable: Throwable ->
-                            runCatching { cache?.computeIfAbsent(httpRequest, noSuchElement()) }
-                                    .recoverCatching { if (it is NoSuchElementException) null else throw it }
-                                    .mapCatching { it ?: throw NoSuchElementException() }
-                                    .fold(
-                                            { ba ->
-                                                usingCachedResult = true
-                                                Flowable.fromIterable(unpack(ba))
-                                            },
-                                            { x ->
-                                                throwable.addSuppressed(x)
-                                                Flowable.error(throwable)
-                                            }
-                                    )
-                        }
-                        .doOnNext { next ->
-                            if (cache != null && !usingCachedResult)
-                                httpResponsesToCache += next
-                        }
-                        .doOnComplete {
-                            if (cache != null && !usingCachedResult)
-                                cache.computeIfAbsent(httpRequest, CheckedFunction0 { httpResponsesToCache as Any })
-                        }
-            }
+                }
+                .doOnNext { next ->
+                    if (cache != null && !usingCachedResult)
+                        httpResponsesToCache += next
+                }
+                .doOnComplete {
+                    if (cache != null && !usingCachedResult)
+                        cache.computeIfAbsent(httpRequest, CheckedFunction0 { httpResponsesToCache as Any })
+                }
+        }
 
     fun <R : Any> decorate(
-            httpRequest: HttpRequest,
-            resultType: TypeReference<R>
+        httpRequest: HttpRequest,
+        resultType: TypeReference<R>
     ): CheckedFunction0<Publisher<Pair<HttpResponse, R?>>> =
-            CheckedFunction0 {
-                val raw = decorate(httpRequest).apply()
-                var firstResponse: HttpResponse? = null
+        CheckedFunction0 {
+            val raw = decorate(httpRequest)()
+            var firstResponse: HttpResponse? = null
 
-                val flowable = Flowable.fromPublisher(raw)
-                        .doOnNext {
-                            if (firstResponse == null)
-                                firstResponse = it
-                        }
-                        .map { it.body ?: emptyByteArray }
+            val flowable = Flowable.fromPublisher(raw)
+                .doOnNext {
+                    if (firstResponse == null)
+                        firstResponse = it
+                }
+                .map { it.body ?: emptyByteArray }
 
-                Flowable.fromPublisher(
-                        jacksonDecoder.decode(
-                                flowable,
-                                resultType
-                        )
+            Flowable.fromPublisher(
+                jacksonDecoder.decode(
+                    flowable,
+                    resultType
                 )
-                        .map { firstResponse!! to it as R? }
-                        .switchIfEmpty(Flowable.fromCallable { firstResponse!! to null })
-            }
+            )
+                .map { firstResponse!! to it as R? }
+                .switchIfEmpty(Flowable.fromCallable { firstResponse!! to null })
+        }
 
     private fun createRetry(name: String) =
-            retryConfig?.let { Retry.of(name, it) }
-                    ?: Retry.ofDefaults(name)
+        retryConfig?.let { Retry.of(name, it) }
+            ?: Retry.ofDefaults(name)
 
     private fun noSuchElement(): CheckedFunction0<Any> = CheckedFunction0 { throw NoSuchElementException() }
 }

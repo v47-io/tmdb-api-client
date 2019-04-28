@@ -18,10 +18,10 @@ class JacksonDecoderTest {
     private val singlePojoBytes = objectMapper.writeValueAsBytes(singlePojo)
 
     private val pojoList = listOf(
-            Person("Peter", 24),
-            Person("Tina", 22),
-            Person("Michael", 14),
-            Person("Sabrina", 12)
+        Person("Peter", 24),
+        Person("Tina", 22),
+        Person("Michael", 14),
+        Person("Sabrina", 12)
     )
     private val pojoListBytes = objectMapper.writeValueAsBytes(pojoList)
 

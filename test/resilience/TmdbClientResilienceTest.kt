@@ -30,29 +30,29 @@ class TmdbClientResilienceTest {
 
     private val simpleHttpRequest = HttpRequestImpl(HttpMethod.Get, "http://mocked.com/simple")
     private val simpleHttpResponse = HttpResponseImpl(
-            200,
-            mapOf(
-                    "content-type" to listOf("text/plain"),
-                    "content-length" to listOf("${someStringBytes.size}")
-            ),
-            someStringBytes
+        200,
+        mapOf(
+            "content-type" to listOf("text/plain"),
+            "content-length" to listOf("${someStringBytes.size}")
+        ),
+        someStringBytes
     )
 
     private val pojoList = listOf(
-            SimplePojo("First String", 1),
-            SimplePojo("Second String", 2),
-            SimplePojo("Third String", 3)
+        SimplePojo("First String", 1),
+        SimplePojo("Second String", 2),
+        SimplePojo("Third String", 3)
     )
     private val pojoListBytes = objectMapper.writeValueAsBytes(pojoList)
 
     private val pojoListHttpRequest = HttpRequestImpl(HttpMethod.Get, "http://mocked.com/pojo-list")
     private val pojoListHttpResponse = HttpResponseImpl(
-            200,
-            mapOf(
-                    "content-type" to listOf("application/json"),
-                    "content-length" to listOf("${pojoListBytes.size}")
-            ),
-            pojoListBytes
+        200,
+        mapOf(
+            "content-type" to listOf("application/json"),
+            "content-length" to listOf("${pojoListBytes.size}")
+        ),
+        pojoListBytes
     )
 
     @BeforeAll

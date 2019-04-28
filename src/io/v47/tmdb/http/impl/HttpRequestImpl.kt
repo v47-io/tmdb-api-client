@@ -4,11 +4,11 @@ import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpRequest
 
 data class HttpRequestImpl(
-        override val method: HttpMethod,
-        override val url: String,
-        override val headers: Map<String, List<String>> = emptyMap(),
-        override val query: Map<String, String> = emptyMap(),
-        override val body: ByteArray? = null
+    override val method: HttpMethod,
+    override val url: String,
+    override val headers: Map<String, List<String>> = emptyMap(),
+    override val query: Map<String, String> = emptyMap(),
+    override val body: ByteArray? = null
 ) : HttpRequest {
     @Suppress("ComplexMethod")
     override fun equals(other: Any?): Boolean {

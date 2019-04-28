@@ -7,7 +7,7 @@ import io.vavr.CheckedFunction0
 internal class PackedCache(private val cache: Cache<ByteArray, ByteArray>) : Cache<ByteArray, ByteArray> {
     @Suppress("UNCHECKED_CAST")
     override fun computeIfAbsent(key: ByteArray, supplier: CheckedFunction0<ByteArray>) =
-            computeIfAbsent(key as Any, supplier as CheckedFunction0<Any>)
+        computeIfAbsent(key as Any, supplier as CheckedFunction0<Any>)
 
     fun computeIfAbsent(key: Any, supplier: CheckedFunction0<Any>): ByteArray {
         val cacheKey = if (key is ByteArray)
@@ -25,11 +25,11 @@ internal class PackedCache(private val cache: Cache<ByteArray, ByteArray>) : Cac
     }
 
     override fun getName() =
-            "${cache.name}(packed)"
+        "${cache.name}(packed)"
 
     override fun getMetrics(): Cache.Metrics =
-            cache.metrics
+        cache.metrics
 
     override fun getEventPublisher(): Cache.EventPublisher =
-            cache.eventPublisher
+        cache.eventPublisher
 }
