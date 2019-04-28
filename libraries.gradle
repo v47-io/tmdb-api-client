@@ -1,0 +1,54 @@
+final RESILIENCE = 'io.github.resilience4j:resilience4j'
+final RESILIENCE_LIBS = [ 'circuitbreaker', 'ratelimiter', 'retry', 'cache', 'timelimiter', 'rxjava2' ]
+
+ext {
+    // Core Libraries
+    slf4jVersion = '1.7.26'
+
+    // Implementation Libraries
+    coroutinesVersion = '1.2.1'
+    jacksonVersion = '2.9.8'
+    javaxCacheApiVersion = '1.0.0'
+    msgpackVersion = '0.8.16'
+    reactiveStreamsVersion = '1.0.2'
+    rxJavaVersion = '2.2.8'
+    resilience4jVersion = '0.14.1'
+    zeroAllocationHashingVersion = '0.9'
+
+    // Testing Libraries
+    mockitoKotlinVersion = '2.1.0'
+    junitJupiterVersion = '5.4.0'
+    logbackVersion = '1.2.3'
+
+    libraries = [
+            // Core Libraries
+            stdlib: 'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
+            reflect: 'org.jetbrains.kotlin:kotlin-reflect',
+            slf4j: "org.slf4j:slf4j-api:$slf4jVersion",
+
+            // Implementation Libraries
+            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
+            coroutinesReactive: "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutinesVersion",
+
+            jacksonDatabind: "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            jacksonDataformatMsgpack: "org.msgpack:jackson-dataformat-msgpack:$msgpackVersion",
+            jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
+
+            javaxCacheApi: "javax.cache:cache-api:$javaxCacheApiVersion",
+
+            rxJava: "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+
+            resilience: RESILIENCE_LIBS.collect {
+                "$RESILIENCE-$it:$resilience4jVersion"
+            },
+
+            zeroAllocationHashing: "net.openhft:zero-allocation-hashing:$zeroAllocationHashingVersion",
+
+            // Testing Libraries
+            mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion",
+            junitApi: "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
+            junitEngine: "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
+
+            logback: "ch.qos.logback:logback-classic:$logbackVersion"
+    ]
+}
