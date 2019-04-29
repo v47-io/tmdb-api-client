@@ -3,7 +3,7 @@ package io.v47.tmdb.http.impl
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpRequest
 
-data class HttpRequestImpl(
+internal data class HttpRequestImpl(
     override val method: HttpMethod,
     override val url: String,
     override val headers: Map<String, List<String>> = emptyMap(),
