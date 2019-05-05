@@ -80,27 +80,19 @@ dependencies {
     implementation libraries.stdlib
     implementation libraries.slf4j
 
-    implementation libraries.coroutines
-    implementation libraries.coroutinesReactive
+    implementation libraries.jacksonDatabind
 
-    api libraries.jacksonDatabind
-    implementation libraries.jacksonDataformatMsgpack
-    implementation libraries.jacksonModuleKotlin
+    api libraries.nvI18n
 
-    api libraries.javaxCacheApi
-
+    api libraries.r4jRatelimiter
+    implementation libraries.r4jRxjava
     api libraries.rxJava
-
-    libraries.resilience.forEach {
-        api it
-    }
-
-    implementation libraries.zeroAllocationHashing
 
     testImplementation libraries.logback
 
-    testImplementation libraries.ehcache
-    testImplementation libraries.reflect
+    testRuntime libraries.jacksonModuleKotlin
+
+    testImplementation libraries.mnHttpClient
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.junitApi
     testRuntime libraries.junitEngine
@@ -153,6 +145,10 @@ task integrationTest(type: Test) {
     reports {
         html.destination = file("$buildDir/reports/integration-test")
         junitXml.destination = file("$buildDir/integration-test-results")
+    }
+
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/integrationTest.exec")
     }
 
     mustRunAfter 'test'
