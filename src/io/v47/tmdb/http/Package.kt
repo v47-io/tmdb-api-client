@@ -2,12 +2,13 @@ package io.v47.tmdb.http
 
 import io.v47.tmdb.utils.TypeInfo
 import org.reactivestreams.Publisher
+import java.io.Closeable
 
 interface HttpClientFactory {
     fun createHttpClient(baseUrl: String): HttpClient
 }
 
-interface HttpClient {
+interface HttpClient : Closeable {
     fun <T : Any> execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<T>>
 }
 

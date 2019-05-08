@@ -16,8 +16,12 @@
 package io.v47.tmdb.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.utils.ImageSizeDeserializer
+import io.v47.tmdb.utils.ImageSizeSerializer
 
 data class Configuration(
     val images: Images = Images(null, null),
@@ -26,12 +30,44 @@ data class Configuration(
     data class Images(
         val baseUrl: String?,
         val secureBaseUrl: String?,
-        val backdropSizes: List<String> = emptyList(),
-        val logoSizes: List<String> = emptyList(),
-        val posterSizes: List<String> = emptyList(),
-        val profileSizes: List<String> = emptyList(),
-        val stillSizes: List<String> = emptyList()
+        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        val backdropSizes: List<ImageSize> = emptyList(),
+        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        val logoSizes: List<ImageSize> = emptyList(),
+        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        val posterSizes: List<ImageSize> = emptyList(),
+        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        val profileSizes: List<ImageSize> = emptyList(),
+        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        val stillSizes: List<ImageSize> = emptyList()
     ) : TmdbType()
+}
+
+interface ImageSize {
+    val value: Int
+}
+
+internal data class Width(override val value: Int) : ImageSize, Comparable<Width> {
+    override fun compareTo(other: Width) = value.compareTo(other.value)
+
+    override fun toString() = "w$value"
+}
+
+internal data class Height(override val value: Int) : ImageSize, Comparable<Height> {
+    override fun compareTo(other: Height) = value.compareTo(other.value)
+
+    override fun toString() = "h$value"
+}
+
+object Original : ImageSize {
+    override val value = Int.MAX_VALUE
+
+    override fun toString() = "original"
 }
 
 data class Country(
