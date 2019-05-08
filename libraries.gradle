@@ -26,6 +26,7 @@ ext {
 
             r4jRatelimiter     : "io.github.resilience4j:resilience4j-ratelimiter:$resilience4jVersion",
             r4jRxjava          : "io.github.resilience4j:resilience4j-rxjava2:$resilience4jVersion",
+            r4jTimeLimiter     : "io.github.resilience4j:resilience4j-timelimiter:$resilience4jVersion",
 
             rxJava             : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
 

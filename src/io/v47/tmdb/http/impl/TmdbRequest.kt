@@ -9,7 +9,6 @@ internal data class TmdbRequest<T : Any>(
     val method: HttpMethod,
     val path: String,
     val apiVersion: Int,
-    val pathArgs: Map<String, Any>,
     val queryArgs: Map<String, List<Any>>,
     val requestEntity: Any?,
     val responseType: TypeInfo
@@ -80,7 +79,6 @@ internal interface TmdbRequestBuilder<T : Any> {
     fun method(httpMethod: HttpMethod)
     fun apiVersion(apiVersion: Int)
     fun path(path: String)
-    fun pathArg(name: String, value: Any)
     fun queryArg(name: String, value: Any, replace: Boolean = false)
     fun requestEntity(requestEntity: Any?)
     fun responseType(responseType: TypeInfo)
@@ -91,7 +89,6 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     private var _method = HttpMethod.Get
     private var _apiVersion = 3
     private var _path: String? = null
-    private var _pathArgs = mutableMapOf<String, Any>()
     private var _queryArgs = mutableMapOf<String, MutableList<Any>>()
     private var _requestEntity: Any? = null
     private var _responseType: TypeInfo? = null
@@ -106,10 +103,6 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
 
     override fun path(path: String) {
         _path = path
-    }
-
-    override fun pathArg(name: String, value: Any) {
-        _pathArgs[name] = value
     }
 
     override fun queryArg(name: String, value: Any, replace: Boolean) {
@@ -136,7 +129,6 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
             _method,
             _path!!,
             _apiVersion,
-            _pathArgs,
             _queryArgs,
             _requestEntity,
             _responseType!!

@@ -86,6 +86,7 @@ dependencies {
 
     api libraries.r4jRatelimiter
     implementation libraries.r4jRxjava
+    api libraries.r4jTimeLimiter
     api libraries.rxJava
 
     testImplementation libraries.logback
