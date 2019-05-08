@@ -2,7 +2,6 @@ package io.v47.tmdb
 
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
-import io.reactivex.Flowable
 import io.reactivex.Single
 import io.v47.tmdb.api.ConfigurationApi
 import io.v47.tmdb.http.HttpClientFactory
@@ -19,14 +18,7 @@ class TmdbClient private constructor(
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
-        ): TmdbClient {
-            val httpExecutor = createHttpExecutor(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig)
-
-            val configurationApi = ConfigurationApi(httpExecutor)
-            val config = Flowable.fromPublisher(configurationApi.getConfiguration()).blockingFirst()
-
-            return TmdbClient(httpExecutor, config)
-        }
+        ) = newRx(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
 
         fun newRx(
             httpClientFactory: HttpClientFactory,
