@@ -13,14 +13,14 @@ class TmdbClient private constructor(
     private var cachedConfiguration: Configuration
 ) {
     companion object {
-        fun new(
+        fun blockingNew(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
-        ) = newRx(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
+        ) = new(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
 
-        fun newRx(
+        fun new(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
@@ -46,6 +46,4 @@ class TmdbClient private constructor(
                 timeLimiterConfig
             )
     }
-
-
 }
