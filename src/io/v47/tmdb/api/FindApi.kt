@@ -19,7 +19,7 @@ class FindApi(private val httpExecutor: HttpExecutor) {
      * @param source An external source the specified id belongs to
      * @param language A language code
      */
-    fun find(externalId: Any, source: ExternalSource, language: LocaleCode? = null) =
+    fun byId(externalId: Any, source: ExternalSource, language: LocaleCode? = null) =
         httpExecutor.execute(
             get<Find>("/find/$externalId") {
                 queryArg("external_source", source.value)

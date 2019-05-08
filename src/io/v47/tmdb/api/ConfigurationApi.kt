@@ -26,22 +26,22 @@ class ConfigurationApi(private val httpExecutor: HttpExecutor) {
      * The configuration method also contains the list of change keys which can be
      * useful if you are building an app that consumes data from the change feed
      */
-    fun getConfiguration() = httpExecutor.execute(get<Configuration>("/configuration"))
+    fun system() = httpExecutor.execute(get<Configuration>("/configuration"))
 
     /**
      * Get the list of countries (ISO 3166-1 tags) used throughout TMDb
      */
-    fun getCountries() = httpExecutor.execute(get<List<Country>>("/configuration/countries"))
+    fun countries() = httpExecutor.execute(get<List<Country>>("/configuration/countries"))
 
     /**
      * Get a list of the jobs and departments we use on TMDb
      */
-    fun getJobs() = httpExecutor.execute(get<List<Jobs>>("/configuration/jobs"))
+    fun jobs() = httpExecutor.execute(get<List<Jobs>>("/configuration/jobs"))
 
     /**
      * Get the list of languages (ISO 639-1 tags) used throughout TMDb
      */
-    fun getLanguages() = httpExecutor.execute(get<List<Language>>("/configuration/languages"))
+    fun languages() = httpExecutor.execute(get<List<Language>>("/configuration/languages"))
 
     /**
      * Get a list of the _officially_ supported translations on TMDb.
@@ -66,10 +66,10 @@ class ConfigurationApi(private val httpExecutor: HttpExecutor) {
      * translation project. You can view and contribute to that project
      * [here](https://www.localeapp.com/projects/8267)
      */
-    fun getPrimaryTranslations() = httpExecutor.execute(get<List<String>>("/configuration/primary_translations"))
+    fun primaryTranslations() = httpExecutor.execute(get<List<String>>("/configuration/primary_translations"))
 
     /**
      * Get the list of timezones used throughout TMDb
      */
-    fun getTimezones() = httpExecutor.execute(get<List<Timezones>>("/configuration/timezones"))
+    fun timezones() = httpExecutor.execute(get<List<Timezones>>("/configuration/timezones"))
 }

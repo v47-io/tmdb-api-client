@@ -41,6 +41,7 @@ internal class EnumDeserializerModifier : BeanDeserializerModifier() {
 
     @Suppress("UNCHECKED_CAST")
     private class EnhancedEnumDeserializer(val type: JavaType) : JsonDeserializer<Enum<*>>() {
+        @Suppress("ReturnCount")
         override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Enum<*> {
             val rawClass = (type.rawClass as Class<Enum<*>>)
             val intVal = p.valueAsInt

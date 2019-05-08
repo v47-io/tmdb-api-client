@@ -6,13 +6,13 @@ import io.v47.tmdb.model.Company
 import io.v47.tmdb.model.CompanyAlternativeNames
 import io.v47.tmdb.model.CompanyImages
 
-class CompaniesApi(private val httpExecutor: HttpExecutor) {
+class CompanyApi(private val httpExecutor: HttpExecutor) {
     /**
      * Get a companies details by id
      *
      * @param companyId The id of the company
      */
-    fun getDetails(companyId: Int) =
+    fun details(companyId: Int) =
         httpExecutor.execute(get<Company>("/company/$companyId"))
 
     /**
@@ -20,7 +20,7 @@ class CompaniesApi(private val httpExecutor: HttpExecutor) {
      *
      * @param companyId The id of the company
      */
-    fun getAlternativeNames(companyId: Int) =
+    fun alternativeNames(companyId: Int) =
         httpExecutor.execute(get<CompanyAlternativeNames>("/company/$companyId/alternative_names"))
 
     /**
@@ -37,6 +37,6 @@ class CompaniesApi(private val httpExecutor: HttpExecutor) {
      *
      * @param companyId The id of the company
      */
-    fun getImages(companyId: Int) =
+    fun images(companyId: Int) =
         httpExecutor.execute(get<CompanyImages>("/company/$companyId/images"))
 }

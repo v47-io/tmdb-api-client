@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package io.v47.tmdb.http.impl
 
 import io.v47.tmdb.http.HttpMethod

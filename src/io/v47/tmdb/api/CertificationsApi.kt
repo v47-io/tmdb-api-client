@@ -8,12 +8,12 @@ class CertificationsApi(private val httpExecutor: HttpExecutor) {
     /**
      * Get an up to date list of the officially supported movie certifications on TMDb
      */
-    fun getMovieCertifications() =
+    fun forMovies() =
         httpExecutor.execute(get<Certification>("/certification/movie/list"))
 
     /**
      * Get an up to date list of the officially supported TV show certifications on TMDb
      */
-    fun getTvCertifications() =
+    fun forTv() =
         httpExecutor.execute(get<Certification>("/certification/tv/list"))
 }

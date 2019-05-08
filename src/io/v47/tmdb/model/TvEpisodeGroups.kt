@@ -36,7 +36,7 @@ data class TvEpisodeGroupDetails(
 }
 
 enum class TvEpisodeGroupType {
-    @Suppress("EnumEntryName")
+    @Suppress("EnumEntryName", "EnumNaming")
     @Deprecated("Not a valid value")
     /** @suppress */
     __Dummy__,

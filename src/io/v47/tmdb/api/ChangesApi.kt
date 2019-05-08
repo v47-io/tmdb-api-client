@@ -18,7 +18,7 @@ class ChangesApi(private val httpExecutor: HttpExecutor) {
      * @param startDate The start of the time range for the result
      * @param page The page number for the selected result
      */
-    fun getMovieChanges(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
+    fun forMovies(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
         getChangeList("movie", endDate, startDate, page)
 
     /**
@@ -31,7 +31,7 @@ class ChangesApi(private val httpExecutor: HttpExecutor) {
      * @param startDate The start of the time range for the result
      * @param page The page number for the selected result
      */
-    fun getTvChanges(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
+    fun forTv(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
         getChangeList("tv", endDate, startDate, page)
 
     /**
@@ -44,7 +44,7 @@ class ChangesApi(private val httpExecutor: HttpExecutor) {
      * @param startDate The start of the time range for the result
      * @param page The page number for the selected result
      */
-    fun getPersonChanges(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
+    fun forPeople(endDate: LocalDate? = null, startDate: LocalDate? = null, page: Int? = null) =
         getChangeList("person", endDate, startDate, page)
 
     private fun getChangeList(

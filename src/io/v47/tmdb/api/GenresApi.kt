@@ -11,7 +11,7 @@ class GenresApi(private val httpExecutor: HttpExecutor) {
      *
      * @param language A language code
      */
-    fun getListForMovies(language: LocaleCode? = null) =
+    fun forMovies(language: LocaleCode? = null) =
         httpExecutor.execute(
             get<GenreList>("/genre/movie/list") {
                 language?.let { queryArg("language", language.toString()) }
@@ -23,7 +23,7 @@ class GenresApi(private val httpExecutor: HttpExecutor) {
      *
      * @param language A language code
      */
-    fun getListForTV(language: LocaleCode? = null) =
+    fun forTv(language: LocaleCode? = null) =
         httpExecutor.execute(
             get<GenreList>("/genre/tv/list") {
                 language?.let { queryArg("language", language.toString()) }

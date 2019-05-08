@@ -14,7 +14,7 @@ import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 import java.util.*
 
-class DiscoveryApi(private val httpExecutor: HttpExecutor) {
+class DiscoverApi(private val httpExecutor: HttpExecutor) {
     /**
      * Discover movies by different types of data like average rating, number of
      * votes, genres and certifications. You can get a valid list of certifications
@@ -40,7 +40,7 @@ class DiscoveryApi(private val httpExecutor: HttpExecutor) {
      * Some examples of what can be done with discover can be found
      * [here](https://www.themoviedb.org/documentation/api/discover).
      */
-    fun discoverMovie(block: MovieQuery.() -> Unit = {}) =
+    fun movies(block: MovieQuery.() -> Unit = {}) =
         httpExecutor.execute(
             get<PaginatedListResults<MovieListResult>>("/discover/movie") {
                 DiscoveryApiMovieQuery(this).block()
@@ -60,13 +60,14 @@ class DiscoveryApi(private val httpExecutor: HttpExecutor) {
      * Some examples of what can be done with discover can be found
      * [here](https://www.themoviedb.org/documentation/api/discover).
      */
-    fun discoverTv(block: TvQuery.() -> Unit = {}) =
+    fun tv(block: TvQuery.() -> Unit = {}) =
         httpExecutor.execute(
             get<PaginatedListResults<TvListResult>>("/discovery/tv") {
                 DiscoveryApiTvQuery(this).block()
             }
         )
 
+    @Suppress("TooManyFunctions")
     interface MovieQuery {
         fun language(language: LocaleCode)
         fun region(region: CountryCode)
@@ -99,6 +100,7 @@ class DiscoveryApi(private val httpExecutor: HttpExecutor) {
         fun originalLanguage(language: LanguageCode)
     }
 
+    @Suppress("TooManyFunctions")
     interface TvQuery {
         fun language(language: LocaleCode)
         fun sortBy(option: SortOption, direction: SortDirection = SortDirection.Ascending)
@@ -125,9 +127,10 @@ class DiscoveryApi(private val httpExecutor: HttpExecutor) {
     }
 }
 
+@Suppress("TooManyFunctions")
 private class DiscoveryApiMovieQuery(
     private val target: TmdbRequestBuilder<PaginatedListResults<MovieListResult>>
-) : DiscoveryApi.MovieQuery {
+) : DiscoverApi.MovieQuery {
     override fun language(language: LocaleCode) {
         target.queryArg("language", language.toString(), replace = true)
     }
@@ -251,9 +254,10 @@ private class DiscoveryApiMovieQuery(
     }
 }
 
+@Suppress("TooManyFunctions")
 private class DiscoveryApiTvQuery(
     private val target: TmdbRequestBuilder<PaginatedListResults<TvListResult>>
-) : DiscoveryApi.TvQuery {
+) : DiscoverApi.TvQuery {
     override fun language(language: LocaleCode) {
         target.queryArg("language", language.toString(), replace = true)
     }
