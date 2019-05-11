@@ -4,8 +4,12 @@ import io.v47.tmdb.model.Height
 import io.v47.tmdb.model.ImageSize
 import io.v47.tmdb.model.Original
 import io.v47.tmdb.model.Width
+import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
+
+internal fun String.urlEncode() =
+    URLEncoder.encode(this, Charsets.UTF_8)
 
 /**
  * Matches strings conforming to this pattern: `([a-z]{2})(?:-([A-Z]{2}))?`

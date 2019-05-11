@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonAnySetter
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 
@@ -23,7 +22,6 @@ abstract class TmdbType(private vararg val ignoredProperties: String) : Serializ
     private val logger by lazy { LoggerFactory.getLogger(javaClass)!! }
 
     @Suppress("unused")
-    @JsonAnySetter
     fun handleUnknownProperty(key: String, value: Any?) {
         if (key !in ignoredProperties)
             logger.trace("Unknown property: '$key' -> '$value'")

@@ -18,7 +18,7 @@ class DiscoverApi(private val httpExecutor: HttpExecutor) {
     /**
      * Discover movies by different types of data like average rating, number of
      * votes, genres and certifications. You can get a valid list of certifications
-     * from the [CertificationsApi.getMovieCertifications] method.
+     * from the [CertificationsApi.forMovies] method.
      *
      * Discover also supports a nice list of sort options. See [MovieQuery] for all
      * of the available options.

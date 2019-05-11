@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.neovisionaries.i18n.LanguageCode
 
 // @V3("/review/{review_id}")
@@ -23,7 +22,6 @@ data class ReviewDetails(
     val id: String?,
     val author: String?,
     val content: String?,
-    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val mediaId: Int?,
     val mediaTitle: String?,

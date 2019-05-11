@@ -15,18 +15,14 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.utils.CreditMediaDeserializer
-import io.v47.tmdb.utils.CreditPersonKnownForDeserializer
 import java.time.LocalDate
 
 data class Credits(
     val creditType: CreditType?,
     val department: String?,
     val job: String?,
-    @JsonDeserialize(using = CreditMediaDeserializer::class)
     val media: CreditMedia?,
     val mediaType: MediaType,
     val id: String?,
@@ -115,7 +111,6 @@ data class CreditPerson(
     val gender: Gender?,
     val name: String?,
     val id: Int?,
-    @JsonDeserialize(contentUsing = CreditPersonKnownForDeserializer::class)
     val knownFor: List<CreditPersonKnownFor> = emptyList(),
     val knownForDepartment: String?,
     val profilePath: String?,

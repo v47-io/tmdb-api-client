@@ -15,14 +15,16 @@ class TmdbClient private constructor(
     private var _cachedSystemConfiguration: Configuration
 ) {
     companion object {
-        fun blockingNew(
+        @JvmStatic
+        fun blockingCreate(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
-        ) = new(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
+        ) = create(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
 
-        fun new(
+        @JvmStatic
+        fun create(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,

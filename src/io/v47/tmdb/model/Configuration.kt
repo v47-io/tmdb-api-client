@@ -15,13 +15,8 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.utils.ImageSizeDeserializer
-import io.v47.tmdb.utils.ImageSizeSerializer
 
 data class Configuration(
     val images: Images = Images(null, null),
@@ -30,20 +25,10 @@ data class Configuration(
     data class Images(
         val baseUrl: String?,
         val secureBaseUrl: String?,
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val backdropSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val logoSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val posterSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val profileSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val stillSizes: List<ImageSize> = emptyList()
     ) : TmdbType()
 }
@@ -71,7 +56,6 @@ object Original : ImageSize {
 }
 
 data class Country(
-    @JsonProperty("iso_3166_1")
     val code: CountryCode?,
     val englishName: String?,
     val name: String?
@@ -83,14 +67,12 @@ data class Jobs(
 ) : TmdbType()
 
 data class Language(
-    @JsonProperty("iso_639_1")
     val code: LanguageCode?,
     val englishName: String?,
     val name: String
 ) : TmdbType()
 
 data class Timezones(
-    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val zones: List<String> = emptyList()
 ) : TmdbType()

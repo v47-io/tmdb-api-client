@@ -16,13 +16,14 @@
 package io.v47.tmdb.model
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import io.v47.tmdb.utils.MovieTvPersonListResultDeserializer
+import io.v47.tmdb.jackson.deserialization.MovieTvPersonListResultDeserializer
 
+// TODO Just use PaginatedListResults
 // @V3("/trending/{media_type}/{time_window}")
 data class Trending(
-    val page: Int?,
+    override val page: Int?,
     @JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
-    val results: List<MovieListResult> = emptyList(),
-    val totalPages: Int?,
-    val totalResults: Int?
-) : TmdbType()
+    override val results: List<MovieListResult> = emptyList(),
+    override val totalPages: Int?,
+    override val totalResults: Int?
+) : Paginated<MovieListResult>, TmdbType()

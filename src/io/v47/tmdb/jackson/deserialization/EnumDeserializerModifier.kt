@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.v47.tmdb.utils
+package io.v47.tmdb.jackson.deserialization
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
-import com.fasterxml.jackson.databind.module.SimpleModule
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
 internal class EnumDeserializerModifier : BeanDeserializerModifier() {
-    companion object Module : SimpleModule() {
-        init {
-            setDeserializerModifier(EnumDeserializerModifier())
-        }
-    }
-
     override fun modifyEnumDeserializer(
         config: DeserializationConfig,
         type: JavaType,

@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
@@ -58,9 +57,7 @@ data class CollectionTranslations(
 ) : TmdbType()
 
 data class CollectionTranslation(
-    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
-    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val name: String?,
     val englishName: String?,

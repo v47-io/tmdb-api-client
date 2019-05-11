@@ -15,11 +15,8 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.utils.MovieTvPersonListResultDeserializer
 
 // @V3("/person/{person_id}")
 data class PersonDetails(
@@ -85,13 +82,11 @@ data class PersonTaggedImages(
         val aspectRatio: Double?,
         val filePath: String?,
         val height: Int?,
-        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val voteAverage: Double?,
         val voteCount: Int?,
         val width: Int?,
         val imageType: String?,
-        @JsonDeserialize(using = MovieTvPersonListResultDeserializer::class)
         val media: MovieTvPersonListResult?,
         val mediaType: MediaType?
     ) : TmdbType()
@@ -103,9 +98,7 @@ data class PersonTranslations(
     val translations: List<PersonTranslation> = emptyList()
 ) : TmdbType() {
     data class PersonTranslation(
-        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
-        @JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val name: String?,
         val data: PersonTranslationData?,
@@ -141,7 +134,6 @@ data class PeoplePopular(
         val profilePath: String?,
         val adult: Boolean?,
         val id: Int?,
-        @JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
         val knownFor: List<MovieTvPersonListResult> = emptyList(),
         val name: String?,
         val popularity: Double?

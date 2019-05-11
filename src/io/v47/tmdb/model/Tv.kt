@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
@@ -83,7 +82,6 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
         val id: String?,
         val action: String?,
         val time: String?,
-        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
@@ -97,7 +95,6 @@ data class TvShowContentRatings(
 ) : TmdbType() {
     data class Rating(
         val rating: String?,
-        @JsonProperty("iso_3166_1")
         val country: CountryCode?
     ) : TmdbType()
 }

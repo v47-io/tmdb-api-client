@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.v47.tmdb.utils
+package io.v47.tmdb.jackson.deserialization
 
 import io.v47.tmdb.model.MovieListResult
 import io.v47.tmdb.model.MovieTvPersonListResult

@@ -80,7 +80,7 @@ dependencies {
     implementation libraries.stdlib
     implementation libraries.slf4j
 
-    implementation libraries.jacksonDatabind
+    compileOnly libraries.jacksonDatabind
 
     api libraries.nvI18n
 
@@ -91,6 +91,7 @@ dependencies {
 
     testImplementation libraries.logback
 
+    testRuntime libraries.jacksonDatabind
     testRuntime libraries.jacksonModuleKotlin
 
     testImplementation libraries.mnHttpClient

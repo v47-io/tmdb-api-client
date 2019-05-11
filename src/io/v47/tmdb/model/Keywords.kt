@@ -15,13 +15,11 @@
  */
 package io.v47.tmdb.model
 
-// @V3("/keyword/{keyword_id}")
 data class Keyword(
     val id: Int?,
     val name: String?
 ) : TmdbType()
 
-// @V3("/keyword/{keyword_id}/movies")
 data class KeywordMovies(
     val id: Int?,
     override val page: Int?,

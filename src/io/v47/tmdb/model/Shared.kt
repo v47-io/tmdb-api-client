@@ -17,11 +17,8 @@
 
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.utils.MovieTvPersonListResultDeserializer
 import java.time.LocalDate
 
 interface MovieTvPersonListResult {
@@ -79,7 +76,6 @@ data class TvListResult(
 
 data class Title(
     val title: String?,
-    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val type: String?
 ) : TmdbType()
@@ -116,7 +112,6 @@ data class PersonListResult(
     override val gender: Gender?,
     override val id: Int?,
     override val mediaType: MediaType?,
-    @JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
     val knownFor: List<MovieTvPersonListResult> = emptyList(),
     val knownForDepartment: String?,
     val creditId: String?,
@@ -166,7 +161,6 @@ data class ImageListResult(
     val fileType: String?,
     val height: Int?,
     val id: String?,
-    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val voteAverage: Double?,
     val voteCount: Int?,
@@ -175,9 +169,7 @@ data class ImageListResult(
 
 data class VideoListResult(
     val id: String?,
-    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
-    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val key: String?,
     val name: String?,
@@ -187,9 +179,7 @@ data class VideoListResult(
 ) : TmdbType()
 
 data class TranslationListResult(
-    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
-    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val name: String?,
     val englishName: String?,

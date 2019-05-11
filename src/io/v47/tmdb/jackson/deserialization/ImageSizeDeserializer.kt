@@ -1,4 +1,4 @@
-package io.v47.tmdb.utils
+package io.v47.tmdb.jackson.deserialization
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.core.JsonParser

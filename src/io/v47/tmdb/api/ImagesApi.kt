@@ -55,7 +55,7 @@ class ImagesApi(
             .doOnNext { resp ->
                 @Suppress("MagicNumber")
                 if (resp.status != 200) {
-                    if (String(resp.body ?: ByteArray(0)).contains(imageSizeNotSupported, true))
+                    if (String(resp.body ?: ByteArray(0)).contains(imageSizeNotSupported, ignoreCase = true))
                         throw ErrorResponseException(
                             ErrorResponse(
                                 imageSizeNotSupported,

@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
@@ -73,7 +72,6 @@ data class MovieAlternativeTitles(
 // @V3("/movie/{movie_id}/changes")
 data class MovieChanges(
     override val page: Int?,
-    @JsonProperty("changes")
     override val results: List<Change> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
@@ -87,7 +85,6 @@ data class MovieChanges(
         val id: String?,
         val action: String?,
         val time: String?,
-        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
@@ -129,13 +126,11 @@ data class MovieReleaseDates(
     val results: List<ReleaseDates> = emptyList()
 ) : TmdbType() {
     data class ReleaseDates(
-        @JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val releaseDates: List<MovieReleaseInfo> = emptyList()
     ) : TmdbType() {
         data class MovieReleaseInfo(
             val certification: String?,
-            @JsonProperty("iso_639_1")
             val language: LanguageCode?,
             val note: String?,
             val releaseDate: LocalDate?,
