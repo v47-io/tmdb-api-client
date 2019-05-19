@@ -14,7 +14,7 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
     private fun doInit() {
         setDeserializerModifier(EnumDeserializerModifier())
 
-        mapOf(
+        mapOf<Class<out TmdbType>, Class<*>>(
             CollectionDetails::class.java to CollectionDetailsMixin::class.java,
             CollectionDetails.Part::class.java to CollectionDetailsPartMixin::class.java,
             CollectionTranslation::class.java to CollectionTranslationMixin::class.java,

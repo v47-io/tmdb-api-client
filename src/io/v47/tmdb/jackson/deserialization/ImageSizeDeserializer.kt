@@ -11,9 +11,7 @@ import io.v47.tmdb.model.Width
 
 internal class ImageSizeDeserializer : StdScalarDeserializer<ImageSize>(ImageSize::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ImageSize {
-        val rawString = p.valueAsString
-        if (rawString == null || !rawString.startsWith('"') || !rawString.endsWith('"'))
-            throwParseException(p)
+        val rawString = p.valueAsString ?: throwParseException(p)
 
         val str = rawString.trim(' ', '"').toLowerCase()
         return if (str == "original")

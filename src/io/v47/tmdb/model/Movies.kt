@@ -135,7 +135,7 @@ data class MovieReleaseDates(
             val note: String?,
             val releaseDate: LocalDate?,
             val type: Release?
-        )
+        ) : TmdbType()
     }
 }
 

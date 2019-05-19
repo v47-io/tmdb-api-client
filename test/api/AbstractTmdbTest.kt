@@ -1,13 +1,13 @@
 package io.v47.tmdb.api
 
 import io.v47.tmdb.TmdbClient
-import io.v47.tmdb.http.MicronautClientFactory
+import io.v47.tmdb.http.TestMicronautClientFactory
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class AbstractTmdbTest {
-    protected lateinit var tmdb: TmdbClient
+    protected lateinit var client: TmdbClient
 
     @BeforeAll
     fun setup() {
@@ -19,6 +19,6 @@ abstract class AbstractTmdbTest {
                         "property called 'tmdb.apiKey' or as an environment variable called 'API_KEY'"
             )
 
-        tmdb = TmdbClient.blockingCreate(MicronautClientFactory(), apiKey)
+        client = TmdbClient.blockingCreate(TestMicronautClientFactory(), apiKey)
     }
 }
