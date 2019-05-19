@@ -77,6 +77,7 @@ class TmdbClient private constructor(
 
     val keyword = KeywordApi(httpExecutor)
     val list = ListApi(httpExecutor)
+    val movie = MoviesApi(httpExecutor)
 
     fun refreshCachedConfiguration(): Single<Unit> =
         Single

@@ -2,8 +2,10 @@
 
 package io.v47.tmdb.http.impl
 
+import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.utils.TypeInfo
+import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 
@@ -31,6 +33,34 @@ internal inline fun <reified T : Any> get(path: String, block: TmdbRequestBuilde
     request<T>(path) {
         block()
         method(HttpMethod.Get)
+    }
+
+internal inline fun <reified T : Any> getWithLanguage(
+    path: String,
+    language: LocaleCode? = null,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
+    get<T>(path) {
+        block()
+
+        language?.let { queryArg("language", it.toString(), replace = true) }
+    }
+
+internal inline fun <reified T : Any> getWithPageAndLanguage(
+    path: String,
+    page: Int? = null,
+    language: LocaleCode? = null,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
+    get<T>(path) {
+        block()
+
+        page?.let {
+            checkPage(it)
+            queryArg("page", it.toString(), replace = true)
+        }
+
+        language?.let { queryArg("language", it.toString(), replace = true) }
     }
 
 internal inline fun <reified T : Any> requestV4(path: String, block: TmdbRequestBuilder<T>.() -> Unit = {}) =
