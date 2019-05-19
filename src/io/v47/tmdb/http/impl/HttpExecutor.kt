@@ -19,7 +19,7 @@ class HttpExecutor internal constructor(
     httpClientFactory: HttpClientFactory,
     private val apiKey: String,
     rateLimiterRegistry: RateLimiterRegistry? = null,
-    timeLimiterConfig: TimeLimiterConfig? = null
+    timeLimiterConfig: TimeLimiterConfig
 ) {
     private val httpClient = httpClientFactory.createHttpClient(BASE_URL)
 
@@ -33,13 +33,7 @@ class HttpExecutor internal constructor(
             .build()
     )
 
-    private val timeLimiterConfig = timeLimiterConfig
-        ?: TimeLimiterConfig.custom()
-            .cancelRunningFuture(true)
-            .timeoutDuration(Duration.ofSeconds(30))
-            .build()
-
-    private val timeLimiter = TimeLimiter.of(this.timeLimiterConfig)
+    private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     @Suppress("UNCHECKED_CAST")
     internal fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> =

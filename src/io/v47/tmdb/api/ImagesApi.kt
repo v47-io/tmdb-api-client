@@ -1,5 +1,7 @@
 package io.v47.tmdb.api
 
+import io.github.resilience4j.timelimiter.TimeLimiter
+import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.v47.tmdb.TmdbClientException
 import io.v47.tmdb.http.HttpClientFactory
@@ -9,10 +11,12 @@ import io.v47.tmdb.model.*
 import io.v47.tmdb.utils.TypeInfo
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import java.util.concurrent.CompletableFuture
 
 class ImagesApi(
     private val httpClientFactory: HttpClientFactory,
-    configuration: Configuration
+    configuration: Configuration,
+    timeLimiterConfig: TimeLimiterConfig
 ) {
     private val log = LoggerFactory.getLogger(javaClass)!!
 
@@ -22,6 +26,8 @@ class ImagesApi(
             log.warn("Image download not possible: The system configuration doesn't provide a base URL!")
             null
         }
+
+    private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     private val byteArrayTypeInfo = TypeInfo.Simple(ByteArray::class.java)
     private val imageSizeNotSupported = "Image size not supported"
@@ -47,10 +53,14 @@ class ImagesApi(
 
         return Flowable
             .fromPublisher(
-                imageDlClient!!.execute<ByteArray>(
-                    request,
-                    byteArrayTypeInfo
-                )
+                timeLimiter.executeFutureSupplier {
+                    CompletableFuture.supplyAsync {
+                        imageDlClient!!.execute<ByteArray>(
+                            request,
+                            byteArrayTypeInfo
+                        )
+                    }
+                }
             )
             .doOnNext { resp ->
                 @Suppress("MagicNumber")

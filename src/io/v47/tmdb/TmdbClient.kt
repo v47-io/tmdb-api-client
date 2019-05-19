@@ -7,12 +7,14 @@ import io.v47.tmdb.api.*
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Configuration
+import java.time.Duration
 
 @Suppress("ConstructorParameterNaming")
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,
     httpExecutor: HttpExecutor,
-    private var _cachedSystemConfiguration: Configuration
+    private var _cachedSystemConfiguration: Configuration,
+    private val timeLimiterConfig: TimeLimiterConfig
 ) {
     companion object {
         @JvmStatic
@@ -30,18 +32,24 @@ class TmdbClient private constructor(
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
         ): Single<TmdbClient> {
-            val httpExecutor = createHttpExecutor(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig)
+            val tlConfig = timeLimiterConfig
+                ?: TimeLimiterConfig.custom()
+                    .cancelRunningFuture(true)
+                    .timeoutDuration(Duration.ofSeconds(30))
+                    .build()
+
+            val httpExecutor = createHttpExecutor(httpClientFactory, apiKey, rateLimiterRegistry, tlConfig)
             val configurationApi = ConfigurationApi(httpExecutor)
 
             return Single.fromPublisher(configurationApi.system())
-                .map { TmdbClient(httpClientFactory, httpExecutor, it) }
+                .map { TmdbClient(httpClientFactory, httpExecutor, it, tlConfig) }
         }
 
         private fun createHttpExecutor(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
-            timeLimiterConfig: TimeLimiterConfig? = null
+            timeLimiterConfig: TimeLimiterConfig
         ) =
             HttpExecutor(
                 httpClientFactory,
@@ -64,8 +72,11 @@ class TmdbClient private constructor(
     val find = FindApi(httpExecutor)
     val genres = GenresApi(httpExecutor)
 
-    private var _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration)
+    private var _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration, timeLimiterConfig)
     val images get() = _images
+
+    val keyword = KeywordApi(httpExecutor)
+    val list = ListApi(httpExecutor)
 
     fun refreshCachedConfiguration(): Single<Unit> =
         Single
@@ -74,7 +85,7 @@ class TmdbClient private constructor(
                 _cachedSystemConfiguration = systemConfig
 
                 _images.close()
-                _images = ImagesApi(httpClientFactory, systemConfig)
+                _images = ImagesApi(httpClientFactory, systemConfig, timeLimiterConfig)
             }
             .map { Unit }
 }
