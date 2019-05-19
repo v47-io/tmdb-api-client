@@ -13,7 +13,7 @@ import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 
-class ImagesApi(
+class ImagesApi internal constructor(
     private val httpClientFactory: HttpClientFactory,
     configuration: Configuration,
     timeLimiterConfig: TimeLimiterConfig

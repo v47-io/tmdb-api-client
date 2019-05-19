@@ -7,7 +7,7 @@ import io.v47.tmdb.model.Keyword
 import io.v47.tmdb.model.KeywordMovies
 import io.v47.tmdb.utils.checkPage
 
-class KeywordApi(private val httpExecutor: HttpExecutor) {
+class KeywordApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun details(keywordId: Int) = httpExecutor.execute(get<Keyword>("/keyword/$keywordId"))
 
     /**

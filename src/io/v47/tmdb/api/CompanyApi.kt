@@ -6,7 +6,7 @@ import io.v47.tmdb.model.Company
 import io.v47.tmdb.model.CompanyAlternativeNames
 import io.v47.tmdb.model.CompanyImages
 
-class CompanyApi(private val httpExecutor: HttpExecutor) {
+class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get a companies details by id
      *

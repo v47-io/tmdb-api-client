@@ -7,7 +7,7 @@ import io.v47.tmdb.model.CollectionDetails
 import io.v47.tmdb.model.CollectionImages
 import io.v47.tmdb.model.CollectionTranslations
 
-class CollectionApi(private val httpExecutor: HttpExecutor) {
+class CollectionApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get collection details by id
      *

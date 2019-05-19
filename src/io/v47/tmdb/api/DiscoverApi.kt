@@ -14,7 +14,7 @@ import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 import java.util.*
 
-class DiscoverApi(private val httpExecutor: HttpExecutor) {
+class DiscoverApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Discover movies by different types of data like average rating, number of
      * votes, genres and certifications. You can get a valid list of certifications

@@ -7,7 +7,7 @@ import io.v47.tmdb.model.ItemStatus
 import io.v47.tmdb.model.ListDetails
 import io.v47.tmdb.utils.urlEncode
 
-class ListApi(private val httpExecutor: HttpExecutor) {
+class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the details of a list
      *

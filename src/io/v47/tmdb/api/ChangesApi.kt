@@ -7,7 +7,7 @@ import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.utils.checkPage
 import java.time.LocalDate
 
-class ChangesApi(private val httpExecutor: HttpExecutor) {
+class ChangesApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get a list of all of the movie ids that have been changed in the past 24 hours.
      *

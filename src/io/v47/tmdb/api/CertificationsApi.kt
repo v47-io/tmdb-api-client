@@ -4,7 +4,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.get
 import io.v47.tmdb.model.Certification
 
-class CertificationsApi(private val httpExecutor: HttpExecutor) {
+class CertificationsApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get an up to date list of the officially supported movie certifications on TMDb
      */

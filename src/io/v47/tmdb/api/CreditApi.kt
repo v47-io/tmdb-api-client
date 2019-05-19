@@ -4,7 +4,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.get
 import io.v47.tmdb.model.Credits
 
-class CreditApi(private val httpExecutor: HttpExecutor) {
+class CreditApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get a movie or TV credit details by id
      *

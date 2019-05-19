@@ -4,7 +4,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.get
 import io.v47.tmdb.model.*
 
-class ConfigurationApi(private val httpExecutor: HttpExecutor) {
+class ConfigurationApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the system wide configuration information. Some elements of the API
      * require some knowledge of this configuration data. The purpose of this

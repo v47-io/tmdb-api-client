@@ -5,7 +5,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.get
 import io.v47.tmdb.model.GenreList
 
-class GenresApi(private val httpExecutor: HttpExecutor) {
+class GenresApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the list of official genres for movies
      *

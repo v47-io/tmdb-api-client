@@ -5,7 +5,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.get
 import io.v47.tmdb.model.Find
 
-class FindApi(private val httpExecutor: HttpExecutor) {
+class FindApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * The find method makes it easy to search for objects in our database by an external id.
      * For example, an IMDb ID.
