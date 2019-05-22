@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 private const val BASE_URL = "https://api.themoviedb.org"
 
 @Suppress("MagicNumber")
-class HttpExecutor internal constructor(
+internal class HttpExecutor(
     httpClientFactory: HttpClientFactory,
     private val apiKey: String,
     rateLimiterRegistry: RateLimiterRegistry? = null,

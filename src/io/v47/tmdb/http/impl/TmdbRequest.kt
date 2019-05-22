@@ -46,6 +46,20 @@ internal inline fun <reified T : Any> getWithLanguage(
         language?.let { queryArg("language", it.toString(), replace = true) }
     }
 
+internal inline fun <reified T : Any> getWithPage(
+    path: String,
+    page: Int? = null,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
+    get<T>(path) {
+        block()
+
+        page?.let {
+            checkPage(it)
+            queryArg("page", it.toString(), replace = true)
+        }
+    }
+
 internal inline fun <reified T : Any> getWithPageAndLanguage(
     path: String,
     page: Int? = null,

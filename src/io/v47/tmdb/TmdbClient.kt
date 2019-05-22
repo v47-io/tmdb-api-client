@@ -32,6 +32,7 @@ class TmdbClient private constructor(
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
         ): Single<TmdbClient> {
+            @Suppress("MagicNumber")
             val tlConfig = timeLimiterConfig
                 ?: TimeLimiterConfig.custom()
                     .cancelRunningFuture(true)
@@ -78,6 +79,11 @@ class TmdbClient private constructor(
     val keyword = KeywordApi(httpExecutor)
     val list = ListApi(httpExecutor)
     val movie = MoviesApi(httpExecutor)
+    val network = NetworksApi(httpExecutor)
+    val person = PeopleApi(httpExecutor)
+    val review = ReviewsApi(httpExecutor)
+    val search = SearchApi(httpExecutor)
+    val trending = TrendingApi(httpExecutor)
 
     fun refreshCachedConfiguration(): Single<Unit> =
         Single

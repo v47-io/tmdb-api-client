@@ -17,7 +17,6 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.LanguageCode
 
-// @V3("/review/{review_id}")
 data class ReviewDetails(
     val id: String?,
     val author: String?,

@@ -1,3 +1,5 @@
+@file:Suppress("MaxLineLength")
+
 package io.v47.tmdb.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -11,6 +13,7 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
         doInit()
     }
 
+    @Suppress("LongMethod")
     private fun doInit() {
         setDeserializerModifier(EnumDeserializerModifier())
 
@@ -53,6 +56,8 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
             MovieLists::class.java to MovieListsMixin::class.java,
 
             Network::class.java to NetworkMixin::class.java,
+
+            PaginatedMovieTvPersonListResults::class.java to PaginatedMovieTvPersonListResultsMixin::class.java,
 
             PersonDetails::class.java to PersonDetailsMixin::class.java,
             PersonExternalIds::class.java to PersonExternalIdsMixin::class.java,

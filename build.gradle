@@ -30,7 +30,9 @@ sourceSets {
     }
     test {
         kotlin {
-            srcDir 'test'
+            srcDirs {
+                'test'
+            }
         }
         java {
             srcDir 'test'

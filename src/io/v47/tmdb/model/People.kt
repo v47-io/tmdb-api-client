@@ -18,7 +18,6 @@ package io.v47.tmdb.model
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
-// @V3("/person/{person_id}")
 data class PersonDetails(
     val adult: Boolean?,
     val alsoKnownAs: List<String> = emptyList(),
@@ -45,14 +44,12 @@ data class PersonDetails(
     val changes: PersonChanges?
 ) : TmdbType()
 
-// @V3("/person/{person_id}/{type}_credits")
 data class PersonCredits(
     val id: Int?,
     val cast: List<CastMember> = emptyList(),
     val crew: List<CrewMember> = emptyList()
 ) : TmdbType()
 
-// @V3("/person/{person_id}/external_ids")
 data class PersonExternalIds(
     val imdbId: String?,
     val facebookId: String?,
@@ -64,13 +61,11 @@ data class PersonExternalIds(
     val instagramId: String?
 ) : TmdbType()
 
-// @V3("/person/{person_id}/images")
 data class PersonImages(
     val id: Int?,
     val profiles: List<ImageListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/person/{person_id}/tagged_images")
 data class PersonTaggedImages(
     val id: Int?,
     override val page: Int?,
@@ -92,7 +87,6 @@ data class PersonTaggedImages(
     ) : TmdbType()
 }
 
-// @V3("/person/{person_id}/translations")
 data class PersonTranslations(
     val id: Int?,
     val translations: List<PersonTranslation> = emptyList()
@@ -108,7 +102,6 @@ data class PersonTranslations(
     }
 }
 
-// @V3("/person/{person_id}/changes")
 data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbType() {
     data class PersonChange(
         val key: String?,
@@ -123,7 +116,6 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
     }
 }
 
-// @V3("/person/popular")
 data class PeoplePopular(
     override val page: Int?,
     override val results: List<PopularPerson>,

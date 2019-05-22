@@ -11,6 +11,7 @@ import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
+@Suppress("TooManyFunctions")
 class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the primary information about a movie.
@@ -290,7 +291,7 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
         )
 }
 
-enum class MovieRequest(val value: String) {
+enum class MovieRequest(internal val value: String) {
     AlternativeTitles("alternative_titles"),
     Changes("changes"),
     Credits("credits"),

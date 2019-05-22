@@ -17,20 +17,17 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 
-// @V3("/network/{network_id}")
 data class Network(
     val id: Int,
     val name: String?,
-    val logoPath: String?,
     val homepage: String?,
     val headquarters: String?,
     val originCountry: CountryCode?
 ) : TmdbType()
 
-// @V3("/network/{network_id}/alternative_names")
 data class NetworkAlternativeNames(
     val id: Int?,
-    val results: List<CompanyAlternativeNameResult> = emptyList()
+    val results: List<NetworkAlternativeNameResult> = emptyList()
 ) : TmdbType()
 
 data class NetworkAlternativeNameResult(
@@ -38,7 +35,6 @@ data class NetworkAlternativeNameResult(
     val type: String?
 ) : TmdbType()
 
-// @V3("/network/{network_id}/images")
 data class NetworkImages(
     val id: Int?,
     val logos: List<ImageListResult> = emptyList()
