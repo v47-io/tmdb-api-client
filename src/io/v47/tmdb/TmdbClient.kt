@@ -84,6 +84,7 @@ class TmdbClient private constructor(
     val review = ReviewsApi(httpExecutor)
     val search = SearchApi(httpExecutor)
     val trending = TrendingApi(httpExecutor)
+    val tvShow = TvApi(httpExecutor)
 
     fun refreshCachedConfiguration(): Single<Unit> =
         Single

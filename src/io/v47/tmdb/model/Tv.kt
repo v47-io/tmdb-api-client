@@ -19,7 +19,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
-// @V3("/tv/{tv_id}")
 data class TvShowDetails(
     val backdropPath: String?,
     val createdBy: List<PersonListResult> = emptyList(),
@@ -65,13 +64,11 @@ data class TvShowDetails(
     val videos: TvShowVideos?
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/alternative_titles")
 data class TvShowAlternativeTitles(
     val id: Int?,
     val results: List<Title> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/changes")
 data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
         val key: String?,
@@ -88,7 +85,6 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/content_ratings")
 data class TvShowContentRatings(
     val id: Int?,
     val results: List<Rating> = emptyList()
@@ -99,14 +95,12 @@ data class TvShowContentRatings(
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/credits")
 data class TvShowCredits(
     val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
     val crew: List<CreditListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/episode_groups")
 data class TvShowEpisodeGroups(
     val id: Int?,
     val results: List<TvShowEpisodeGroup> = emptyList()
@@ -122,7 +116,6 @@ data class TvShowEpisodeGroups(
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/external_ids")
 data class TvShowExternalIds(
     val id: Int?,
     val imdbId: String?,
@@ -135,14 +128,12 @@ data class TvShowExternalIds(
     val twitterId: String?
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/images")
 data class TvShowImages(
     val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
     val posters: List<ImageListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/keywords")
 data class TvShowKeywords(
     val id: Int?,
     val results: List<Keyword> = emptyList()
@@ -155,7 +146,6 @@ data class TvShowReview(
     val content: String?
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/screened_theatrically")
 data class TvShowScreenedTheatrically(
     val id: Int?,
     val results: List<ScreenedResult> = emptyList()
@@ -167,13 +157,11 @@ data class TvShowScreenedTheatrically(
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/translations")
 data class TvShowTranslations(
     val id: Int?,
     val translations: List<TranslationListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/videos")
 data class TvShowVideos(
     val id: Int?,
     val results: List<VideoListResult> = emptyList()
