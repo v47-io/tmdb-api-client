@@ -21,7 +21,7 @@ class TypeInfoTest {
 
         assertEquals(
             TypeInfo.Generic(
-                TypeInfo.Simple(List::class.java),
+                List::class.java,
                 listOf(TypeInfo.Simple(SimplePojo::class.java))
             ),
             typeInfo
@@ -35,11 +35,11 @@ class TypeInfoTest {
 
         assertEquals(
             TypeInfo.Generic(
-                TypeInfo.Simple(Map::class.java),
+                Map::class.java,
                 listOf(
                     TypeInfo.Simple(String::class.java),
                     TypeInfo.Generic(
-                        TypeInfo.Simple(List::class.java),
+                        List::class.java,
                         listOf(TypeInfo.Simple(SimplePojo::class.java))
                     )
                 )

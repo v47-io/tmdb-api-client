@@ -204,9 +204,6 @@ private fun TypeInfo.Simple.toArgument(): Argument<*> =
 
 private fun TypeInfo.Generic.toArgument(): Argument<*> =
     Argument.of(
-        if (type is TypeInfo.Simple)
-            (type as TypeInfo.Simple).type
-        else
-            throw IllegalArgumentException("Cannot convert TypeInfo.Generic into Class<*>"),
+        rawType,
         *typeArguments.map { it.toArgument() }.toTypedArray()
     )

@@ -6,7 +6,7 @@ import java.lang.reflect.WildcardType
 
 sealed class TypeInfo {
     data class Simple(val type: Class<*>) : TypeInfo()
-    data class Generic(val type: TypeInfo, val typeArguments: List<TypeInfo>) : TypeInfo()
+    data class Generic(val rawType: Class<*>, val typeArguments: List<TypeInfo>) : TypeInfo()
 }
 
 internal inline fun <reified T : Any> tmdbTypeReference() = object : TmdbTypeReference<T>() {}
@@ -40,13 +40,12 @@ private fun Type.toTypeInfo(): TypeInfo =
     }
 
 private fun ParameterizedType.toTypeInfo(): TypeInfo {
-    val rawTypeInfo = rawType.toTypeInfo()
     val typeArgumentInfos = actualTypeArguments.map { it.toTypeInfo() }
 
     return if (typeArgumentInfos.isNotEmpty())
-        TypeInfo.Generic(rawTypeInfo, typeArgumentInfos)
+        TypeInfo.Generic(rawType as Class<*>, typeArgumentInfos)
     else
-        rawTypeInfo
+        TypeInfo.Simple(rawType as Class<*>)
 }
 
 private fun Class<*>.toTypeInfo(): TypeInfo = TypeInfo.Simple(this)
