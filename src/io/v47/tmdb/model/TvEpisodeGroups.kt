@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.model
 
-// @V3("/tv/episode_group/{id}")
 data class TvEpisodeGroupDetails(
     val id: String?,
     val name: String?,

@@ -18,7 +18,6 @@ package io.v47.tmdb.model
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}")
 data class TvEpisodeDetails(
     val airDate: LocalDate?,
     val crew: List<CreditListResult> = emptyList(),
@@ -40,10 +39,10 @@ data class TvEpisodeDetails(
     val credits: TvEpisodeCredits?,
     val externalIds: TvEpisodeExternalIds?,
     val images: TvEpisodeImages?,
+    val translations: TvEpisodeTranslations?,
     val videos: TvEpisodeVideos?
 ) : TmdbType()
 
-// @V3("tv/episode/{episode_id}/changes")
 data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
         val key: String?,
@@ -60,7 +59,6 @@ data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType(
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}/credits")
 data class TvEpisodeCredits(
     val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
@@ -68,7 +66,6 @@ data class TvEpisodeCredits(
     val guestStars: List<CreditListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}/external_ids")
 data class TvEpisodeExternalIds(
     val id: Int?,
     val imdbId: String?,
@@ -78,19 +75,16 @@ data class TvEpisodeExternalIds(
     val tvrageId: Int?
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}/images")
 data class TvEpisodeImages(
     val id: Int?,
     val stills: List<ImageListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}/translations")
 data class TvEpisodeTranslations(
     val id: Int?,
     val translations: List<TranslationListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/episode/{episode_number}/videos")
 data class TvEpisodeVideos(
     val id: Int?,
     val results: List<VideoListResult> = emptyList()

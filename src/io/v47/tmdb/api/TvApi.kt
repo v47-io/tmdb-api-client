@@ -1,12 +1,8 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.LocaleCode
-import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.http.impl.get
-import io.v47.tmdb.http.impl.getWithLanguage
-import io.v47.tmdb.http.impl.getWithPageAndLanguage
+import io.v47.tmdb.http.impl.*
 import io.v47.tmdb.model.*
-import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
@@ -63,12 +59,7 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
         page: Int? = null
     ) =
         httpExecutor.execute(
-            get<TvShowChanges>("/tv/$tvId/changes") {
-                page?.let {
-                    checkPage(it)
-                    queryArg("page", it)
-                }
-
+            getWithPage<TvShowChanges>("/tv/$tvId/changes", page) {
                 startDate?.let { queryArg("start_date", it.format(dateFormat)) }
                 endDate?.let { queryArg("end_date", it.format(dateFormat)) }
             }

@@ -85,6 +85,9 @@ class TmdbClient private constructor(
     val search = SearchApi(httpExecutor)
     val trending = TrendingApi(httpExecutor)
     val tvShow = TvApi(httpExecutor)
+    val tvEpisode = TvEpisodesApi(httpExecutor)
+    val tvEpisodeGroup = TvEpisodeGroupsApi(httpExecutor)
+    val tvSeason = TvSeasonsApi(httpExecutor)
 
     fun refreshCachedConfiguration(): Single<Unit> =
         Single

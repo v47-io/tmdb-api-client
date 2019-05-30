@@ -18,7 +18,6 @@ package io.v47.tmdb.model
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
-// @V3("/tv/{tv_id}/season/{season_number}")
 data class TvSeasonDetails(
     val airDate: LocalDate?,
     val episodes: List<TvEpisodeDetails> = emptyList(),
@@ -38,7 +37,6 @@ data class TvSeasonDetails(
     val videos: TvSeasonVideos?
 ) : TmdbType("_id")
 
-// @V3("/tv/season/{season_id}/changes")
 data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
         val key: String?,
@@ -60,7 +58,6 @@ data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType()
     ) : TmdbType()
 }
 
-// @V3("/tv/{tv_id}/season/{season_number}/credits")
 data class TvSeasonCredits(
     val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
@@ -68,7 +65,6 @@ data class TvSeasonCredits(
 ) : TmdbType()
 
 
-// @V3("/tv/{tv_id}/season/{season_number}/external_ids")
 data class TvSeasonExternalIds(
     val id: Int?,
     val freebaseMid: String?,
@@ -77,13 +73,11 @@ data class TvSeasonExternalIds(
     val tvrageId: Int?
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/images")
 data class TvSeasonImages(
     val id: Int?,
     val posters: List<ImageListResult> = emptyList()
 ) : TmdbType()
 
-// @V3("/tv/{tv_id}/season/{season_number}/videos")
 data class TvSeasonVideos(
     val id: Int?,
     val results: List<VideoListResult> = emptyList()
