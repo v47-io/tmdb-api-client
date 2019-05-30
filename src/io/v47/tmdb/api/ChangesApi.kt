@@ -1,10 +1,9 @@
 package io.v47.tmdb.api
 
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.http.impl.get
+import io.v47.tmdb.http.impl.getWithPage
 import io.v47.tmdb.model.Change
 import io.v47.tmdb.model.PaginatedListResults
-import io.v47.tmdb.utils.checkPage
 import java.time.LocalDate
 
 class ChangesApi internal constructor(private val httpExecutor: HttpExecutor) {
@@ -54,14 +53,9 @@ class ChangesApi internal constructor(private val httpExecutor: HttpExecutor) {
         page: Int? = null
     ) =
         httpExecutor.execute(
-            get<PaginatedListResults<Change>>("/$type/changes") {
+            getWithPage<PaginatedListResults<Change>>("/$type/changes", page) {
                 endDate?.let { queryArg("end_date", it) }
                 startDate?.let { queryArg("start_date", it) }
-
-                page?.let {
-                    checkPage(it)
-                    queryArg("page", it)
-                }
             }
         )
 }

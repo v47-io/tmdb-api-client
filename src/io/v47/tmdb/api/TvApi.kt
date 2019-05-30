@@ -6,6 +6,7 @@ import io.v47.tmdb.model.*
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
+@Suppress("TooManyFunctions")
 class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the primary TV show details by id.

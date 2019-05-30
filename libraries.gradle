@@ -5,6 +5,7 @@ ext {
     // Implementation Libraries
     jacksonVersion = '2.9.8'
     nvI18nVersion = '1.25'
+    reactiveStreamsVersion = '1.0.2'
     resilience4jVersion = '0.14.1'
     rxJavaVersion = '2.2.8'
 
@@ -28,6 +29,7 @@ ext {
             r4jRxjava          : "io.github.resilience4j:resilience4j-rxjava2:$resilience4jVersion",
             r4jTimeLimiter     : "io.github.resilience4j:resilience4j-timelimiter:$resilience4jVersion",
 
+            reactiveStreams    : "org.reactivestreams:reactive-streams:$reactiveStreamsVersion",
             rxJava             : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
 
             // Testing Libraries

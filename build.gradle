@@ -41,19 +41,6 @@ sourceSets {
             srcDir 'test-resources'
         }
     }
-    integrationTest {
-        kotlin {
-            srcDirs {
-                "$projectDir/integration-test"
-            }
-        }
-        java {
-            srcDir "$projectDir/integration-test"
-        }
-        resources {
-            srcDir "$projectDir/integration-test-resources"
-        }
-    }
 }
 
 sourceCompatibility = 11
@@ -67,10 +54,6 @@ compileKotlin {
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = '11'
-}
-
-compileIntegrationTestKotlin {
     kotlinOptions.jvmTarget = '11'
 }
 
@@ -89,7 +72,9 @@ dependencies {
     api libraries.r4jRatelimiter
     implementation libraries.r4jRxjava
     api libraries.r4jTimeLimiter
-    api libraries.rxJava
+
+    api libraries.reactiveStreams
+    implementation libraries.rxJava
 
     testImplementation libraries.logback
 
@@ -100,15 +85,6 @@ dependencies {
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.junitApi
     testRuntime libraries.junitEngine
-
-    integrationTestImplementation sourceSets.main.output
-    integrationTestImplementation sourceSets.test.output
-
-    integrationTestImplementation configurations.compile
-    integrationTestImplementation configurations.testCompile
-
-    integrationTestRuntimeOnly configurations.runtime
-    integrationTestRuntimeOnly configurations.testRuntime
 }
 
 detekt {
@@ -133,29 +109,6 @@ test {
     jacoco {
         destinationFile = file("$buildDir/jacoco/test.exec")
     }
-}
-
-task integrationTest(type: Test) {
-    group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = 'Runs the integration tests.'
-
-    maxHeapSize = '1024m'
-
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-
-    binResultsDir = file("$buildDir/integration-test-results/binary/integrationTest")
-
-    reports {
-        html.destination = file("$buildDir/reports/integration-test")
-        junitXml.destination = file("$buildDir/integration-test-results")
-    }
-
-    jacoco {
-        destinationFile = file("$buildDir/jacoco/integrationTest.exec")
-    }
-
-    mustRunAfter 'test'
 }
 
 release {

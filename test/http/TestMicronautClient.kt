@@ -10,6 +10,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.client.DefaultHttpClient
 import io.micronaut.http.client.DefaultHttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.client.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
 import io.micronaut.jackson.codec.JsonMediaTypeCodec
@@ -63,32 +64,35 @@ class TestMicronautClientFactory : HttpClientFactory {
 }
 
 private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpClient {
-    override fun <T : Any> execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<T>> {
-        return if ((responseType as? TypeInfo.Simple)?.type == ByteArray::class.java)
-            Flowable.fromPublisher(rawClient.exchange(request.toMnHttpRequest(false)))
-                .map { resp ->
-                    if (resp.code() == 200)
-                        @Suppress("UNCHECKED_CAST")
-                        resp.toHttpResponse() as HttpResponse<T>
-                    else
-                        throwErrorResponse(resp, request)
-                }
-        else {
-            val argument = responseType.toArgument()
+    private val byteBufferArgument = Argument.of(ByteBuffer::class.java)
 
-            Flowable.fromPublisher(rawClient.exchange(request.toMnHttpRequest()))
-                .map { resp ->
-                    if (resp.code() == 200)
-                        @Suppress("UNCHECKED_CAST")
-                        resp.toHttpResponse(argument) as HttpResponse<T>
-                    else
-                        throwErrorResponse(resp, request)
-                }
+    override fun <T : Any> execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<T>> {
+        val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
+        val argument = if (jsonBody) responseType.toArgument() else null
+
+        return Flowable.fromPublisher(
+            rawClient.exchange(
+                request.toMnHttpRequest(jsonBody),
+                byteBufferArgument,
+                byteBufferArgument
+            )
+        ).onErrorReturn { t ->
+            @Suppress("UNCHECKED_CAST")
+            if (t is HttpClientResponseException)
+                t.response as MnHttpResponse<ByteBuffer<*>>
+            else
+                throw IllegalArgumentException("Not a HttpClientResponseException", t)
+        }.map { resp ->
+            if (resp.code() == 200)
+                @Suppress("UNCHECKED_CAST")
+                resp.toHttpResponse(argument) as HttpResponse<T>
+            else
+                throwErrorResponse(resp, request)
         }
     }
 
     private fun throwErrorResponse(
-        mnResponse: MnHttpResponse<ByteBuffer<Any>>,
+        mnResponse: MnHttpResponse<ByteBuffer<*>>,
         request: HttpRequest
     ): Nothing {
         val errorResponse =
@@ -111,20 +115,26 @@ private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpCli
         val uriSB = StringBuilder(url)
         if (query.isNotEmpty()) {
             uriSB.append("?")
-            query
-                .map { (name, values) ->
-                    uriSB.append(URLEncoder.encode(name, Charsets.UTF_8))
-                    uriSB.append('=')
-                    var first = true
-                    values.forEach { value ->
-                        if (first)
-                            first = false
-                        else
-                            uriSB.append(',')
 
-                        uriSB.append(URLEncoder.encode(value.toString(), Charsets.UTF_8))
-                    }
+            var first = true
+            query.map { (name, values) ->
+                if (first)
+                    first = false
+                else
+                    uriSB.append('&')
+
+                uriSB.append(URLEncoder.encode(name, Charsets.UTF_8))
+                uriSB.append('=')
+                var valueFirst = true
+                values.forEach { value ->
+                    if (valueFirst)
+                        valueFirst = false
+                    else
+                        uriSB.append(',')
+
+                    uriSB.append(URLEncoder.encode(value.toString(), Charsets.UTF_8))
                 }
+            }
         }
 
         return MnHttpRequest
@@ -153,32 +163,32 @@ private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpCli
             )
     }
 
-    private fun MnHttpResponse<ByteBuffer<Any>>.toHttpResponse(): HttpResponse<ByteArray> {
-        val cl = if (contentLength > -1)
-            contentLength
-        else
-            0
+    private fun MnHttpResponse<*>.toHttpResponse(argument: Argument<*>?) =
+        if (argument != null)
+            HttpResponseImpl(
+                code(),
+                headers.associate { (key, value) -> key to value },
+                getBody(argument).orElse(null)
+            )
+        else {
+            val cl = if (contentLength > -1)
+                contentLength
+            else
+                0
 
-        val ba = if (cl > 0) {
-            val tmp = ByteArray(cl.toInt())
-            body()?.read(tmp)
-            tmp
-        } else
-            null
+            val ba = if (cl > 0) {
+                val tmp = ByteArray(cl.toInt())
+                (body() as? ByteBuffer<*>)?.read(tmp)
+                tmp
+            } else
+                null
 
-        return HttpResponseImpl(
-            code(),
-            headers.associate { (key, value) -> key to value },
-            ba
-        )
-    }
-
-    private fun MnHttpResponse<out Any>.toHttpResponse(argument: Argument<*>) =
-        HttpResponseImpl(
-            code(),
-            headers.associate { (key, value) -> key to value },
-            getBody(argument).orElse(null)
-        )
+            HttpResponseImpl(
+                code(),
+                headers.associate { (key, value) -> key to value },
+                ba
+            )
+        }
 
     override fun close() = rawClient.close()
 }
