@@ -68,7 +68,7 @@ class TmdbClient private constructor(
     val collection = CollectionApi(httpExecutor)
     val company = CompanyApi(httpExecutor)
     val configuration = ConfigurationApi(httpExecutor)
-    val credit = CreditApi(httpExecutor)
+    val credits = CreditApi(httpExecutor)
     val discover = DiscoverApi(httpExecutor)
     val find = FindApi(httpExecutor)
     val genres = GenresApi(httpExecutor)

@@ -59,11 +59,18 @@ class TestMicronautClientFactory : HttpClientFactory {
                 sslFactory,
                 mediaTypeRegistry,
                 AnnotationMetadataResolver.DEFAULT
-            )
+            ),
+            baseUrl.substring(8).let { url ->
+                val part = url.substringAfter('/', "")
+                if (part != "")
+                    "/$part"
+                else
+                    ""
+            }
         )
 }
 
-private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpClient {
+private class TestMicronautClient(private val rawClient: MnHttpClient, val basePath: String = "") : HttpClient {
     private val byteBufferArgument = Argument.of(ByteBuffer::class.java)
 
     override fun <T : Any> execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<T>> {
@@ -112,7 +119,12 @@ private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpCli
     }
 
     private fun HttpRequest.toMnHttpRequest(json: Boolean = true): MnHttpRequest<*> {
-        val uriSB = StringBuilder(url)
+        val uriSB = StringBuilder(basePath)
+        if (!url.startsWith("/"))
+            uriSB.append('/')
+
+        uriSB.append(url)
+
         if (query.isNotEmpty()) {
             uriSB.append("?")
 
@@ -151,7 +163,7 @@ private class TestMicronautClient(private val rawClient: MnHttpClient) : HttpCli
                 if (json)
                     MediaType.APPLICATION_JSON_TYPE
                 else
-                    MediaType.APPLICATION_OCTET_STREAM_TYPE
+                    MediaType.ALL_TYPE
             )
             .body(body)
             .header(

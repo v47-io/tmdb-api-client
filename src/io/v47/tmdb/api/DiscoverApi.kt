@@ -62,7 +62,7 @@ class DiscoverApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun tv(block: TvQuery.() -> Unit = {}) =
         httpExecutor.execute(
-            get<PaginatedListResults<TvListResult>>("/discovery/tv") {
+            get<PaginatedListResults<TvListResult>>("/discover/tv") {
                 DiscoveryApiTvQuery(this).block()
             }
         )
