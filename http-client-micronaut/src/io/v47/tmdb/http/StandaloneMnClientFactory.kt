@@ -16,10 +16,6 @@ import io.netty.util.concurrent.DefaultThreadFactory
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
 import java.net.URL
-import io.micronaut.http.HttpMethod as MnHttpMethod
-import io.micronaut.http.HttpRequest as MnHttpRequest
-import io.micronaut.http.HttpResponse as MnHttpResponse
-import io.micronaut.http.client.HttpClient as MnHttpClient
 
 class StandaloneMnClientFactory : HttpClientFactory {
     private val httpClientConfiguration = DefaultHttpClientConfiguration()
