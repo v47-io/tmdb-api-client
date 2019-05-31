@@ -17,3 +17,12 @@ private fun TypeInfo.Generic.toArgument(): Argument<*> =
         rawType,
         *typeArguments.map { it.toArgument() }.toTypedArray()
     )
+
+internal fun getBasePath(baseUrl: String) =
+    baseUrl.substring(8).let { url ->
+        val part = url.substringAfter('/', "")
+        if (part != "")
+            "/$part"
+        else
+            ""
+    }

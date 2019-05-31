@@ -7,6 +7,8 @@ dependencies {
     implementation libraries.reactiveStreams
     implementation libraries.rxJava
 
+    testImplementation project(':http-client-tck')
+
     testRuntimeOnly libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
 }

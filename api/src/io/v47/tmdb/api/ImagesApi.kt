@@ -3,7 +3,6 @@ package io.v47.tmdb.api
 import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
-import io.v47.tmdb.TmdbClientException
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.api.ErrorResponse
@@ -57,29 +56,23 @@ class ImagesApi internal constructor(
             .fromPublisher(
                 timeLimiter.executeFutureSupplier {
                     CompletableFuture.supplyAsync {
-                        imageDlClient!!.execute<ByteArray>(
+                        imageDlClient!!.execute(
                             request,
                             byteArrayTypeInfo
                         )
                     }
                 }
             )
-            .doOnNext { resp ->
-                @Suppress("MagicNumber")
-                if (resp.status != 200) {
-                    if (String(resp.body ?: ByteArray(0)).contains(imageSizeNotSupported, ignoreCase = true))
-                        throw ErrorResponseException(
-                            ErrorResponse(
-                                imageSizeNotSupported,
-                                resp.status
-                            ),
-                            request
-                        )
-                    else
-                        throw TmdbClientException("The request failed with status ${resp.status}", request)
+            .map { resp ->
+                when {
+                    resp.status == 200 -> resp.body as ByteArray
+                    resp.body is ErrorResponse -> throw ErrorResponseException(
+                        resp.body as ErrorResponse,
+                        request
+                    )
+                    else -> throw IllegalArgumentException("Invalid error response: $resp")
                 }
             }
-            .map { it.body ?: ByteArray(0) }
     }
 
     internal fun close() {

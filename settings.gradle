@@ -2,4 +2,4 @@ enableFeaturePreview('STABLE_PUBLISHING')
 
 rootProject.name = 'tmdb-api-v2'
 
-include 'core', 'http-client-micronaut', 'api'
+include 'core', 'http-client-tck', 'http-client-micronaut', 'api'

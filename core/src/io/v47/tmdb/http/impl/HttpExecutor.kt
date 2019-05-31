@@ -8,6 +8,8 @@ import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
+import io.v47.tmdb.http.api.ErrorResponse
+import io.v47.tmdb.http.api.ErrorResponseException
 import org.reactivestreams.Publisher
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
@@ -36,13 +38,15 @@ class HttpExecutor(
     private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> =
-        Flowable
+    fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
+        val httpRequest = createHttpRequest(request)
+
+        return Flowable
             .fromPublisher(
                 timeLimiter.executeFutureSupplier {
                     CompletableFuture.supplyAsync {
-                        httpClient.execute<T>(
-                            createHttpRequest(request),
+                        httpClient.execute(
+                            httpRequest,
                             request.responseType
                         )
                     }
@@ -50,8 +54,19 @@ class HttpExecutor(
             )
             .lift(RateLimiterOperator.of(rateLimiter))
             .filter { it.body != null }
-            .map { it.body!! }
+            .map { resp ->
+                when {
+                    resp.status == 200 -> resp.body
+                    resp.body is ErrorResponse -> throw ErrorResponseException(
+                        resp.body as ErrorResponse,
+                        httpRequest
+                    )
+                    else -> throw IllegalArgumentException("Invalid error response: $resp")
+                }
+            }
+            .map { it as T }
             .defaultIfEmpty(Unit as T)
+    }
 
     private fun createHttpRequest(tmdbRequest: TmdbRequest<*>): HttpRequest {
         val url = "/${tmdbRequest.apiVersion}/${tmdbRequest.path.trim(' ', '/')}"

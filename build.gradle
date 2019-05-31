@@ -72,7 +72,9 @@ subprojects {
         implementation libraries.slf4j
 
         testImplementation libraries.junitApi
-        testRuntime libraries.junitEngine
+        testRuntimeOnly libraries.junitEngine
+
+        testRuntimeOnly libraries.logback
     }
 
     detekt {

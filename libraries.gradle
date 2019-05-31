@@ -11,6 +11,7 @@ ext {
 
     // Testing Libraries
     micronautVersion = '1.1.2'
+    mockitoKotlinVersion = '2.1.0'
     junitJupiterVersion = '5.4.0'
     logbackVersion = '1.2.3'
 
@@ -39,6 +40,8 @@ ext {
             junitApi           : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
             junitEngine        : "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
 
-            logback            : "ch.qos.logback:logback-classic:$logbackVersion"
+            logback            : "ch.qos.logback:logback-classic:$logbackVersion",
+
+            mockitoKotlin      : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     ]
 }

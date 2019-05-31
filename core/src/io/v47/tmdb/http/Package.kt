@@ -9,7 +9,7 @@ interface HttpClientFactory {
 }
 
 interface HttpClient : Closeable {
-    fun <T : Any> execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<T>>
+    fun execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<out Any>>
 }
 
 interface HttpRequest {
