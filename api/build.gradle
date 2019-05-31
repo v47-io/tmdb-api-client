@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':core')
+
+    compileOnly libraries.jacksonDatabind
+    api libraries.nvI18n
+
+    testImplementation project(':http-client-micronaut')
+    
+    testRuntimeOnly libraries.jacksonModuleKotlin
+    testRuntimeOnly libraries.logback
+}

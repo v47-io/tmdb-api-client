@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':core')
+
+    implementation libraries.mnHttpClient
+    implementation libraries.jacksonDatabind
+
+    implementation libraries.reactiveStreams
+    implementation libraries.rxJava
+
+    testRuntimeOnly libraries.jacksonModuleKotlin
+    testRuntimeOnly libraries.logback
+}

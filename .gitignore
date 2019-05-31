@@ -1,7 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Gradle template
 .gradle
-/build/
+**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -53,7 +53,7 @@ cmake-build-release/
 *.iws
 
 # IntelliJ
-out/
+**/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -78,5 +78,5 @@ fabric.properties
 !test-resources/*.tar.gz
 
 !libs/*.jar
-/src-gen
-/resources-gen
+**/src-gen
+**/resources-gen
