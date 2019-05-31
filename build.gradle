@@ -102,7 +102,7 @@ subprojects {
     }
 
     release {
-        tagTemplate = "$project.name-v$project.version"
+        tagTemplate = "v$version"
     }
 
     dokka {
