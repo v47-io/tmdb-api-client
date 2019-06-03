@@ -1,7 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.31' apply false
     id 'io.gitlab.arturbosch.detekt' version '1.0.0-RC14' apply false
-    id 'net.researchgate.release' version '2.8.0' apply false
+    id 'net.researchgate.release' version '2.8.0'
     // id 'org.jetbrains.dokka' version '0.9.18' apply false
 }
 
@@ -174,4 +174,8 @@ subprojects {
             }
         }
     }
+}
+
+task build {
+    dependsOn subprojects.findResults { it.tasks.findByName('build') }
 }
