@@ -1,7 +1,7 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.LanguageCode
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ class CollectionsTest : AbstractTmdbTest() {
 
     @Test
     fun testGetCollectionDetails() {
-        val collection = Flowable.fromPublisher(client.collection.details(COLLECTION_ID)).blockingFirst()
+        val collection = client.collection.details(COLLECTION_ID).blockingFirst()
 
         assertEquals(COLLECTION_ID, collection.id)
         assertEquals(COLLECTION_NAME, collection.name)
@@ -38,14 +38,14 @@ class CollectionsTest : AbstractTmdbTest() {
 
     @Test
     fun testGetCollectionImages() {
-        val images = Flowable.fromPublisher(client.collection.images(COLLECTION_ID)).blockingFirst()
+        val images = client.collection.images(COLLECTION_ID).blockingFirst()
 
         assertEquals(COLLECTION_ID, images.id)
     }
 
     @Test
     fun testGetCollectionTranslations() {
-        val translations = Flowable.fromPublisher(client.collection.translations(COLLECTION_ID)).blockingFirst()
+        val translations = client.collection.translations(COLLECTION_ID).blockingFirst()
 
         val chineseTranslation = translations.translations.find { it.language == LanguageCode.zh }
         assertNotNull(chineseTranslation)

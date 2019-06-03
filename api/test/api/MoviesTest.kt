@@ -1,8 +1,8 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.CountryCode
-import io.reactivex.Flowable
 import io.v47.tmdb.model.Release
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -23,11 +23,9 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetDetailsWithTitles() {
-        val details = Flowable.fromPublisher(
-            movie.details(
-                THOR_RAGNAROK_ID,
-                append = *arrayOf(MovieRequest.AlternativeTitles)
-            )
+        val details = movie.details(
+            THOR_RAGNAROK_ID,
+            append = *arrayOf(MovieRequest.AlternativeTitles)
         ).blockingFirst()
 
         assertEquals(THOR_RAGNAROK_ID, details.id)
@@ -41,11 +39,9 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetAlternativeTitles() {
-        val altTitles = Flowable.fromPublisher(
-            movie.alternativeTitles(
-                THOR_RAGNAROK_ID,
-                CountryCode.RU
-            )
+        val altTitles = movie.alternativeTitles(
+            THOR_RAGNAROK_ID,
+            CountryCode.RU
         ).blockingFirst()
 
         assertEquals(1, altTitles.titles.size)
@@ -54,12 +50,12 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetChanges() {
-        Flowable.fromPublisher(movie.changes(THOR_RAGNAROK_ID)).blockingFirst()
+        movie.changes(THOR_RAGNAROK_ID).blockingFirst()
     }
 
     @Test
     fun testGetCredits() {
-        val credits = Flowable.fromPublisher(movie.credits(THOR_RAGNAROK_ID)).blockingFirst()
+        val credits = movie.credits(THOR_RAGNAROK_ID).blockingFirst()
 
         assertEquals(
             CAST_LOKI_ACTOR_NAME,
@@ -69,26 +65,26 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetExternalIds() {
-        val extIds = Flowable.fromPublisher(movie.externalIds(THOR_RAGNAROK_ID)).blockingFirst()
+        val extIds = movie.externalIds(THOR_RAGNAROK_ID).blockingFirst()
 
         assertEquals(THOR_RAGNAROK_IMDB_ID, extIds.imdbId)
     }
 
     @Test
     fun testGetImages() {
-        Flowable.fromPublisher(movie.images(THOR_RAGNAROK_ID)).blockingFirst()
+        movie.images(THOR_RAGNAROK_ID).blockingFirst()
     }
 
     @Test
     fun testGetKeywords() {
-        val keywords = Flowable.fromPublisher(movie.keywords(THOR_RAGNAROK_ID)).blockingFirst()
+        val keywords = movie.keywords(THOR_RAGNAROK_ID).blockingFirst()
 
         assertNotNull(keywords.keywords.find { it.id == KEYWORD_NORSE_GOD_ID })
     }
 
     @Test
     fun testGetReleaseDates() {
-        val releaseDates = Flowable.fromPublisher(movie.releaseDates(THOR_RAGNAROK_ID)).blockingFirst()
+        val releaseDates = movie.releaseDates(THOR_RAGNAROK_ID).blockingFirst()
 
         assertEquals(
             US_THEATRICAL_RELEASE_DATE,
@@ -102,14 +98,14 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetVideos() {
-        val videos = Flowable.fromPublisher(movie.videos(THOR_RAGNAROK_ID)).blockingFirst()
+        val videos = movie.videos(THOR_RAGNAROK_ID).blockingFirst()
 
         assertTrue(videos.results.isNotEmpty())
     }
 
     @Test
     fun testGetTranslations() {
-        val translations = Flowable.fromPublisher(movie.translations(THOR_RAGNAROK_ID)).blockingFirst()
+        val translations = movie.translations(THOR_RAGNAROK_ID).blockingFirst()
 
         assertEquals(
             LATVIAN_TRANSLATION_NAME,
@@ -119,54 +115,54 @@ class MoviesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetRecommendations() {
-        val recommendations = Flowable.fromPublisher(movie.recommendations(THOR_RAGNAROK_ID)).blockingFirst()
+        val recommendations = movie.recommendations(THOR_RAGNAROK_ID).blockingFirst()
 
         assertTrue(recommendations.results.isNotEmpty())
     }
 
     @Test
     fun testGetSimilar() {
-        val similar = Flowable.fromPublisher(movie.similar(THOR_RAGNAROK_ID)).blockingFirst()
+        val similar = movie.similar(THOR_RAGNAROK_ID).blockingFirst()
 
         assertTrue(similar.results.isNotEmpty())
     }
 
     @Test
     fun testGetReviews() {
-        val reviews = Flowable.fromPublisher(movie.reviews(THOR_RAGNAROK_ID)).blockingFirst()
+        val reviews = movie.reviews(THOR_RAGNAROK_ID).blockingFirst()
 
         assertTrue(reviews.results.isNotEmpty())
     }
 
     @Test
     fun testGetLists() {
-        val lists = Flowable.fromPublisher(movie.lists(THOR_RAGNAROK_ID)).blockingFirst()
+        val lists = movie.lists(THOR_RAGNAROK_ID).blockingFirst()
 
         assertTrue(lists.results.isNotEmpty())
     }
 
     @Test
     fun testGetLatest() {
-        Flowable.fromPublisher(movie.latest()).blockingFirst()
+        movie.latest().blockingFirst()
     }
 
     @Test
     fun testGetNowPlaying() {
-        Flowable.fromPublisher(movie.nowPlaying()).blockingFirst()
+        movie.nowPlaying().blockingFirst()
     }
 
     @Test
     fun testGetPopular() {
-        Flowable.fromPublisher(movie.popular()).blockingFirst()
+        movie.popular().blockingFirst()
     }
 
     @Test
     fun testGetTopRated() {
-        Flowable.fromPublisher(movie.topRated()).blockingFirst()
+        movie.topRated().blockingFirst()
     }
 
     @Test
     fun testGetUpcoming() {
-        Flowable.fromPublisher(movie.upcoming()).blockingFirst()
+        movie.upcoming().blockingFirst()
     }
 }

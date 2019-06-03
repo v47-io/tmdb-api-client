@@ -1,6 +1,6 @@
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class CompaniesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetCompany() {
-        val company = Flowable.fromPublisher(client.company.details(COMPANY_ID)).blockingFirst()
+        val company = client.company.details(COMPANY_ID).blockingFirst()
 
         assertEquals(COMPANY_HEADQUARTERS, company.headquarters)
         assertEquals(COMPANY_NAME, company.name)
@@ -27,14 +27,14 @@ class CompaniesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetAlternativeNames() {
-        val alternativeNames = Flowable.fromPublisher(client.company.alternativeNames(COMPANY_ID)).blockingFirst()
+        val alternativeNames = client.company.alternativeNames(COMPANY_ID).blockingFirst()
 
         assertEquals(alternativeNames.results.firstOrNull()?.name, COMPANY_ALTERNATIVE_NAME)
     }
 
     @Test
     fun testGetImages() {
-        val images = Flowable.fromPublisher(client.company.images(COMPANY_ID)).blockingFirst()
+        val images = client.company.images(COMPANY_ID).blockingFirst()
 
         assertTrue(images.logos.isNotEmpty())
     }

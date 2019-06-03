@@ -1,6 +1,6 @@
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -17,46 +17,40 @@ class FindTest : AbstractTmdbTest() {
 
     @Test
     fun testFindMovies() {
-        val result = Flowable.fromPublisher(find.byId(AVENGERS_IMDB_ID, FindApi.ExternalSource.IMDb)).blockingFirst()
+        val result = find.byId(AVENGERS_IMDB_ID, FindApi.ExternalSource.IMDb).blockingFirst()
         assertTrue(result.movieResults.isNotEmpty())
     }
 
     @Test
     fun testFindTv() {
-        val result = Flowable.fromPublisher(
-            find.byId(
-                AGENTS_OF_SHIELD_IMDB_ID,
-                FindApi.ExternalSource.IMDb
-            )
+        val result = find.byId(
+            AGENTS_OF_SHIELD_IMDB_ID,
+            FindApi.ExternalSource.IMDb
         ).blockingFirst()
         assertTrue(result.tvResults.isNotEmpty())
     }
 
     @Test
     fun testFindSeason() {
-        val result = Flowable.fromPublisher(
-            find.byId(
-                SHIELD_SEASON_3_TVDB_ID,
-                FindApi.ExternalSource.TVDB
-            )
+        val result = find.byId(
+            SHIELD_SEASON_3_TVDB_ID,
+            FindApi.ExternalSource.TVDB
         ).blockingFirst()
         assertTrue(result.tvSeasonResults.isNotEmpty())
     }
 
     @Test
     fun testFindEpisode() {
-        val result = Flowable.fromPublisher(
-            find.byId(
-                SHIELD_S05E01_IMDB_ID,
-                FindApi.ExternalSource.IMDb
-            )
+        val result = find.byId(
+            SHIELD_S05E01_IMDB_ID,
+            FindApi.ExternalSource.IMDb
         ).blockingFirst()
         assertTrue(result.tvEpisodeResults.isNotEmpty())
     }
 
     @Test
     fun testFindPerson() {
-        val result = Flowable.fromPublisher(find.byId(CLARK_GREGG_IMDB_ID, FindApi.ExternalSource.IMDb)).blockingFirst()
+        val result = find.byId(CLARK_GREGG_IMDB_ID, FindApi.ExternalSource.IMDb).blockingFirst()
         assertTrue(result.personResults.isNotEmpty())
     }
 }

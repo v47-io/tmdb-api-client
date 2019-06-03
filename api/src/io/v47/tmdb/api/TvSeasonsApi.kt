@@ -22,7 +22,7 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
      * @param append Other methods to append to this call
      */
     fun details(
-        tvId: String,
+        tvId: Int,
         seasonNumber: Int,
         language: LocaleCode? = null,
         vararg append: TvSeasonRequest

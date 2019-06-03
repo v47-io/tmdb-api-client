@@ -12,12 +12,14 @@ internal fun TypeInfo.toArgument() =
 private fun TypeInfo.Simple.toArgument(): Argument<*> =
     Argument.of(type)
 
+@Suppress("SpreadOperator")
 private fun TypeInfo.Generic.toArgument(): Argument<*> =
     Argument.of(
         rawType,
         *typeArguments.map { it.toArgument() }.toTypedArray()
     )
 
+@Suppress("MagicNumber")
 internal fun getBasePath(baseUrl: String) =
     baseUrl.substring(8).let { url ->
         val part = url.substringAfter('/', "")

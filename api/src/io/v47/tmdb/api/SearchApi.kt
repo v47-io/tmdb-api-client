@@ -6,6 +6,7 @@ import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.*
+import org.reactivestreams.Publisher
 
 class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
@@ -80,7 +81,7 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
         language: LocaleCode? = null,
         region: CountryCode? = null,
         includeAdult: Boolean? = null
-    ): Paginated<MovieTvPersonListResult> =
+    ): Publisher<out Paginated<MovieTvPersonListResult>> =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedMovieTvPersonListResults>("/search/multi", page, language) {
                 queryArg("query", query)
@@ -88,7 +89,7 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
                 region?.let { queryArg("region", it.toString()) }
                 includeAdult?.let { queryArg("include_adult", it) }
             }
-        ) as Paginated<MovieTvPersonListResult>
+        )
 
     fun forPeople(
         query: String,

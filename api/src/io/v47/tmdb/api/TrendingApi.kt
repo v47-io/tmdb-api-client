@@ -4,6 +4,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.MovieTvPersonListResult
 import io.v47.tmdb.model.Paginated
 import io.v47.tmdb.model.PaginatedMovieTvPersonListResults
+import org.reactivestreams.Publisher
 
 @Suppress("UNCHECKED_CAST")
 class TrendingApi internal constructor(private val httpExecutor: HttpExecutor) {
@@ -19,11 +20,12 @@ class TrendingApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun get(
         mediaType: TrendingMediaType = TrendingMediaType.All,
         timeWindow: TrendingTimeWindow = TrendingTimeWindow.Day
-    ): Paginated<MovieTvPersonListResult> = httpExecutor.execute(
-        io.v47.tmdb.http.get<PaginatedMovieTvPersonListResults>(
-            "/trending/${mediaType.name.toLowerCase()}/${timeWindow.name.toLowerCase()}"
+    ): Publisher<out Paginated<MovieTvPersonListResult>> =
+        httpExecutor.execute(
+            io.v47.tmdb.http.get<PaginatedMovieTvPersonListResults>(
+                "/trending/${mediaType.name.toLowerCase()}/${timeWindow.name.toLowerCase()}"
+            )
         )
-    ) as Paginated<MovieTvPersonListResult>
 }
 
 enum class TrendingMediaType {

@@ -3,6 +3,7 @@ package io.v47.tmdb.http.impl
 import io.micronaut.core.io.buffer.ByteBuffer
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpHeaders
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.reactivex.Flowable
@@ -42,7 +43,7 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
             else
                 throw IllegalArgumentException("Not a HttpClientResponseException", t)
         }.map { resp ->
-            if (resp.code() == 200)
+            if (resp.code() == HttpStatus.OK.code)
                 @Suppress("UNCHECKED_CAST")
                 resp.toHttpResponse(argument)
             else
@@ -73,7 +74,33 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
                 ErrorResponse(txt, mnResponse.code())
             }
 
-    private fun HttpRequest.toMnHttpRequest(json: Boolean = true): MnHttpRequest<*> {
+    private fun HttpRequest.toMnHttpRequest(json: Boolean = true): MnHttpRequest<*> =
+        MnHttpRequest
+            .create<Any>(
+                when (method) {
+                    HttpMethod.Get -> io.micronaut.http.HttpMethod.GET
+                    HttpMethod.Post -> io.micronaut.http.HttpMethod.POST
+                    HttpMethod.Put -> io.micronaut.http.HttpMethod.PUT
+                    HttpMethod.Delete -> io.micronaut.http.HttpMethod.DELETE
+                },
+                createUri()
+            )
+            .accept(
+                if (json)
+                    MediaType.APPLICATION_JSON_TYPE
+                else
+                    MediaType.ALL_TYPE
+            )
+            .body(body)
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                if (body !is ByteArray)
+                    MediaType.APPLICATION_JSON
+                else
+                    MediaType.APPLICATION_OCTET_STREAM
+            )
+
+    private fun HttpRequest.createUri(): String {
         val uriSB = StringBuilder(basePath)
         if (!url.startsWith("/"))
             uriSB.append('/')
@@ -104,30 +131,7 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
             }
         }
 
-        return MnHttpRequest
-            .create<Any>(
-                when (method) {
-                    HttpMethod.Get -> io.micronaut.http.HttpMethod.GET
-                    HttpMethod.Post -> io.micronaut.http.HttpMethod.POST
-                    HttpMethod.Put -> io.micronaut.http.HttpMethod.PUT
-                    HttpMethod.Delete -> io.micronaut.http.HttpMethod.DELETE
-                },
-                uriSB.toString()
-            )
-            .accept(
-                if (json)
-                    MediaType.APPLICATION_JSON_TYPE
-                else
-                    MediaType.ALL_TYPE
-            )
-            .body(body)
-            .header(
-                HttpHeaders.CONTENT_TYPE,
-                if (body !is ByteArray)
-                    MediaType.APPLICATION_JSON
-                else
-                    MediaType.APPLICATION_OCTET_STREAM
-            )
+        return uriSB.toString()
     }
 
     private fun MnHttpResponse<*>.toHttpResponse(argument: Argument<*>?) =

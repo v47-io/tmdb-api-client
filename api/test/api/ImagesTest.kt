@@ -1,6 +1,6 @@
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -11,7 +11,7 @@ class ImagesTest : AbstractTmdbTest() {
 
     @Test
     fun testDownloadImage() {
-        val result = Flowable.fromPublisher(client.images.download("$NETFLIX_LOGO_ID.svg")).blockingFirst()
+        val result = client.images.download("$NETFLIX_LOGO_ID.svg").blockingFirst()
         assertTrue(result.isNotEmpty())
     }
 }

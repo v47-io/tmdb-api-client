@@ -1,6 +1,6 @@
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class CreditsTest : AbstractTmdbTest() {
 
     @Test
     fun testGetDetailsForTv() {
-        val credits = Flowable.fromPublisher(client.credits.details(TV_CREDIT_ID)).blockingFirst()
+        val credits = client.credits.details(TV_CREDIT_ID).blockingFirst()
 
         assertEquals(TV_MEDIA_ID, credits.media?.id)
         assertEquals(TV_CHARACTER, credits.media?.character)
@@ -25,7 +25,7 @@ class CreditsTest : AbstractTmdbTest() {
 
     @Test
     fun testGetDetailsForMovie() {
-        val credits = Flowable.fromPublisher(client.credits.details(MOVIE_CREDIT_ID)).blockingFirst()
+        val credits = client.credits.details(MOVIE_CREDIT_ID).blockingFirst()
 
         assertEquals(MOVIE_MEDIA_ID, credits.media?.id)
         assertEquals(MOVIE_CHARACTER, credits.media?.character)

@@ -1,6 +1,6 @@
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
+import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -14,37 +14,37 @@ class ChangesTest : AbstractTmdbTest() {
 
     @Test
     fun testGetMovieChangeList() {
-        val result = Flowable.fromPublisher(changes.forMovies()).blockingFirst()
+        val result = changes.forMovies().blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 
     @Test
     fun testGetPersonChangeList() {
-        val result = Flowable.fromPublisher(changes.forPeople()).blockingFirst()
+        val result = changes.forPeople().blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 
     @Test
     fun testGetTvChangeList() {
-        val result = Flowable.fromPublisher(changes.forTv()).blockingFirst()
+        val result = changes.forTv().blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 
     @Test
     fun testGetMovieChangeListWithArguments() {
-        val result = Flowable.fromPublisher(changes.forMovies(endDate, startDate, page)).blockingFirst()
+        val result = changes.forMovies(endDate, startDate, page).blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 
     @Test
     fun testGetPersonChangeListWithArguments() {
-        val result = Flowable.fromPublisher(changes.forPeople(endDate, startDate, page)).blockingFirst()
+        val result = changes.forPeople(endDate, startDate, page).blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 
     @Test
     fun testGetTvChangeListWithArguments() {
-        val result = Flowable.fromPublisher(changes.forTv(endDate, startDate, page)).blockingFirst()
+        val result = changes.forTv(endDate, startDate, page).blockingFirst()
         assertTrue(result.results.isNotEmpty())
     }
 }

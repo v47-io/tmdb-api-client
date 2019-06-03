@@ -64,6 +64,7 @@ class ImagesApi internal constructor(
                 }
             )
             .map { resp ->
+                @Suppress("MagicNumber")
                 when {
                     resp.status == 200 -> resp.body as ByteArray
                     resp.body is ErrorResponse -> throw ErrorResponseException(

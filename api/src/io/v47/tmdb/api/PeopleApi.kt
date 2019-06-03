@@ -109,7 +109,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param personId The id of the person
      */
     fun externalIds(personId: Int) =
-        httpExecutor.execute(get<PersonExternalIds>("/person/$personId/external_ids)"))
+        httpExecutor.execute(get<PersonExternalIds>("/person/$personId/external_ids"))
 
     /**
      * Get the images for a person
@@ -149,7 +149,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      *
      * @param language A language code
      */
-    fun latest(language: LocaleCode?) =
+    fun latest(language: LocaleCode? = null) =
         httpExecutor.execute(getWithLanguage<PersonDetails>("/person/latest", language))
 
     /**

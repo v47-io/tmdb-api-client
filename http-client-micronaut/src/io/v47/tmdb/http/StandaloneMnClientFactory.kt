@@ -18,13 +18,22 @@ import io.v47.tmdb.http.utils.getBasePath
 import java.net.URL
 
 class StandaloneMnClientFactory : HttpClientFactory {
+    companion object {
+        private val isTckRunning = runCatching {
+            Class.forName("io.v47.tmdb.http.tck.HttpClientTck")
+        }.isSuccess
+    }
+
     private val httpClientConfiguration = DefaultHttpClientConfiguration()
     private val threadFactory = DefaultThreadFactory(MultithreadEventLoopGroup::class.java)
     private val sslFactory = NettyClientSslBuilder(httpClientConfiguration.sslConfiguration)
 
     private val objectMapper = ObjectMapper().apply {
         findAndRegisterModules()
-        disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+
+        // Don't need to be so strict for TCK, it's testing the implementation of the client, not the deserialization
+        if (isTckRunning)
+            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     }
 
     private val applicationConfiguration = ApplicationConfiguration()
