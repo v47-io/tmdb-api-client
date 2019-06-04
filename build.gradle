@@ -8,7 +8,6 @@ plugins {
 subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'io.gitlab.arturbosch.detekt'
-    apply plugin: 'net.researchgate.release'
     // apply plugin: 'org.jetbrains.dokka'
 
     apply plugin: 'jacoco'
@@ -101,10 +100,6 @@ subprojects {
         }
     }
 
-    release {
-        tagTemplate = "v$version"
-    }
-
     /*dokka {
         moduleName = project.name
 
@@ -174,6 +169,10 @@ subprojects {
             }
         }
     }
+}
+
+release {
+    tagTemplate = 'v$version'
 }
 
 task build {
