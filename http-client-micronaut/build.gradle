@@ -9,6 +9,9 @@ dependencies {
 
     testImplementation project(':http-client-tck')
 
+    testRuntimeOnly libraries.mnHttpServerNetty
+    testImplementation libraries.mnRuntime
+
     testRuntimeOnly libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
 }

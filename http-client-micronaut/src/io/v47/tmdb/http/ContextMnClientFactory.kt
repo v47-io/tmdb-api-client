@@ -1,6 +1,7 @@
 package io.v47.tmdb.http
 
 import io.micronaut.context.BeanContext
+import io.micronaut.http.client.HttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
@@ -12,7 +13,10 @@ class ContextMnClientFactory(private val beanContext: BeanContext) : HttpClientF
         return HttpClientImpl(
             beanContext.createBean(
                 MnHttpClient::class.java,
-                mapOf("loadBalancer" to LoadBalancer.fixed(URL(baseUrl)))
+                mapOf(
+                    "loadBalancer" to LoadBalancer.fixed(URL(baseUrl)),
+                    "configuration" to beanContext.getBean(HttpClientConfiguration::class.java)
+                )
             ),
             getBasePath(baseUrl)
         )

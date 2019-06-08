@@ -25,6 +25,8 @@ ext {
             jacksonDatabind    : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
 
             mnHttpClient       : "io.micronaut:micronaut-http-client:$micronautVersion",
+            mnHttpServerNetty  : "io.micronaut:micronaut-http-server-netty:$micronautVersion",
+            mnRuntime          : "io.micronaut:micronaut-runtime:$micronautVersion",
 
             nvI18n             : "com.neovisionaries:nv-i18n:$nvI18nVersion",
 
