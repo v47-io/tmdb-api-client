@@ -16,9 +16,6 @@ class ContextMnClientTckTest {
     @BeforeAll
     fun startApplicationContext() {
         embeddedServer = ApplicationContext.run(EmbeddedServer::class.java)
-
-        while (!embeddedServer.isRunning) {
-        }
     }
 
     @Test
