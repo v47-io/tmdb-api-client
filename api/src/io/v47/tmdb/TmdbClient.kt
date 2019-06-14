@@ -3,6 +3,7 @@ package io.v47.tmdb
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.api.*
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
@@ -23,7 +24,12 @@ class TmdbClient private constructor(
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
-        ) = create(httpClientFactory, apiKey, rateLimiterRegistry, timeLimiterConfig).blockingGet()!!
+        ) = create(
+            httpClientFactory,
+            apiKey,
+            rateLimiterRegistry,
+            timeLimiterConfig
+        ).subscribeOn(Schedulers.io()).blockingGet()!!
 
         @JvmStatic
         fun create(

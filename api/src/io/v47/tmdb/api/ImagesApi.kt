@@ -3,6 +3,7 @@ package io.v47.tmdb.api
 import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.api.ErrorResponse
@@ -31,7 +32,6 @@ class ImagesApi internal constructor(
     private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     private val byteArrayTypeInfo = TypeInfo.Simple(ByteArray::class.java)
-    private val imageSizeNotSupported = "Image size not supported"
 
     val available get() = imageDlClient != null
 
@@ -63,6 +63,7 @@ class ImagesApi internal constructor(
                     }
                 }
             )
+            .subscribeOn(Schedulers.io())
             .map { resp ->
                 @Suppress("MagicNumber")
                 when {

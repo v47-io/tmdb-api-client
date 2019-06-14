@@ -6,6 +6,7 @@ import io.github.resilience4j.ratelimiter.operator.RateLimiterOperator
 import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
@@ -52,6 +53,7 @@ class HttpExecutor(
                     }
                 }
             )
+            .subscribeOn(Schedulers.io())
             .lift(RateLimiterOperator.of(rateLimiter))
             .filter { it.body != null }
             .map { resp ->
