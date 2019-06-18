@@ -3,7 +3,6 @@ package io.v47.tmdb
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.api.*
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
@@ -14,30 +13,15 @@ import java.time.Duration
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,
     httpExecutor: HttpExecutor,
-    private var _cachedSystemConfiguration: Configuration,
     private val timeLimiterConfig: TimeLimiterConfig
 ) {
     companion object {
-        @JvmStatic
-        fun blockingCreate(
+        operator fun invoke(
             httpClientFactory: HttpClientFactory,
             apiKey: String,
             rateLimiterRegistry: RateLimiterRegistry? = null,
             timeLimiterConfig: TimeLimiterConfig? = null
-        ) = create(
-            httpClientFactory,
-            apiKey,
-            rateLimiterRegistry,
-            timeLimiterConfig
-        ).subscribeOn(Schedulers.io()).blockingGet()!!
-
-        @JvmStatic
-        fun create(
-            httpClientFactory: HttpClientFactory,
-            apiKey: String,
-            rateLimiterRegistry: RateLimiterRegistry? = null,
-            timeLimiterConfig: TimeLimiterConfig? = null
-        ): Single<TmdbClient> {
+        ): TmdbClient {
             @Suppress("MagicNumber")
             val tlConfig = timeLimiterConfig
                 ?: TimeLimiterConfig.custom()
@@ -45,34 +29,25 @@ class TmdbClient private constructor(
                     .timeoutDuration(Duration.ofSeconds(30))
                     .build()
 
-            val httpExecutor = createHttpExecutor(
+            val httpExecutor = HttpExecutor(
                 httpClientFactory,
                 apiKey,
                 rateLimiterRegistry,
                 tlConfig
             )
-            val configurationApi = ConfigurationApi(httpExecutor)
 
-            return Single.fromPublisher(configurationApi.system())
-                .map { TmdbClient(httpClientFactory, httpExecutor, it, tlConfig) }
+            return TmdbClient(httpClientFactory, httpExecutor, tlConfig)
         }
-
-        private fun createHttpExecutor(
-            httpClientFactory: HttpClientFactory,
-            apiKey: String,
-            rateLimiterRegistry: RateLimiterRegistry? = null,
-            timeLimiterConfig: TimeLimiterConfig
-        ) =
-            HttpExecutor(
-                httpClientFactory,
-                apiKey,
-                rateLimiterRegistry,
-                timeLimiterConfig
-            )
     }
 
-    val cachedSystemConfiguration
-        get() = _cachedSystemConfiguration
+    private var _cachedSystemConfiguration: Configuration? = null
+    val cachedSystemConfiguration: Configuration
+        get() {
+            if (_cachedSystemConfiguration == null)
+                initialize()
+
+            return _cachedSystemConfiguration!!
+        }
 
     val certifications = CertificationsApi(httpExecutor)
     val changes = ChangesApi(httpExecutor)
@@ -84,8 +59,14 @@ class TmdbClient private constructor(
     val find = FindApi(httpExecutor)
     val genres = GenresApi(httpExecutor)
 
-    private var _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration, timeLimiterConfig)
-    val images get() = _images
+    private var _images: ImagesApi? = null
+    val images: ImagesApi
+        get() {
+            if (_images == null)
+                initialize()
+
+            return _images!!
+        }
 
     val keyword = KeywordApi(httpExecutor)
     val list = ListApi(httpExecutor)
@@ -100,13 +81,26 @@ class TmdbClient private constructor(
     val tvEpisodeGroup = TvEpisodeGroupsApi(httpExecutor)
     val tvSeason = TvSeasonsApi(httpExecutor)
 
+    private fun initialize() {
+        synchronized(this) {
+            if (_cachedSystemConfiguration == null) {
+                Single.fromPublisher(configuration.system())
+                    .map { config ->
+                        _cachedSystemConfiguration = config
+                        _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration!!, timeLimiterConfig)
+                    }
+                    .blockingGet()
+            }
+        }
+    }
+
     fun refreshCachedConfiguration(): Single<Unit> =
         Single
             .fromPublisher(configuration.system())
             .doOnSuccess { systemConfig ->
                 _cachedSystemConfiguration = systemConfig
 
-                _images.close()
+                _images?.close()
                 _images = ImagesApi(httpClientFactory, systemConfig, timeLimiterConfig)
             }
             .map { Unit }

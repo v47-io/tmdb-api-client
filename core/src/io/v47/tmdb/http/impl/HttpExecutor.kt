@@ -7,6 +7,7 @@ import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
@@ -14,17 +15,19 @@ import io.v47.tmdb.http.api.ErrorResponseException
 import org.reactivestreams.Publisher
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val BASE_URL = "https://api.themoviedb.org"
 
 @Suppress("MagicNumber")
 class HttpExecutor(
-    httpClientFactory: HttpClientFactory,
+    private val httpClientFactory: HttpClientFactory,
     private val apiKey: String,
     rateLimiterRegistry: RateLimiterRegistry? = null,
     timeLimiterConfig: TimeLimiterConfig
 ) {
-    private val httpClient = httpClientFactory.createHttpClient(BASE_URL)
+    private lateinit var httpClient: HttpClient
+    private var httpClientInitialized = AtomicBoolean(false)
 
     private val rateLimiterRegistry = rateLimiterRegistry ?: RateLimiterRegistry.ofDefaults()
 
@@ -41,6 +44,9 @@ class HttpExecutor(
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
         val httpRequest = createHttpRequest(request)
+
+        if (!httpClientInitialized.getAndSet(true))
+            httpClient = httpClientFactory.createHttpClient(BASE_URL)
 
         return Flowable
             .fromPublisher(

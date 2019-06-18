@@ -1,3 +1,11 @@
+apply plugin: 'org.jetbrains.kotlin.kapt'
+apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
+
+allOpen {
+    annotation('io.micronaut.aop.Around')
+    annotation('javax.inject.Singleton')
+}
+
 dependencies {
     implementation project(':core')
 
@@ -7,8 +15,10 @@ dependencies {
     implementation libraries.reactiveStreams
     implementation libraries.rxJava
 
+    testImplementation project(':api')
     testImplementation project(':http-client-tck')
 
+    kaptTest libraries.mnInject
     testRuntimeOnly libraries.mnHttpServerNetty
     testImplementation libraries.mnRuntime
 
