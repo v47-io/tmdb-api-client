@@ -14,10 +14,6 @@ class MnClientInjectTest {
     @BeforeAll
     fun startServer() {
         embeddedServer = ApplicationContext.run(EmbeddedServer::class.java)
-
-        while (!embeddedServer.isRunning) {
-            Thread.onSpinWait()
-        }
     }
 
     @Test
