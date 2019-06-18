@@ -19,6 +19,6 @@ abstract class AbstractTmdbTest {
                         "property called 'tmdb.apiKey' or as an environment variable called 'API_KEY'"
             )
 
-        client = TmdbClient.blockingCreate(StandaloneMnClientFactory(), apiKey)
+        client = TmdbClient(StandaloneMnClientFactory(), apiKey)
     }
 }
