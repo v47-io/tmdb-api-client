@@ -60,7 +60,7 @@ class HttpExecutor(
                 }
             )
             .subscribeOn(Schedulers.io())
-            .lift(RateLimiterOperator.of(rateLimiter))
+            .compose(RateLimiterOperator.of(rateLimiter))
             .filter { it.body != null }
             .map { resp ->
                 when {
