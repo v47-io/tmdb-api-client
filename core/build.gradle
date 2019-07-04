@@ -2,6 +2,7 @@ dependencies {
     compileOnly libraries.jacksonDatabind
 
     api libraries.r4jRatelimiter
+    implementation libraries.r4jRetry
     implementation libraries.r4jRxjava
     api libraries.r4jTimeLimiter
 

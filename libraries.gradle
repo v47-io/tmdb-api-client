@@ -33,6 +33,7 @@ ext {
             nvI18n             : "com.neovisionaries:nv-i18n:$nvI18nVersion",
 
             r4jRatelimiter     : "io.github.resilience4j:resilience4j-ratelimiter:$resilience4jVersion",
+            r4jRetry           : "io.github.resilience4j:resilience4j-retry:$resilience4jVersion",
             r4jRxjava          : "io.github.resilience4j:resilience4j-rxjava2:$resilience4jVersion",
             r4jTimeLimiter     : "io.github.resilience4j:resilience4j-timelimiter:$resilience4jVersion",
 

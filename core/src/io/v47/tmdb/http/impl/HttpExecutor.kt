@@ -3,12 +3,16 @@ package io.v47.tmdb.http.impl
 import io.github.resilience4j.ratelimiter.RateLimiterConfig
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry
 import io.github.resilience4j.ratelimiter.operator.RateLimiterOperator
+import io.github.resilience4j.retry.Retry
+import io.github.resilience4j.retry.RetryConfig
+import io.github.resilience4j.retry.transformer.RetryTransformer
 import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
+import io.v47.tmdb.http.HttpResponse
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
 import org.reactivestreams.Publisher
@@ -33,9 +37,21 @@ class HttpExecutor(
     private val rateLimiter = this.rateLimiterRegistry.rateLimiter(
         "tmdb-api-v2",
         RateLimiterConfig.custom()
-            .limitRefreshPeriod(Duration.ofMillis(1200))
-            .limitForPeriod(4)
+            .limitRefreshPeriod(Duration.ofSeconds(10))
+            .limitForPeriod(40)
             .timeoutDuration(Duration.ofNanos(Long.MAX_VALUE))
+            .build()
+    )
+
+    private val retry = Retry.of(
+        "tmdb-api-v2",
+        RetryConfig.custom<HttpResponse<*>>()
+            .maxAttempts(4)
+            .waitDuration(Duration.ofSeconds(10))
+            .retryOnResult { resp ->
+                val body = resp.body
+                resp.status == 429 && body is ErrorResponse && body.code == 25
+            }
             .build()
     )
 
@@ -59,6 +75,7 @@ class HttpExecutor(
                     }
                 }
             )
+            .compose(RetryTransformer.of(retry))
             .compose(RateLimiterOperator.of(rateLimiter))
             .filter { it.body != null }
             .map { resp ->
