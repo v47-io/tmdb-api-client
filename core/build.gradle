@@ -7,4 +7,13 @@ dependencies {
 
     api libraries.reactiveStreams
     api libraries.rxJava
+
+    testImplementation libraries.coroutinesCore
+    testImplementation libraries.coroutinesReactive
+
+    testImplementation project(':api')
+    testImplementation project(':http-client-micronaut')
+
+    testRuntimeOnly libraries.jacksonModuleKotlin
+    testRuntimeOnly libraries.logback
 }

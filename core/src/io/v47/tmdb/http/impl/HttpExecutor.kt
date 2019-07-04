@@ -6,7 +6,6 @@ import io.github.resilience4j.ratelimiter.operator.RateLimiterOperator
 import io.github.resilience4j.timelimiter.TimeLimiter
 import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
@@ -34,8 +33,9 @@ class HttpExecutor(
     private val rateLimiter = this.rateLimiterRegistry.rateLimiter(
         "tmdb-api-v2",
         RateLimiterConfig.custom()
-            .limitRefreshPeriod(Duration.ofSeconds(10))
-            .limitForPeriod(40)
+            .limitRefreshPeriod(Duration.ofMillis(1200))
+            .limitForPeriod(4)
+            .timeoutDuration(Duration.ofNanos(Long.MAX_VALUE))
             .build()
     )
 
@@ -59,7 +59,6 @@ class HttpExecutor(
                     }
                 }
             )
-            .subscribeOn(Schedulers.io())
             .compose(RateLimiterOperator.of(rateLimiter))
             .filter { it.body != null }
             .map { resp ->
