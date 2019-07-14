@@ -1,9 +1,8 @@
 dependencies {
-    compileOnly libraries.jacksonDatabind
+    implementation libraries.coroutines
+    implementation libraries.coroutinesReactive
 
-    api libraries.r4jRatelimiter
-    implementation libraries.r4jRxjava
-    api libraries.r4jTimeLimiter
+    compileOnly libraries.jacksonDatabind
 
     api libraries.reactiveStreams
     api libraries.rxJava

@@ -1,12 +1,12 @@
 ext {
     // Core Libraries
+    coroutinesVersion = '1.2.2'
     slf4jVersion = '1.7.26'
 
     // Implementation Libraries
     jacksonVersion = '2.9.9'
     nvI18nVersion = '1.25'
     reactiveStreamsVersion = '1.0.2'
-    resilience4jVersion = '0.16.0'
     rxJavaVersion = '2.2.8'
 
     // Testing Libraries
@@ -19,6 +19,8 @@ ext {
     libraries = [
             // Core Libraries
             stdlib             : 'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
+            coroutines         : "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
+            coroutinesReactive : "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutinesVersion",
             slf4j              : "org.slf4j:slf4j-api:$slf4jVersion",
 
             // Implementation Libraries
@@ -31,10 +33,6 @@ ext {
             mnRuntime          : "io.micronaut:micronaut-runtime:$micronautVersion",
 
             nvI18n             : "com.neovisionaries:nv-i18n:$nvI18nVersion",
-
-            r4jRatelimiter     : "io.github.resilience4j:resilience4j-ratelimiter:$resilience4jVersion",
-            r4jRxjava          : "io.github.resilience4j:resilience4j-rxjava2:$resilience4jVersion",
-            r4jTimeLimiter     : "io.github.resilience4j:resilience4j-timelimiter:$resilience4jVersion",
 
             reactiveStreams    : "org.reactivestreams:reactive-streams:$reactiveStreamsVersion",
             rxJava             : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",

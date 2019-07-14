@@ -1,44 +1,18 @@
 package io.v47.tmdb
 
-import io.github.resilience4j.ratelimiter.RateLimiterRegistry
-import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Single
 import io.v47.tmdb.api.*
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Configuration
-import java.time.Duration
 
 @Suppress("ConstructorParameterNaming")
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,
-    httpExecutor: HttpExecutor,
-    private val timeLimiterConfig: TimeLimiterConfig
+    httpExecutor: HttpExecutor
 ) {
-    companion object {
-        operator fun invoke(
-            httpClientFactory: HttpClientFactory,
-            apiKey: String,
-            rateLimiterRegistry: RateLimiterRegistry? = null,
-            timeLimiterConfig: TimeLimiterConfig? = null
-        ): TmdbClient {
-            @Suppress("MagicNumber")
-            val tlConfig = timeLimiterConfig
-                ?: TimeLimiterConfig.custom()
-                    .cancelRunningFuture(true)
-                    .timeoutDuration(Duration.ofSeconds(30))
-                    .build()
-
-            val httpExecutor = HttpExecutor(
-                httpClientFactory,
-                apiKey,
-                rateLimiterRegistry,
-                tlConfig
-            )
-
-            return TmdbClient(httpClientFactory, httpExecutor, tlConfig)
-        }
-    }
+    constructor (httpClientFactory: HttpClientFactory, apiKey: String) :
+            this(httpClientFactory, HttpExecutor(httpClientFactory, apiKey))
 
     private var _cachedSystemConfiguration: Configuration? = null
     val cachedSystemConfiguration: Configuration
@@ -87,7 +61,7 @@ class TmdbClient private constructor(
                 Single.fromPublisher(configuration.system())
                     .map { config ->
                         _cachedSystemConfiguration = config
-                        _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration!!, timeLimiterConfig)
+                        _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration!!)
                     }
                     .blockingGet()
             }
@@ -101,7 +75,7 @@ class TmdbClient private constructor(
                 _cachedSystemConfiguration = systemConfig
 
                 _images?.close()
-                _images = ImagesApi(httpClientFactory, systemConfig, timeLimiterConfig)
+                _images = ImagesApi(httpClientFactory, systemConfig)
             }
             .map { Unit }
 }

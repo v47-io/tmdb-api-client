@@ -1,10 +1,10 @@
 package io.v47.tmdb.http.impl
 
-import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.StandaloneMnClientFactory
 import io.v47.tmdb.model.TvShowDetails
 import io.v47.tmdb.utils.TypeInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactive.awaitFirst
@@ -37,9 +37,7 @@ class HttpExecutorBurstTest {
 
         val httpExecutor = HttpExecutor(
             StandaloneMnClientFactory(),
-            apiKey,
-            null,
-            TimeLimiterConfig.ofDefaults()
+            apiKey
         )
 
         val request = TmdbRequest<TvShowDetails>(
@@ -54,7 +52,7 @@ class HttpExecutorBurstTest {
         runBlocking {
             coroutineScope {
                 val asyncResults = (0 until 80).map {
-                    async {
+                    async(Dispatchers.IO) {
                         httpExecutor.execute(request).awaitFirst()
                     }
                 }

@@ -1,7 +1,5 @@
 package io.v47.tmdb.api
 
-import io.github.resilience4j.timelimiter.TimeLimiter
-import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClientFactory
@@ -13,12 +11,10 @@ import io.v47.tmdb.model.*
 import io.v47.tmdb.utils.TypeInfo
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
-import java.util.concurrent.CompletableFuture
 
 class ImagesApi internal constructor(
     private val httpClientFactory: HttpClientFactory,
-    configuration: Configuration,
-    timeLimiterConfig: TimeLimiterConfig
+    configuration: Configuration
 ) {
     private val log = LoggerFactory.getLogger(javaClass)!!
 
@@ -28,8 +24,6 @@ class ImagesApi internal constructor(
             log.warn("Image download not possible: The system configuration doesn't provide a base URL!")
             null
         }
-
-    private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     private val byteArrayTypeInfo = TypeInfo.Simple(ByteArray::class.java)
 
@@ -54,14 +48,10 @@ class ImagesApi internal constructor(
 
         return Flowable
             .fromPublisher(
-                timeLimiter.executeFutureSupplier {
-                    CompletableFuture.supplyAsync {
-                        imageDlClient!!.execute(
-                            request,
-                            byteArrayTypeInfo
-                        )
-                    }
-                }
+                imageDlClient!!.execute(
+                    request,
+                    byteArrayTypeInfo
+                )
             )
             .subscribeOn(Schedulers.io())
             .map { resp ->

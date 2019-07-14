@@ -1,19 +1,13 @@
 package io.v47.tmdb.http.impl
 
-import io.github.resilience4j.ratelimiter.RateLimiterConfig
-import io.github.resilience4j.ratelimiter.RateLimiterRegistry
-import io.github.resilience4j.ratelimiter.operator.RateLimiterOperator
-import io.github.resilience4j.timelimiter.TimeLimiter
-import io.github.resilience4j.timelimiter.TimeLimiterConfig
 import io.reactivex.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
+import kotlinx.coroutines.reactive.asPublisher
 import org.reactivestreams.Publisher
-import java.time.Duration
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
 private const val BASE_URL = "https://api.themoviedb.org"
@@ -21,45 +15,23 @@ private const val BASE_URL = "https://api.themoviedb.org"
 @Suppress("MagicNumber")
 class HttpExecutor(
     private val httpClientFactory: HttpClientFactory,
-    private val apiKey: String,
-    rateLimiterRegistry: RateLimiterRegistry? = null,
-    timeLimiterConfig: TimeLimiterConfig
+    private val apiKey: String
 ) {
     private lateinit var httpClient: HttpClient
+    private var queue = HttpExecutorQueue()
     private var httpClientInitialized = AtomicBoolean(false)
-
-    private val rateLimiterRegistry = rateLimiterRegistry ?: RateLimiterRegistry.ofDefaults()
-
-    private val rateLimiter = this.rateLimiterRegistry.rateLimiter(
-        "tmdb-api-v2",
-        RateLimiterConfig.custom()
-            .limitRefreshPeriod(Duration.ofMillis(1200))
-            .limitForPeriod(4)
-            .timeoutDuration(Duration.ofNanos(Long.MAX_VALUE))
-            .build()
-    )
-
-    private val timeLimiter = TimeLimiter.of(timeLimiterConfig)
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
         val httpRequest = createHttpRequest(request)
 
-        if (!httpClientInitialized.getAndSet(true))
+        if (!httpClientInitialized.getAndSet(true)) {
             httpClient = httpClientFactory.createHttpClient(BASE_URL)
+            queue.start(httpClient)
+        }
 
         return Flowable
-            .fromPublisher(
-                timeLimiter.executeFutureSupplier {
-                    CompletableFuture.supplyAsync {
-                        httpClient.execute(
-                            httpRequest,
-                            request.responseType
-                        )
-                    }
-                }
-            )
-            .compose(RateLimiterOperator.of(rateLimiter))
+            .fromPublisher(queue.enqueue<T>(httpRequest, request.responseType).asPublisher())
             .filter { it.body != null }
             .map { resp ->
                 when {
@@ -71,8 +43,6 @@ class HttpExecutor(
                     else -> throw IllegalArgumentException("Invalid error response: $resp")
                 }
             }
-            .map { it as T }
-            .defaultIfEmpty(Unit as T)
     }
 
     private fun createHttpRequest(tmdbRequest: TmdbRequest<*>): HttpRequest {
