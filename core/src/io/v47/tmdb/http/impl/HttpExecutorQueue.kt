@@ -9,8 +9,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.reactive.openSubscription
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.min
 
 internal class HttpExecutorQueue : CoroutineScope {
     override val coroutineContext = Job() + Dispatchers.IO
@@ -18,65 +18,114 @@ internal class HttpExecutorQueue : CoroutineScope {
     private val log = LoggerFactory.getLogger(javaClass)!!
     private val queue = Channel<QueuedRequest<*>>(Channel.UNLIMITED)
 
+    @Suppress("ComplexMethod", "LongMethod", "ReturnCount", "ThrowsCount", "TooGenericExceptionCaught")
     fun start(httpClient: HttpClient) {
-        val coreContext = coroutineContext
-
         launch {
             while (isActive) {
-                val executingRequests = mutableListOf<QueuedRequest<*>>()
-                var retryAfterSeconds: Int? = null
+                val executingRequests = ConcurrentLinkedQueue<QueuedRequest<*>>()
+                val rateLimited = AtomicBoolean(false)
 
-                processing@ while (isActive) {
-                    @Suppress("UNCHECKED_CAST")
-                    val nextRequest = queue.receive() as QueuedRequest<Any>
+                runCatching {
+                    coroutineScope processingScope@{
+                        @Suppress("UNCHECKED_CAST")
+                        val c = queue as Channel<QueuedRequest<Any>>
 
-                    executingRequests += nextRequest
+                        for (nextRequest in c) {
+                            executingRequests += nextRequest
 
-                    val responsePublisher = httpClient.execute(nextRequest.httpRequest, nextRequest.responseType)
-                    val responseChannel = responsePublisher.openSubscription(1)
+                            launch requestWorker@{
+                                if (rateLimited.get())
+                                    return@requestWorker
 
-                    @Suppress("UNCHECKED_CAST")
-                    val firstResponse = try {
-                        responseChannel.receive() as HttpResponse<Any>
-                    } catch (x: Exception) {
-                        nextRequest.offerException(x)
-                        executingRequests -= nextRequest
-                        continue@processing
-                    }
+                                val responsePublisher = httpClient.execute(
+                                    nextRequest.httpRequest,
+                                    nextRequest.responseType
+                                )
 
-                    if (firstResponse.status == 429) {
-                        val retryAfterHeader = firstResponse.headers["Retry-After"]?.firstOrNull()
-                        retryAfterSeconds = min(1, retryAfterHeader?.toInt() ?: 10)
+                                val responseChannel = responsePublisher.openSubscription(1)
 
-                        break@processing
-                    }
+                                if (rateLimited.get()) {
+                                    responseChannel.cancel()
+                                    return@requestWorker
+                                }
 
-                    executingRequests -= nextRequest
-
-                    launch(coreContext) {
-                        nextRequest.offerResponse(firstResponse)
-
-                        runCatching {
-                            for (resp in responseChannel) {
                                 @Suppress("UNCHECKED_CAST")
-                                nextRequest.offerResponse(resp as HttpResponse<Any>)
-                            }
+                                val firstResponse = try {
+                                    responseChannel.receive() as HttpResponse<Any>
+                                } catch (x: Exception) {
+                                    if (x !is CancellationException) {
+                                        nextRequest.offerException(x)
+                                        executingRequests -= nextRequest
 
-                            nextRequest.close()
-                        }.onFailure {
-                            nextRequest.offerException(it)
+                                        return@requestWorker
+                                    }
+
+                                    throw x
+                                }
+
+                                if (firstResponse.status == 429) {
+                                    responseChannel.cancel()
+
+                                    if (rateLimited.getAndSet(true))
+                                        return@requestWorker
+
+                                    val retryAfterHeader = firstResponse.headers["Retry-After"]?.firstOrNull()
+                                    val retryAfterSeconds = (retryAfterHeader?.toInt() ?: 10)
+
+                                    throw RateLimitException(retryAfterSeconds)
+                                } else {
+                                    val remainingHeader = firstResponse.headers["X-RateLimit-Remaining"]?.firstOrNull()
+                                    val remaining = remainingHeader?.toInt() ?: 1
+
+                                    executingRequests -= nextRequest
+
+                                    launch(this@HttpExecutorQueue.coroutineContext) {
+                                        runCatching {
+                                            nextRequest.offerResponse(firstResponse)
+
+                                            for (resp in responseChannel) {
+                                                @Suppress("UNCHECKED_CAST")
+                                                nextRequest.offerResponse(resp as HttpResponse<Any>)
+                                            }
+                                        }.onFailure {
+                                            nextRequest.offerException(it)
+                                        }
+
+                                        nextRequest.close()
+                                    }
+
+                                    if (remaining == 0) {
+                                        if (rateLimited.getAndSet(true))
+                                            return@requestWorker
+
+                                        val reset = firstResponse.headers["X-RateLimit-Reset"]?.firstOrNull()?.toInt()
+                                        val delaySeconds = if (reset != null)
+                                            (reset - (System.currentTimeMillis() / 1000)).toInt()
+                                        else
+                                            5
+
+                                        if (delaySeconds > -1) {
+                                            if (log.isTraceEnabled)
+                                                log.trace("remaining limit is 0 and delay is {}", delaySeconds)
+
+                                            throw RateLimitException(delaySeconds)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
-                }
+                }.onFailure { x ->
+                    if (x is RateLimitException) {
+                        log.warn("Just got rate-limited, delaying further operations by {}s", x.delaySeconds)
 
-                if (retryAfterSeconds != null) {
-                    log.warn("Just got rate-limited, delaying further operations by {}s", retryAfterSeconds)
-
-                    delay(retryAfterSeconds * 1000L)
-                    executingRequests.forEach { req ->
-                        if (!req.hasResponded)
-                            queue.send(req)
-                    }
+                        delay(x.delaySeconds * 1000L)
+                        executingRequests.forEach { req ->
+                            if (!req.hasResponded)
+                                queue.send(req)
+                        }
+                    } else
+                        throw x
                 }
             }
 
@@ -98,7 +147,7 @@ internal class HttpExecutorQueue : CoroutineScope {
 }
 
 private class QueuedRequest<T>(val httpRequest: HttpRequest, val responseType: TypeInfo) {
-    private val _responseChannel = Channel<HttpResponse<T>>()
+    private val _responseChannel = Channel<HttpResponse<T>>(Channel.UNLIMITED)
     val responseChannel: ReceiveChannel<HttpResponse<T>> get() = _responseChannel
 
     private var _hasResponded = AtomicBoolean(false)
@@ -118,3 +167,5 @@ private class QueuedRequest<T>(val httpRequest: HttpRequest, val responseType: T
         _responseChannel.close()
     }
 }
+
+private class RateLimitException(val delaySeconds: Int) : RuntimeException()
