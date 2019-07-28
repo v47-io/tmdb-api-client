@@ -33,23 +33,23 @@ data class Configuration(
     ) : TmdbType()
 }
 
-interface ImageSize {
-    val value: Int
+sealed class ImageSize {
+    abstract val value: Int
 }
 
-internal data class Width(override val value: Int) : ImageSize, Comparable<Width> {
+data class Width(override val value: Int) : ImageSize(), Comparable<Width> {
     override fun compareTo(other: Width) = value.compareTo(other.value)
 
     override fun toString() = "w$value"
 }
 
-internal data class Height(override val value: Int) : ImageSize, Comparable<Height> {
+data class Height(override val value: Int) : ImageSize(), Comparable<Height> {
     override fun compareTo(other: Height) = value.compareTo(other.value)
 
     override fun toString() = "h$value"
 }
 
-object Original : ImageSize {
+object Original : ImageSize() {
     override val value = Int.MAX_VALUE
 
     override fun toString() = "original"
