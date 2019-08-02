@@ -312,7 +312,8 @@ enum class VideoType {
     Clip,
     Featurette,
     `Opening Credits`,
-    `Behind the Scenes`
+    `Behind the Scenes`,
+    Bloopers
 }
 
 enum class TvShowType {
