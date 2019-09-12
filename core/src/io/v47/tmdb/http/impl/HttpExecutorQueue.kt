@@ -27,6 +27,7 @@ internal class HttpExecutorQueue(parentContext: CoroutineContext) : CoroutineSco
 
     private val requestQueue = Channel<QueuedRequest<*>>(Channel.UNLIMITED)
 
+    @Suppress("ComplexMethod", "LongMethod", "TooGenericExceptionCaught")
     fun start(httpClient: HttpClient) {
         launch {
             var isFirst = true
