@@ -6,6 +6,7 @@ import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactive.asPublisher
 import org.reactivestreams.Publisher
 import java.util.concurrent.atomic.AtomicBoolean
@@ -18,7 +19,7 @@ class HttpExecutor(
     private val apiKey: String
 ) {
     private lateinit var httpClient: HttpClient
-    private var queue = HttpExecutorQueue()
+    private var queue = HttpExecutorQueue(Dispatchers.IO)
     private var httpClientInitialized = AtomicBoolean(false)
 
     @Suppress("UNCHECKED_CAST")

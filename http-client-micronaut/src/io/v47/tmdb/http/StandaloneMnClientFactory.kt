@@ -16,6 +16,7 @@ import io.netty.util.concurrent.DefaultThreadFactory
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
 import java.net.URL
+import java.time.Duration
 
 class StandaloneMnClientFactory : HttpClientFactory {
     companion object {
@@ -24,7 +25,10 @@ class StandaloneMnClientFactory : HttpClientFactory {
         }.isSuccess
     }
 
-    private val httpClientConfiguration = DefaultHttpClientConfiguration()
+    private val httpClientConfiguration = DefaultHttpClientConfiguration().apply {
+        setReadTimeout(Duration.ofSeconds(30))
+    }
+
     private val threadFactory = DefaultThreadFactory(MultithreadEventLoopGroup::class.java)
     private val sslFactory = NettyClientSslBuilder(httpClientConfiguration.sslConfiguration)
 

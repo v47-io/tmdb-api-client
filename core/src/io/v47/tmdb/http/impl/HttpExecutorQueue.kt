@@ -8,129 +8,154 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.reactive.openSubscription
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.time.delay
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.time.Duration
+import java.time.Instant
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.CoroutineContext
 
-internal class HttpExecutorQueue : CoroutineScope {
-    override val coroutineContext = Job() + Dispatchers.IO
+internal class HttpExecutorQueue(parentContext: CoroutineContext) : CoroutineScope {
+    override val coroutineContext = Job() + parentContext
 
     private val log = LoggerFactory.getLogger(javaClass)!!
-    private val queue = Channel<QueuedRequest<*>>(Channel.UNLIMITED)
 
-    @Suppress("ComplexMethod", "LongMethod", "ReturnCount", "ThrowsCount", "TooGenericExceptionCaught")
+    private val stateMutex = Mutex()
+    private var requestsAvailable = 1
+
+    private val requestQueue = Channel<QueuedRequest<*>>(Channel.UNLIMITED)
+
     fun start(httpClient: HttpClient) {
         launch {
+            var isFirst = true
+
             while (isActive) {
-                val executingRequests = ConcurrentLinkedQueue<QueuedRequest<*>>()
-                val rateLimited = AtomicBoolean(false)
+                for (queuedRequest in requestQueue) {
+                    runCatching {
+                        var doReset = false
 
-                runCatching {
-                    coroutineScope processingScope@{
-                        @Suppress("UNCHECKED_CAST")
-                        val c = queue as Channel<QueuedRequest<Any>>
+                        while (true) {
+                            val doYield = stateMutex.withLock {
+                                if (requestsAvailable > 0) {
+                                    if (--requestsAvailable == 0)
+                                        doReset = true
 
-                        for (nextRequest in c) {
-                            executingRequests += nextRequest
+                                    false
+                                } else
+                                    true
+                            }
 
-                            launch requestWorker@{
-                                if (rateLimited.get())
-                                    return@requestWorker
+                            if (doYield)
+                                yield()
+                            else
+                                break
+                        }
 
-                                val responsePublisher = httpClient.execute(
-                                    nextRequest.httpRequest,
-                                    nextRequest.responseType
-                                )
+                        launch request@{
+                            @Suppress("UNCHECKED_CAST")
+                            val nextRequest = queuedRequest as QueuedRequest<Any>
 
-                                val responseChannel = responsePublisher.openSubscription(1)
+                            val responsePublisher = httpClient.execute(
+                                nextRequest.httpRequest,
+                                nextRequest.responseType
+                            )
 
-                                if (rateLimited.get()) {
-                                    responseChannel.cancel()
-                                    return@requestWorker
+                            @Suppress("EXPERIMENTAL_API_USAGE")
+                            val responseChannel = responsePublisher.openSubscription(1)
+
+                            @Suppress("UNCHECKED_CAST")
+                            val firstResponse = try {
+                                responseChannel.receive() as HttpResponse<Any>
+                            } catch (x: Exception) {
+                                stateMutex.withLock {
+                                    requestsAvailable++
                                 }
 
-                                @Suppress("UNCHECKED_CAST")
-                                val firstResponse = try {
-                                    responseChannel.receive() as HttpResponse<Any>
-                                } catch (x: Exception) {
-                                    if (x !is CancellationException) {
-                                        nextRequest.offerException(x)
-                                        executingRequests -= nextRequest
-
-                                        return@requestWorker
-                                    }
-
-                                    throw x
+                                if (x !is CancellationException) {
+                                    nextRequest.offerException(x)
+                                    return@request
                                 }
 
-                                if (firstResponse.status == 429) {
-                                    responseChannel.cancel()
+                                throw x
+                            }
 
-                                    if (rateLimited.getAndSet(true))
-                                        return@requestWorker
+                            val isRateLimited = stateMutex.withLock {
+                                val tmp = firstResponse.status == 429
 
-                                    val retryAfterHeader = firstResponse.headers["Retry-After"]?.firstOrNull()
-                                    val retryAfterSeconds = (retryAfterHeader?.toInt() ?: 10)
+                                if (tmp) {
+                                    log.warn("Just got rate-limited by TMDB")
+                                    requestsAvailable = 0
+                                }
 
-                                    throw RateLimitException(retryAfterSeconds)
-                                } else {
-                                    val remainingHeader = firstResponse.headers["X-RateLimit-Remaining"]?.firstOrNull()
-                                    val remaining = remainingHeader?.toInt() ?: 1
+                                tmp
+                            }
 
-                                    executingRequests -= nextRequest
+                            val (retryAfter: Instant?, newAvailableRequests: Int?) =
+                                if (doReset || isRateLimited) {
+                                    val headers = firstResponse.headers.toList()
 
-                                    launch(this@HttpExecutorQueue.coroutineContext) {
-                                        runCatching {
-                                            nextRequest.offerResponse(firstResponse)
+                                    val xRatelimitLimit = headers
+                                        .find { (name, _) -> name.equals("x-ratelimit-limit", true) }
+                                        ?.second?.firstOrNull()?.toInt()
 
-                                            for (resp in responseChannel) {
-                                                @Suppress("UNCHECKED_CAST")
-                                                nextRequest.offerResponse(resp as HttpResponse<Any>)
-                                            }
-                                        }.onFailure {
-                                            nextRequest.offerException(it)
+                                    val xRatelimitReset = headers
+                                        .find { (name, _) -> name.equals("x-ratelimit-reset", true) }
+                                        ?.second?.firstOrNull()?.toLong()
+
+                                    if (isRateLimited)
+                                        requestQueue.send(nextRequest)
+
+                                    Instant.ofEpochSecond(
+                                        (xRatelimitReset ?: System.currentTimeMillis() / 1000 + 10) + 1
+                                    ) to (xRatelimitLimit ?: 40)
+                                } else
+                                    null to null
+
+                            if (!isRateLimited) {
+                                launch(this@HttpExecutorQueue.coroutineContext) {
+                                    runCatching {
+                                        nextRequest.offerResponse(firstResponse)
+
+                                        for (resp in responseChannel) {
+                                            @Suppress("UNCHECKED_CAST")
+                                            nextRequest.offerResponse(resp as HttpResponse<Any>)
                                         }
-
-                                        nextRequest.close()
+                                    }.onFailure {
+                                        nextRequest.offerException(it)
                                     }
 
-                                    if (remaining == 0) {
-                                        if (rateLimited.getAndSet(true))
-                                            return@requestWorker
+                                    nextRequest.close()
+                                }
+                            } else
+                                responseChannel.cancel()
 
-                                        val reset = firstResponse.headers["X-RateLimit-Reset"]?.firstOrNull()?.toInt()
-                                        val delaySeconds = if (reset != null)
-                                            (reset - (System.currentTimeMillis() / 1000)).toInt()
-                                        else
-                                            5
+                            if (retryAfter != null && newAvailableRequests != null) {
+                                if (!isFirst) {
+                                    val delayDuration = Duration.between(Instant.now(), retryAfter)
+                                    if (log.isDebugEnabled)
+                                        log.debug(
+                                            "Delaying further operations by {}ms after rate-limit",
+                                            delayDuration.toMillis()
+                                        )
 
-                                        if (delaySeconds > -1) {
-                                            if (log.isTraceEnabled)
-                                                log.trace("remaining limit is 0 and delay is {}", delaySeconds)
+                                    delay(delayDuration)
+                                }
 
-                                            throw RateLimitException(delaySeconds)
-                                        }
-                                    }
+                                stateMutex.withLock {
+                                    requestsAvailable = if (newAvailableRequests > 0)
+                                        newAvailableRequests
+                                    else
+                                        1 // Prevents locking ourselves out
                                 }
                             }
+
+                            isFirst = false
                         }
                     }
-                }.onFailure { x ->
-                    if (x is RateLimitException) {
-                        log.warn("Just got rate-limited, delaying further operations by {}s", x.delaySeconds)
-
-                        delay(x.delaySeconds * 1000L)
-                        executingRequests.forEach { req ->
-                            if (!req.hasResponded)
-                                queue.send(req)
-                        }
-                    } else
-                        throw x
                 }
             }
-
-            if (log.isDebugEnabled)
-                log.debug("HttpExecutorQueue processing coroutine is ending")
         }
     }
 
@@ -138,7 +163,7 @@ internal class HttpExecutorQueue : CoroutineScope {
         val queuedRequest = QueuedRequest<T>(request, responseType)
 
         runBlocking {
-            if (!queue.offer(queuedRequest))
+            if (!requestQueue.offer(queuedRequest))
                 throw IllegalArgumentException("The queue rejected the request $request -> $responseType")
         }
 
