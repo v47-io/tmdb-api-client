@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "tmdb-client.api-key",
+      "type": "java.lang.String",
+      "description": "The api key used to communicate with the TMDB API."
+    }
+  ]
+}
