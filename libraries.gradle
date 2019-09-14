@@ -5,13 +5,15 @@ ext {
 
     // Implementation Libraries
     jacksonVersion = '2.9.9'
+    micronautVersion = '1.2.2'
     nvI18nVersion = '1.25'
     reactiveStreamsVersion = '1.0.2'
     rxJavaVersion = '2.2.8'
+    springBootVersion = '2.1.8.RELEASE'
+    springVersion = '5.1.9.RELEASE'
 
     // Testing Libraries
     coroutinesVersion = '1.2.2'
-    micronautVersion = '1.1.3'
     mockitoKotlinVersion = '2.1.0'
     junitJupiterVersion = '5.4.0'
     logbackVersion = '1.2.3'
@@ -37,9 +39,12 @@ ext {
             reactiveStreams    : "org.reactivestreams:reactive-streams:$reactiveStreamsVersion",
             rxJava             : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
 
+            springBootStarter  : "org.springframework.boot:spring-boot-starter:$springBootVersion",
+            springContext      : "org.springframework:spring-context:$springVersion",
+            springWebflux      : "org.springframework:spring-webflux:$springVersion",
+
             // Testing Libraries
             coroutinesCore     : "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
-            coroutinesReactive : "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutinesVersion",
 
             jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
             junitApi           : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
@@ -47,6 +52,9 @@ ext {
 
             logback            : "ch.qos.logback:logback-classic:$logbackVersion",
 
-            mockitoKotlin      : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+            mockitoKotlin      : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion",
+
+            sbsTest            : "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
+            sbsWebflux         : "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
     ]
 }

@@ -31,6 +31,7 @@ class HttpExecutor(
             queue.start(httpClient)
         }
 
+        @Suppress("EXPERIMENTAL_API_USAGE")
         return Flowable
             .fromPublisher(queue.enqueue<T>(httpRequest, request.responseType).asPublisher())
             .filter { it.body != null }

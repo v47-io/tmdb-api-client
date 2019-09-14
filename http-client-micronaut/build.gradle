@@ -9,7 +9,7 @@ allOpen {
 dependencies {
     implementation project(':core')
 
-    implementation libraries.mnHttpClient
+    compileOnly libraries.mnHttpClient
     implementation libraries.jacksonDatabind
 
     implementation libraries.reactiveStreams
@@ -19,6 +19,7 @@ dependencies {
     testImplementation project(':http-client-tck')
 
     kaptTest libraries.mnInject
+    testRuntimeOnly libraries.mnHttpClient
     testRuntimeOnly libraries.mnHttpServerNetty
     testImplementation libraries.mnRuntime
 

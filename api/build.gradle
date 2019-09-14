@@ -5,7 +5,8 @@ dependencies {
     api libraries.nvI18n
 
     testImplementation project(':http-client-micronaut')
-    
+
+    testRuntimeOnly libraries.mnHttpClient
     testRuntimeOnly libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
 }

@@ -21,10 +21,10 @@ internal class ValidImageResponseTest : AbstractTckTest("https://image.tmdb.org/
             )
         ).blockingFirst()
 
-        val contentLengthHeader = result.headers["Content-Length"]?.firstOrNull()?.toIntOrNull()
+        val contentLength = (result.body as? ByteArray)?.size
         return when {
             result.status != 200 -> TckTestResult.Failure(200, result.status)
-            contentLengthHeader != 2114 -> TckTestResult.Failure(2114, result.status)
+            contentLength != 2114 -> TckTestResult.Failure(2114, contentLength)
             else -> TckTestResult.Success
         }
     }

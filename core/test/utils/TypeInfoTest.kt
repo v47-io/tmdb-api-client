@@ -1,5 +1,6 @@
 package io.v47.tmdb.utils
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -22,7 +23,8 @@ class TypeInfoTest {
         assertEquals(
             TypeInfo.Generic(
                 List::class.java,
-                listOf(TypeInfo.Simple(SimplePojo::class.java))
+                listOf(TypeInfo.Simple(SimplePojo::class.java)),
+                jacksonTypeRef<List<SimplePojo>>().type
             ),
             typeInfo
         )
@@ -40,9 +42,11 @@ class TypeInfoTest {
                     TypeInfo.Simple(String::class.java),
                     TypeInfo.Generic(
                         List::class.java,
-                        listOf(TypeInfo.Simple(SimplePojo::class.java))
+                        listOf(TypeInfo.Simple(SimplePojo::class.java)),
+                        jacksonTypeRef<List<SimplePojo>>().type
                     )
-                )
+                ),
+                jacksonTypeRef<Map<String, List<SimplePojo>>>().type
             ),
             typeInfo
         )

@@ -1,0 +1,21 @@
+apply plugin: 'org.jetbrains.kotlin.plugin.spring'
+
+dependencies {
+    implementation project(':core')
+
+    compileOnly libraries.springContext
+    compileOnly libraries.springWebflux
+    implementation libraries.jacksonDatabind
+
+    implementation libraries.reactiveStreams
+    implementation libraries.rxJava
+
+    testImplementation project(':api')
+    testImplementation project(':http-client-tck')
+
+    testImplementation libraries.sbsWebflux
+    testImplementation libraries.sbsTest
+
+    testRuntimeOnly libraries.jacksonModuleKotlin
+    testRuntimeOnly libraries.logback
+}
