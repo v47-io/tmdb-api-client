@@ -65,6 +65,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
             }
     }
 
+    @Suppress("ComplexMethod")
     private fun HttpRequest.toRequestSpec(jsonBody: Boolean): WebClient.RequestHeadersSpec<*> {
         val reqSpec = when (method) {
             HttpMethod.Get -> rawClient.get()
