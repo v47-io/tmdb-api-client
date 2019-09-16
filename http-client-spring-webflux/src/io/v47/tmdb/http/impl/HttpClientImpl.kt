@@ -35,9 +35,9 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
             .switchMap { resp ->
                 if (resp.statusCode() == HttpStatus.OK) {
                     val typeReference = ParameterizedTypeReference.forType<Any>(responseType.fullType)
-                    val bodyMono = resp.bodyToMono(typeReference)
+                    val bodyFlux = resp.bodyToFlux(typeReference)
 
-                    Flowable.fromPublisher(bodyMono)
+                    Flowable.fromPublisher(bodyFlux)
                         .map { resp to it }
                 } else {
                     val bodyFlux = resp.bodyToMono(ByteArray::class.java)
