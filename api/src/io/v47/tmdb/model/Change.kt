@@ -16,6 +16,6 @@
 package io.v47.tmdb.model
 
 data class Change(
-    val id: Int?,
+    override val id: Int?,
     val adult: Boolean?
-) : TmdbType()
+) : TmdbType(), TmdbIntId

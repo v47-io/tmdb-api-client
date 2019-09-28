@@ -26,7 +26,7 @@ data class MovieDetails(
     val budget: Int?,
     val genres: List<Genre> = emptyList(),
     val homepage: String?,
-    val id: Int?,
+    override val id: Int?,
     val imdbId: String?,
     val originalLanguage: LanguageCode?,
     val originalTitle: String?,
@@ -60,12 +60,12 @@ data class MovieDetails(
     val similar: PaginatedListResults<MovieListResult>?,
     val reviews: MovieReviews?,
     val lists: MovieLists?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieAlternativeTitles(
-    val id: Int?,
+    override val id: Int?,
     val titles: List<Title> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieChanges(
     override val page: Int?,
@@ -79,44 +79,44 @@ data class MovieChanges(
     ) : TmdbType()
 
     data class ChangeItem(
-        val id: String?,
+        override val id: String?,
         val action: String?,
         val time: String?,
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 data class MovieCredits(
-    val id: Int?,
+    override val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
     val crew: List<CreditListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieExternalIds(
-    val id: Int?,
+    override val id: Int?,
     val imdbId: String?,
     val facebookId: String?,
     val instagramId: String?,
     val twitterId: String?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieImages(
-    val id: Int?,
+    override val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
     val posters: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieKeywords(
-    val id: Int?,
+    override val id: Int?,
     val keywords: List<Keyword> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieReleaseDates(
-    val id: Int?,
+    override val id: Int?,
     val results: List<ReleaseDates> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class ReleaseDates(
         val country: CountryCode?,
         val releaseDates: List<MovieReleaseInfo> = emptyList()
@@ -132,27 +132,27 @@ data class MovieReleaseDates(
 }
 
 data class MovieVideos(
-    val id: Int?,
+    override val id: Int?,
     val results: List<VideoListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieTranslations(
-    val id: Int?,
+    override val id: Int?,
     val translations: List<TranslationListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class MovieReviews(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int?,
     override val results: List<ReviewDetails> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<ReviewDetails>
+) : TmdbType(), TmdbIntId, Paginated<ReviewDetails>
 
 data class MovieLists(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int?,
     override val results: List<ListDetails> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<ListDetails>
+) : TmdbType(), TmdbIntId, Paginated<ListDetails>

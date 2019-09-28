@@ -18,7 +18,7 @@ package io.v47.tmdb.model
 import com.neovisionaries.i18n.LanguageCode
 
 data class ReviewDetails(
-    val id: String?,
+    override val id: String?,
     val author: String?,
     val content: String?,
     val language: LanguageCode?,
@@ -26,4 +26,4 @@ data class ReviewDetails(
     val mediaTitle: String?,
     val mediaType: MediaType?,
     val url: String?
-) : TmdbType()
+) : TmdbType(), TmdbStringId

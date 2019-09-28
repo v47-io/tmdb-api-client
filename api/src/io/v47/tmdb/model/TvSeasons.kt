@@ -23,7 +23,7 @@ data class TvSeasonDetails(
     val episodes: List<TvEpisodeDetails> = emptyList(),
     val name: String?,
     val overview: String?,
-    val id: Int?,
+    override val id: Int?,
     val posterPath: String?,
     val seasonNumber: Int?,
     val showId: Int?,
@@ -35,7 +35,7 @@ data class TvSeasonDetails(
     val externalIds: TvSeasonExternalIds?,
     val images: TvSeasonImages?,
     val videos: TvSeasonVideos?
-) : TmdbType("_id")
+) : TmdbType("_id"), TmdbIntId
 
 data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
@@ -44,13 +44,13 @@ data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType()
     ) : TmdbType()
 
     data class ChangeItem(
-        val id: String?,
+        override val id: String?,
         val action: String?,
         val time: String?,
         val value: ChangeValue?,
         val language: LanguageCode?,
         val originalValue: String?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 
     data class ChangeValue(
         val episodeId: Int?,
@@ -59,26 +59,26 @@ data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType()
 }
 
 data class TvSeasonCredits(
-    val id: Int?,
+    override val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
     val crew: List<CreditListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 
 data class TvSeasonExternalIds(
-    val id: Int?,
+    override val id: Int?,
     val freebaseMid: String?,
     val freebaseId: String?,
     val tvdbId: Int?,
     val tvrageId: Int?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvSeasonImages(
-    val id: Int?,
+    override val id: Int?,
     val posters: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvSeasonVideos(
-    val id: Int?,
+    override val id: Int?,
     val results: List<VideoListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId

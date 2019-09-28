@@ -21,8 +21,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
-interface MovieTvPersonListResult {
-    val id: Int?
+interface MovieTvPersonListResult : TmdbIntId {
+    override val id: Int?
     val mediaType: MediaType?
 }
 
@@ -42,7 +42,7 @@ data class MovieListResult(
     val video: Boolean?,
     val voteAverage: Double?,
     override val mediaType: MediaType?
-) : TmdbType(), MovieTvPersonListResult
+) : TmdbType(), TmdbIntId, MovieTvPersonListResult
 
 data class TvListResult(
     val posterPath: String?,
@@ -84,9 +84,9 @@ enum class MediaType {
     Movie, Tv, Person
 }
 
-interface IPerson {
+interface IPerson : TmdbIntId {
     val gender: Gender?
-    val id: Int?
+    override val id: Int?
     val name: String?
     val profilePath: String?
 }
@@ -120,12 +120,12 @@ data class PersonListResult(
 ) : TmdbType(), IPerson, MovieTvPersonListResult
 
 data class Genre(
-    val id: Int?,
+    override val id: Int?,
     val name: String?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CollectionInfo(
-    val id: Int?,
+    override val id: Int?,
     val name: String?,
     val originalName: String?,
     val overview: String?,
@@ -133,14 +133,14 @@ data class CollectionInfo(
     val posterPath: String?,
     val backdropPath: String?,
     val adult: Boolean?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CompanyInfo(
-    val id: Int?,
+    override val id: Int?,
     val logoPath: String?,
     val name: String?,
     val originCountry: CountryCode?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CreditListResult(
     val castId: Int?,
@@ -160,15 +160,15 @@ data class ImageListResult(
     val filePath: String?,
     val fileType: String?,
     val height: Int?,
-    val id: String?,
+    override val id: String?,
     val language: LanguageCode?,
     val voteAverage: Double?,
     val voteCount: Int?,
     val width: Int?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
 data class VideoListResult(
-    val id: String?,
+    override val id: String?,
     val language: LanguageCode?,
     val country: CountryCode?,
     val key: String?,
@@ -176,7 +176,7 @@ data class VideoListResult(
     val site: String?,
     val size: Int?,
     val type: VideoType?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
 data class TranslationListResult(
     val language: LanguageCode?,
@@ -194,21 +194,21 @@ data class TranslationListResult(
 }
 
 data class PaginatedListResults<out T : Any>(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int,
     override val results: List<T> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<T>
+) : TmdbType(), TmdbIntId, Paginated<T>
 
 data class PaginatedMovieListResultsWithDates(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int?,
     override val results: List<MovieListResult> = emptyList(),
     val dates: Dates?,
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<MovieListResult> {
+) : TmdbType(), TmdbIntId, Paginated<MovieListResult> {
     data class Dates(
         val maximum: LocalDate?,
         val minimum: LocalDate?
@@ -216,7 +216,7 @@ data class PaginatedMovieListResultsWithDates(
 }
 
 data class CastMember(
-    val id: Int?,
+    override val id: Int?,
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
     val overview: String?,
@@ -238,10 +238,10 @@ data class CastMember(
     val releaseDate: LocalDate?,
     val title: String?,
     val adult: Boolean?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CrewMember(
-    val id: Int?,
+    override val id: Int?,
     val department: String?,
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
@@ -264,7 +264,7 @@ data class CrewMember(
     val title: String?,
     val adult: Boolean?,
     val releaseDate: LocalDate?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 enum class CreditType {
     Cast,

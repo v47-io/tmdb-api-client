@@ -26,7 +26,7 @@ data class PersonDetails(
     val deathday: String?,
     val gender: Gender?,
     val homepage: String?,
-    val id: Int?,
+    override val id: Int?,
     val imdbId: String?,
     val name: String?,
     val placeOfBirth: String?,
@@ -42,13 +42,13 @@ data class PersonDetails(
     val images: PersonImages?,
     val taggedImages: PersonTaggedImages?,
     val changes: PersonChanges?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class PersonCredits(
-    val id: Int?,
+    override val id: Int?,
     val cast: List<CastMember> = emptyList(),
     val crew: List<CrewMember> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class PersonExternalIds(
     val imdbId: String?,
@@ -57,22 +57,22 @@ data class PersonExternalIds(
     val freebaseId: String?,
     val tvrageId: Int?,
     val twitterId: String?,
-    val id: Int?,
+    override val id: Int?,
     val instagramId: String?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class PersonImages(
-    val id: Int?,
+    override val id: Int?,
     val profiles: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class PersonTaggedImages(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int?,
     override val results: List<TaggedImage> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<PersonTaggedImages.TaggedImage> {
+) : TmdbType(), TmdbIntId, Paginated<PersonTaggedImages.TaggedImage> {
     data class TaggedImage(
         val aspectRatio: Double?,
         val filePath: String?,
@@ -88,9 +88,9 @@ data class PersonTaggedImages(
 }
 
 data class PersonTranslations(
-    val id: Int?,
+    override val id: Int?,
     val translations: List<PersonTranslation> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class PersonTranslation(
         val language: LanguageCode?,
         val country: CountryCode?,
@@ -108,11 +108,11 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
         val items: List<PersonChangeItem> = emptyList()
     ) : TmdbType() {
         data class PersonChangeItem(
-            val id: String?,
+            override val id: String?,
             val action: String?,
             val time: String?,
             val originalValue: Map<String, Any> = emptyMap()
-        ) : TmdbType()
+        ) : TmdbType(), TmdbStringId
     }
 }
 
@@ -125,9 +125,9 @@ data class PeoplePopular(
     data class PopularPerson(
         val profilePath: String?,
         val adult: Boolean?,
-        val id: Int?,
+        override val id: Int?,
         val knownFor: List<MovieTvPersonListResult> = emptyList(),
         val name: String?,
         val popularity: Double?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbIntId
 }

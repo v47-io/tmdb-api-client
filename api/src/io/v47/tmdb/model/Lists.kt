@@ -21,19 +21,19 @@ data class ListDetails(
     val createdBy: String?,
     val description: String?,
     val favoriteCount: Int?,
-    val id: String?,
+    override val id: String?,
     val items: List<MovieListResult> = emptyList(),
     val itemCount: Int?,
     val language: LanguageCode?,
     val listType: String?,
     val name: String?,
     val posterPath: String?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
 data class ItemStatus(
-    val id: String?,
+    override val id: String?,
     val itemPresent: Boolean?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
 /*
 data class ListDetailsV4(

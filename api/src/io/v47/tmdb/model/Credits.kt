@@ -25,16 +25,16 @@ data class Credits(
     val job: String?,
     val media: CreditMedia?,
     val mediaType: MediaType,
-    val id: String?,
+    override val id: String?,
     val person: CreditPerson?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
-interface CreditMedia {
+interface CreditMedia : TmdbIntId {
     val adult: Boolean?
     val backdropPath: String?
     val character: String?
     val genreIds: List<Int>
-    val id: Int?
+    override val id: Int?
     val originalLanguage: LanguageCode?
     val overview: String?
     val popularity: Double?
@@ -84,7 +84,7 @@ data class CreditMediaTv(
 data class CreditMediaTvEpisode(
     val airDate: LocalDate?,
     val episodeNumber: Int?,
-    val id: Int?,
+    override val id: Int?,
     val name: String?,
     val overview: String?,
     val productionCode: String?,
@@ -93,35 +93,35 @@ data class CreditMediaTvEpisode(
     val stillPath: String?,
     val voteAverage: Double?,
     val voteCount: Long?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CreditMediaTvSeason(
     val airDate: LocalDate?,
     val episodeCount: Int?,
-    val id: Int?,
+    override val id: Int?,
     val name: String?,
     val overview: String?,
     val posterPath: String?,
     val seasonNumber: Int?,
     val showId: Int?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CreditPerson(
     val adult: Boolean?,
     val gender: Gender?,
     val name: String?,
-    val id: Int?,
+    override val id: Int?,
     val knownFor: List<CreditPersonKnownFor> = emptyList(),
     val knownForDepartment: String?,
     val profilePath: String?,
     val popularity: Double?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
-interface CreditPersonKnownFor {
+interface CreditPersonKnownFor : TmdbIntId {
     val adult: Boolean?
     val backdropPath: String?
     val genreIds: List<Int>
-    val id: Int?
+    override val id: Int?
     val mediaType: MediaType?
     val originalLanguage: LanguageCode?
     val overview: String?

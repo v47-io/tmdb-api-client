@@ -20,18 +20,18 @@ import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
 data class CollectionDetails(
-    val id: Int?,
+    override val id: Int?,
     val name: String?,
     val overview: String?,
     val posterPath: String?,
     val backdropPath: String?,
     val parts: List<Part> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class Part(
         val adult: Boolean?,
         val backdropPath: String?,
         val genreIds: List<Int> = emptyList(),
-        val id: Int?,
+        override val id: Int?,
         val originalLanguage: LanguageCode?,
         val originalTitle: String?,
         val overview: String?,
@@ -42,19 +42,19 @@ data class CollectionDetails(
         val voteAverage: Double?,
         val voteCount: Int?,
         val popularity: Double?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbIntId
 }
 
 data class CollectionImages(
-    val id: Int?,
+    override val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
     val posters: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CollectionTranslations(
-    val id: Int?,
+    override val id: Int?,
     val translations: List<CollectionTranslation> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CollectionTranslation(
     val country: CountryCode?,

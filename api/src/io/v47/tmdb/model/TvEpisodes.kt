@@ -25,7 +25,7 @@ data class TvEpisodeDetails(
     val guestStars: List<CreditListResult> = emptyList(),
     val name: String?,
     val overview: String?,
-    val id: Int?,
+    override val id: Int?,
     val productionCode: String?,
     val seasonNumber: String?,
     val showId: Int?,
@@ -41,7 +41,7 @@ data class TvEpisodeDetails(
     val images: TvEpisodeImages?,
     val translations: TvEpisodeTranslations?,
     val videos: TvEpisodeVideos?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
@@ -50,42 +50,42 @@ data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType(
     ) : TmdbType()
 
     data class ChangeItem(
-        val id: String?,
+        override val id: String?,
         val action: String?,
         val time: String?,
         val value: String?,
         val originalValue: String?,
         val language: LanguageCode?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 data class TvEpisodeCredits(
-    val id: Int?,
+    override val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
     val crew: List<CreditListResult> = emptyList(),
     val guestStars: List<CreditListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvEpisodeExternalIds(
-    val id: Int?,
+    override val id: Int?,
     val imdbId: String?,
     val freebaseMid: String?,
     val freebaseId: String?,
     val tvdbId: Int?,
     val tvrageId: Int?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvEpisodeImages(
-    val id: Int?,
+    override val id: Int?,
     val stills: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvEpisodeTranslations(
-    val id: Int?,
+    override val id: Int?,
     val translations: List<TranslationListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvEpisodeVideos(
-    val id: Int?,
+    override val id: Int?,
     val results: List<VideoListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId

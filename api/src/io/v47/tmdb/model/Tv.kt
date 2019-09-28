@@ -26,7 +26,7 @@ data class TvShowDetails(
     val firstAirDate: LocalDate?,
     val genres: List<Genre> = emptyList(),
     val homepage: String?,
-    val id: Int?,
+    override val id: Int?,
     val inProduction: Boolean?,
     val languages: List<LanguageCode> = emptyList(),
     val lastAirDate: LocalDate?,
@@ -62,12 +62,12 @@ data class TvShowDetails(
     val similar: PaginatedListResults<TvListResult>?,
     val translations: TvShowTranslations?,
     val videos: TvShowVideos?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowAlternativeTitles(
-    val id: Int?,
+    override val id: Int?,
     val results: List<Title> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     data class Change(
@@ -76,19 +76,19 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
     ) : TmdbType()
 
     data class ChangeItem(
-        val id: String?,
+        override val id: String?,
         val action: String?,
         val time: String?,
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 data class TvShowContentRatings(
-    val id: Int?,
+    override val id: Int?,
     val results: List<Rating> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class Rating(
         val rating: String?,
         val country: CountryCode?
@@ -96,28 +96,28 @@ data class TvShowContentRatings(
 }
 
 data class TvShowCredits(
-    val id: Int?,
+    override val id: Int?,
     val cast: List<CreditListResult> = emptyList(),
     val crew: List<CreditListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowEpisodeGroups(
-    val id: Int?,
+    override val id: Int?,
     val results: List<TvShowEpisodeGroup> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class TvShowEpisodeGroup(
-        val id: String?,
+        override val id: String?,
         val name: String?,
         val type: TvEpisodeGroupType?,
         val description: String?,
         val episodeCount: Int?,
         val groupCount: Int?,
         val network: Network?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 data class TvShowExternalIds(
-    val id: Int?,
+    override val id: Int?,
     val imdbId: String?,
     val freebaseMid: String?,
     val freebaseId: String?,
@@ -126,43 +126,43 @@ data class TvShowExternalIds(
     val facebookId: String?,
     val instagramId: String?,
     val twitterId: String?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowImages(
-    val id: Int?,
+    override val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
     val posters: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowKeywords(
-    val id: Int?,
+    override val id: Int?,
     val results: List<Keyword> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowReview(
-    val id: String?,
+    override val id: String?,
     val url: String?,
     val author: String?,
     val content: String?
-) : TmdbType()
+) : TmdbType(), TmdbStringId
 
 data class TvShowScreenedTheatrically(
-    val id: Int?,
+    override val id: Int?,
     val results: List<ScreenedResult> = emptyList()
-) : TmdbType() {
+) : TmdbType(), TmdbIntId {
     data class ScreenedResult(
-        val id: Int?,
+        override val id: Int?,
         val seasonNumber: Int?,
         val episodeNumber: Int?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbIntId
 }
 
 data class TvShowTranslations(
-    val id: Int?,
+    override val id: Int?,
     val translations: List<TranslationListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class TvShowVideos(
-    val id: Int?,
+    override val id: Int?,
     val results: List<VideoListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId

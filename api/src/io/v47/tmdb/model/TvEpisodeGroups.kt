@@ -16,7 +16,7 @@
 package io.v47.tmdb.model
 
 data class TvEpisodeGroupDetails(
-    val id: String?,
+    override val id: String?,
     val name: String?,
     val type: TvEpisodeGroupType?,
     val description: String?,
@@ -24,14 +24,14 @@ data class TvEpisodeGroupDetails(
     val groupCount: Int?,
     val groups: List<TvEpisodeGroup> = emptyList(),
     val network: Network?
-) : TmdbType() {
+) : TmdbType(), TmdbStringId {
     data class TvEpisodeGroup(
-        val id: String?,
+        override val id: String?,
         val name: String?,
         val order: Int?,
         val locked: Boolean?,
         val episodes: List<TvEpisodeDetails> = emptyList()
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 enum class TvEpisodeGroupType {

@@ -27,3 +27,11 @@ abstract class TmdbType(private vararg val ignoredProperties: String) : Serializ
             logger.trace("Unknown property: '$key' -> '$value'")
     }
 }
+
+interface TmdbIntId {
+    val id: Int?
+}
+
+interface TmdbStringId {
+    val id: String?
+}

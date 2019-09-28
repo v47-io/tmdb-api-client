@@ -21,17 +21,17 @@ data class Company(
     val description: String?,
     val headquarters: String?,
     val homepage: String?,
-    val id: Int?,
+    override val id: Int?,
     val logoPath: String?,
     val name: String?,
     val originCountry: CountryCode?,
     val parentCompany: Company?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CompanyAlternativeNames(
-    val id: Int?,
+    override val id: Int?,
     val results: List<CompanyAlternativeNameResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class CompanyAlternativeNameResult(
     val name: String?,
@@ -39,6 +39,6 @@ data class CompanyAlternativeNameResult(
 ) : TmdbType()
 
 data class CompanyImages(
-    val id: Int?,
+    override val id: Int?,
     val logos: List<ImageListResult> = emptyList()
-) : TmdbType()
+) : TmdbType(), TmdbIntId

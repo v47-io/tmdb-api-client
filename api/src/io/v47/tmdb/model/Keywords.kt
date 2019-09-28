@@ -16,14 +16,14 @@
 package io.v47.tmdb.model
 
 data class Keyword(
-    val id: Int?,
+    override val id: Int?,
     val name: String?
-) : TmdbType()
+) : TmdbType(), TmdbIntId
 
 data class KeywordMovies(
-    val id: Int?,
+    override val id: Int?,
     override val page: Int?,
     override val results: List<MovieListResult>,
     override val totalPages: Int?,
     override val totalResults: Int?
-) : TmdbType(), Paginated<MovieListResult>
+) : TmdbType(), TmdbIntId, Paginated<MovieListResult>
