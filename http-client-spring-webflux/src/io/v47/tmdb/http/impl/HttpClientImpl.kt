@@ -93,7 +93,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
         val body = body
 
         val optBodyReqSpec = if (reqSpec is WebClient.RequestBodyUriSpec && body != null)
-            reqSpec.body(BodyInserters.fromObject(body))
+            reqSpec.body(BodyInserters.fromValue(body))
         else
             reqSpec
 

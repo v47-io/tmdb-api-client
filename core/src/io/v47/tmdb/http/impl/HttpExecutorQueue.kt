@@ -63,7 +63,7 @@ internal class HttpExecutorQueue(parentContext: CoroutineContext) : CoroutineSco
                                 nextRequest.responseType
                             )
 
-                            @Suppress("EXPERIMENTAL_API_USAGE")
+                            @Suppress("DEPRECATION")
                             val responseChannel = responsePublisher.openSubscription(1)
 
                             @Suppress("UNCHECKED_CAST")

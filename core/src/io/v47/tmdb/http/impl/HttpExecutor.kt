@@ -7,6 +7,7 @@ import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.reactive.asPublisher
 import org.reactivestreams.Publisher
 import java.util.concurrent.atomic.AtomicBoolean
@@ -33,7 +34,7 @@ class HttpExecutor(
 
         @Suppress("EXPERIMENTAL_API_USAGE")
         return Flowable
-            .fromPublisher(queue.enqueue<T>(httpRequest, request.responseType).asPublisher())
+            .fromPublisher(queue.enqueue<T>(httpRequest, request.responseType).consumeAsFlow().asPublisher())
             .filter { it.body != null }
             .map { resp ->
                 when {
