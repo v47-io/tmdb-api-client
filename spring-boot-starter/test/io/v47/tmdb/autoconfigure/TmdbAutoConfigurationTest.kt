@@ -1,7 +1,8 @@
 package io.v47.tmdb.autoconfigure
 
+import io.reactivex.Flowable
 import io.v47.tmdb.TmdbClient
-import org.junit.jupiter.api.Assertions.assertNotNull
+import io.v47.tmdb.config.TmdbAutoConfigurationTestConfiguration
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,13 +14,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @ActiveProfiles("test")
-@ContextConfiguration(classes = [TmdbAutoConfiguration::class])
+@ContextConfiguration(
+    classes = [
+        TmdbAutoConfiguration::class,
+        TmdbAutoConfigurationTestConfiguration::class
+    ]
+)
 class TmdbAutoConfigurationTest {
     @Autowired
     private lateinit var tmdbClient: TmdbClient
 
     @Test
     fun `TMDB Client is available`() {
-        assertNotNull(tmdbClient)
+        Flowable.fromPublisher(tmdbClient.configuration.system()).blockingFirst()
     }
 }
