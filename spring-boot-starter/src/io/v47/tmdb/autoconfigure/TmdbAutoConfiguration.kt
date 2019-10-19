@@ -22,7 +22,7 @@ class TmdbAutoConfiguration {
     @ConditionalOnMissingBean(TmdbClient::class)
     fun tmdbClient(
         httpClientFactory: HttpClientFactory,
-        @Value("#\${tmdbClient.apiKey:#{environment.TMDB_API_KEY}}")
+        @Value("\${tmdbClient.apiKey:#{systemEnvironment['TMDB_API_KEY']}}")
         apiKey: String
     ) =
         TmdbClient(httpClientFactory, apiKey)
