@@ -3,11 +3,13 @@ package io.v47.tmdb.http
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.core.annotation.AnnotationMetadataResolver
+import io.micronaut.core.io.ResourceResolver
 import io.micronaut.http.client.DefaultHttpClient
 import io.micronaut.http.client.DefaultHttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
 import io.micronaut.http.client.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
+import io.micronaut.http.filter.HttpClientFilter
 import io.micronaut.jackson.codec.JsonMediaTypeCodec
 import io.micronaut.jackson.codec.JsonStreamMediaTypeCodec
 import io.micronaut.runtime.ApplicationConfiguration
@@ -30,7 +32,7 @@ class StandaloneMnClientFactory : HttpClientFactory {
     }
 
     private val threadFactory = DefaultThreadFactory(MultithreadEventLoopGroup::class.java)
-    private val sslFactory = NettyClientSslBuilder(httpClientConfiguration.sslConfiguration)
+    private val sslFactory = NettyClientSslBuilder(ResourceResolver())
 
     private val objectMapper = ObjectMapper().apply {
         findAndRegisterModules()
@@ -56,7 +58,8 @@ class StandaloneMnClientFactory : HttpClientFactory {
                 threadFactory,
                 sslFactory,
                 mediaTypeRegistry,
-                AnnotationMetadataResolver.DEFAULT
+                AnnotationMetadataResolver.DEFAULT,
+                emptyList<HttpClientFilter>()
             ),
             getBasePath(baseUrl)
         )
