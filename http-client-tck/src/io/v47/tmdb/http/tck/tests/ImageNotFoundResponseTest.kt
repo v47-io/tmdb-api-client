@@ -14,7 +14,11 @@ internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.o
 
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/original/wwemzKWzjKYJ3r4cm.svg"
+            "/{imageSize}/{imageFile}",
+            mapOf(
+                "imageSize" to "original",
+                "imageFile" to "wwemzKWzjKYJ3r4cm.svg"
+            )
         )
 
         val result = Flowable.fromPublisher(

@@ -113,6 +113,7 @@ internal interface TmdbRequestBuilder<T : Any> {
     fun method(httpMethod: HttpMethod)
     fun apiVersion(apiVersion: Int)
     fun path(path: String)
+    fun pathVar(name: String, value: Any)
     fun queryArg(name: String, value: Any, replace: Boolean = false)
     fun requestEntity(requestEntity: Any?)
     fun responseType(responseType: TypeInfo)
@@ -123,6 +124,7 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     private var _method = HttpMethod.Get
     private var _apiVersion = 3
     private var _path: String? = null
+    private var _pathVariables = mutableMapOf<String, Any>()
     private var _queryArgs = mutableMapOf<String, MutableList<Any>>()
     private var _requestEntity: Any? = null
     private var _responseType: TypeInfo? = null
@@ -137,6 +139,10 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
 
     override fun path(path: String) {
         _path = path
+    }
+
+    override fun pathVar(name: String, value: Any) {
+        _pathVariables.putIfAbsent(name, value)
     }
 
     override fun queryArg(name: String, value: Any, replace: Boolean) {
@@ -162,6 +168,7 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
         return TmdbRequest(
             _method,
             _path!!,
+            _pathVariables,
             _apiVersion,
             _queryArgs,
             _requestEntity,

@@ -12,7 +12,11 @@ internal class ValidImageResponseTest : AbstractTckTest("https://image.tmdb.org/
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
+            "/{imageSize}/{imagePath}",
+            mapOf(
+                "imageSize" to "original",
+                "imagePath" to "wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
+            )
         )
 
         lateinit var response: HttpResponse<*>

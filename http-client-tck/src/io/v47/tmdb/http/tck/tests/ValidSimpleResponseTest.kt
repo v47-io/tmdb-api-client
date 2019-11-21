@@ -15,7 +15,8 @@ internal class ValidSimpleResponseTest : AbstractTckTest("https://api.themoviedb
 
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/3/company/2",
+            "/3/company/{companyId}",
+            mapOf("companyId" to 2),
             mapOf("api_key" to listOf(apiKey))
         )
 

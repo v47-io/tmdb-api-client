@@ -43,6 +43,7 @@ class HttpExecutorBurstTest {
         val request = TmdbRequest<TvShowDetails>(
             HttpMethod.Get,
             "/tv/1403",
+            emptyMap(),
             3,
             emptyMap(),
             null,

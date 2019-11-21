@@ -81,7 +81,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                 uriBuilder.queryParam(name, values.joinToString(","))
             }
 
-            uriBuilder.build()
+            uriBuilder.build(uriVariables)
         }
             .accept(
                 if (jsonBody)

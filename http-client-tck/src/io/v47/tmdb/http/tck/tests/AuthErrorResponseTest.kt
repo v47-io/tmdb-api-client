@@ -15,7 +15,8 @@ internal class AuthErrorResponseTest : AbstractTckTest("https://api.themoviedb.o
 
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/3/company/2"
+            "/3/company/{companyId}",
+            mapOf("companyId" to 2)
         )
 
         val result = Flowable.fromPublisher(

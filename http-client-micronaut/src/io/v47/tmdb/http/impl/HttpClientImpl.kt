@@ -6,6 +6,7 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.http.uri.UriBuilder
 import io.reactivex.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
@@ -102,10 +103,15 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
 
     private fun HttpRequest.createUri(): String {
         val uriSB = StringBuilder(basePath)
-        if (!url.startsWith("/"))
-            uriSB.append('/')
 
-        uriSB.append(url)
+        if (uriVariables.isNotEmpty())
+            uriSB.append(UriBuilder.of(url).expand(uriVariables.toMutableMap()).toString())
+        else {
+            if (!url.startsWith("/"))
+                uriSB.append('/')
+
+            uriSB.append(url)
+        }
 
         if (query.isNotEmpty()) {
             uriSB.append("?")

@@ -12,7 +12,8 @@ internal class ValidComplexResponseTest : AbstractTckTest("https://api.themovied
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/3/company/2/alternative_names",
+            "/3/company/{companyId}/alternative_names",
+            mapOf("companyId" to 2),
             mapOf("api_key" to listOf(apiKey))
         )
 

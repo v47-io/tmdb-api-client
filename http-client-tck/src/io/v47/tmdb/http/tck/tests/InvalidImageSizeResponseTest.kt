@@ -14,7 +14,11 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
 
         val request = HttpRequestImpl(
             HttpMethod.Get,
-            "/123456h/wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
+            "/{imageSize}/{imageFile}",
+            mapOf(
+                "imageSize" to "123456h",
+                "imageFile" to "wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
+            )
         )
 
         val result = Flowable.fromPublisher(

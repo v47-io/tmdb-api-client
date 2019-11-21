@@ -52,6 +52,6 @@ class HttpExecutor(
         val url = "/${tmdbRequest.apiVersion}/${tmdbRequest.path.trim(' ', '/')}"
         val query = tmdbRequest.queryArgs + ("api_key" to listOf(apiKey))
 
-        return HttpRequestImpl(tmdbRequest.method, url, query, tmdbRequest.requestEntity)
+        return HttpRequestImpl(tmdbRequest.method, url, tmdbRequest.pathVariables, query, tmdbRequest.requestEntity)
     }
 }

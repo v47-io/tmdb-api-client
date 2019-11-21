@@ -15,6 +15,7 @@ interface HttpClient : Closeable {
 interface HttpRequest {
     val method: HttpMethod
     val url: String
+    val uriVariables: Map<String, Any>
     val query: Map<String, List<Any>>
     val body: Any?
 }
