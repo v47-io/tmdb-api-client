@@ -31,9 +31,13 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
     ) =
         httpExecutor.execute(
             getWithLanguage<TvEpisodeDetails>(
-                "/tv/$tvId/season/$seasonNumber/episode/$episodeNumber",
+                "/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}",
                 language
             ) {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+
                 append.forEach { req ->
                     queryArg("append_to_response", req.value)
                 }
@@ -58,7 +62,9 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
         page: Int? = null
     ) =
         httpExecutor.execute(
-            getWithPage<TvEpisodeChanges>("/tv/episode/$episodeId/changes", page) {
+            getWithPage<TvEpisodeChanges>("/tv/episode/{episodeId}/changes", page) {
+                pathVar("episodeId", episodeId)
+
                 startDate?.let { queryArg("start_date", it.format(dateFormat)) }
                 endDate?.let { queryArg("end_date", it.format(dateFormat)) }
             }
@@ -79,9 +85,13 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
     ) =
         httpExecutor.execute(
             getWithLanguage<TvEpisodeCredits>(
-                "/tv/$tvId/season/$seasonNumber/episode/$episodeNumber/credits",
+                "/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/credits",
                 language
-            )
+            ) {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+            }
         )
 
     /**
@@ -100,7 +110,11 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
         episodeNumber: Int
     ) =
         httpExecutor.execute(
-            get<TvEpisodeExternalIds>("/tv/$tvId/season/$seasonNumber/episode/$episodeNumber/external_ids")
+            get<TvEpisodeExternalIds>("/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/external_ids") {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+            }
         )
 
     /**
@@ -125,7 +139,14 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
         vararg includeLanguage: LocaleCode?
     ) =
         httpExecutor.execute(
-            getWithLanguage<TvEpisodeImages>("/tv/$tvId/season/$seasonNumber/episode/$episodeNumber/images", language) {
+            getWithLanguage<TvEpisodeImages>(
+                "/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/images",
+                language
+            ) {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+
                 includeLanguage.toSet().forEach { lang ->
                     queryArg("include_image_language", lang?.toString() ?: "null")
                 }
@@ -145,7 +166,11 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
         episodeNumber: Int
     ) =
         httpExecutor.execute(
-            get<TvEpisodeTranslations>("/tv/$tvId/season/$seasonNumber/episode/$episodeNumber/translations")
+            get<TvEpisodeTranslations>("/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/translations") {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+            }
         )
 
     /**
@@ -163,7 +188,14 @@ class TvEpisodesApi internal constructor(private val httpExecutor: HttpExecutor)
         language: LocaleCode? = null
     ) =
         httpExecutor.execute(
-            getWithLanguage<TvEpisodeVideos>("/tv/$tvId/season/$seasonNumber/episode/$episodeNumber/videos", language)
+            getWithLanguage<TvEpisodeVideos>(
+                "/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/videos",
+                language
+            ) {
+                pathVar("tvId", tvId)
+                pathVar("seasonNumber", seasonNumber)
+                pathVar("episodeNumber", episodeNumber)
+            }
         )
 }
 

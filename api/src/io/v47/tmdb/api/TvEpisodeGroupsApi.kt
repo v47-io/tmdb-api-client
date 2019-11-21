@@ -13,5 +13,9 @@ class TvEpisodeGroupsApi internal constructor(private val httpExecutor: HttpExec
      * @param language A language code
      */
     fun details(id: String, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvEpisodeGroupDetails>("/tv/episode_group/$id", language))
+        httpExecutor.execute(
+            getWithLanguage<TvEpisodeGroupDetails>("/tv/episode_group/{id}", language) {
+                pathVar("id", id)
+            }
+        )
 }

@@ -16,7 +16,11 @@ class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun details(listId: String, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<ListDetails>("/list/${listId.urlEncode()}", language))
+        httpExecutor.execute(
+            getWithLanguage<ListDetails>("/list/{listId}", language) {
+                pathVar("listId", listId)
+            }
+        )
 
     /**
      * Check if a movie has already been added to the list
@@ -26,7 +30,8 @@ class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun checkItemStatus(listId: String, movieId: Int) =
         httpExecutor.execute(
-            get<ItemStatus>("/list/${listId.urlEncode()}/item_status") {
+            get<ItemStatus>("/list/{listId}/item_status") {
+                pathVar("listId", listId)
                 queryArg("movie_id", movieId)
             }
         )

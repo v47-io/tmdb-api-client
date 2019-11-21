@@ -23,8 +23,11 @@ class TrendingApi internal constructor(private val httpExecutor: HttpExecutor) {
     ): Publisher<out Paginated<MovieTvPersonListResult>> =
         httpExecutor.execute(
             io.v47.tmdb.http.get<PaginatedMovieTvPersonListResults>(
-                "/trending/${mediaType.name.toLowerCase()}/${timeWindow.name.toLowerCase()}"
-            )
+                "/trending/{mediaType}/{timeWindow}"
+            ) {
+                pathVar("mediaType", mediaType.name.toLowerCase())
+                pathVar("timeWindow", timeWindow.name.toLowerCase())
+            }
         )
 }
 

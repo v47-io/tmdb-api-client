@@ -44,7 +44,14 @@ class ImagesApi internal constructor(
         else
             size
 
-        val request = HttpRequestImpl(HttpMethod.Get, "/$actualSize/$imagePath")
+        val request = HttpRequestImpl(
+            HttpMethod.Get,
+            "/{actualSize}/{imagePath}",
+            mapOf(
+                "actualSize" to actualSize,
+                "imagePath" to imagePath
+            )
+        )
 
         return Flowable
             .fromPublisher(

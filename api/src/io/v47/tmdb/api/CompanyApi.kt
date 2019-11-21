@@ -13,7 +13,11 @@ class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param companyId The id of the company
      */
     fun details(companyId: Int) =
-        httpExecutor.execute(get<Company>("/company/$companyId"))
+        httpExecutor.execute(
+            get<Company>("/company/{companyId}") {
+                pathVar("companyId", companyId)
+            }
+        )
 
     /**
      * Get the alternative names of a company
@@ -21,7 +25,11 @@ class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param companyId The id of the company
      */
     fun alternativeNames(companyId: Int) =
-        httpExecutor.execute(get<CompanyAlternativeNames>("/company/$companyId/alternative_names"))
+        httpExecutor.execute(
+            get<CompanyAlternativeNames>("/company/{companyId}/alternative_names") {
+                pathVar("companyId", companyId)
+            }
+        )
 
     /**
      * Get a companies logos by id.
@@ -38,5 +46,9 @@ class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param companyId The id of the company
      */
     fun images(companyId: Int) =
-        httpExecutor.execute(get<CompanyImages>("/company/$companyId/images"))
+        httpExecutor.execute(
+            get<CompanyImages>("/company/{companyId}/images") {
+                pathVar("companyId", companyId)
+            }
+        )
 }

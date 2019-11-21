@@ -3,10 +3,10 @@ package io.v47.tmdb.api
 import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
+import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.*
-import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
@@ -15,7 +15,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the primary person details by id.
      *
-     * Supports `appendToResponse` using the enumeration [PeopleMethod] (More information
+     * Supports `appendToResponse` using the enumeration [PeopleRequest] (More information
      * [here](https://developers.themoviedb.org/3/getting-started/append-to-response))
      *
      * @param personId The id of the person
@@ -24,7 +24,9 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun details(personId: Int, language: LocaleCode? = null, vararg append: PeopleRequest) =
         httpExecutor.execute(
-            getWithLanguage<PersonDetails>("/person/$personId", language) {
+            getWithLanguage<PersonDetails>("/person/{personId}", language) {
+                pathVar("personId", personId)
+
                 append.forEach { req ->
                     queryArg("append_to_response", req.value)
                 }
@@ -48,11 +50,8 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
         page: Int? = null
     ) =
         httpExecutor.execute(
-            get<PersonChanges>("/person/$personId/changes") {
-                page?.let {
-                    checkPage(it)
-                    queryArg("page", it)
-                }
+            getWithPage<PersonChanges>("/person/{personId}/changes", page) {
+                pathVar("personId", personId)
 
                 startDate?.let { queryArg("start_date", it.format(dateFormat)) }
                 endDate?.let { queryArg("end_date", it.format(dateFormat)) }
@@ -62,7 +61,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the movie credits for a person.
      *
-     * You can query for some extra details about the credit with the method [CreditsApi.getDetails]
+     * You can query for some extra details about the credit with the method [CreditApi.details]
      *
      * @param personId The id of the person
      * @param language A language code
@@ -73,7 +72,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the TV show credits for a person.
      *
-     * You can query for some extra details about the credit with the method [CreditsApi.getDetails]
+     * You can query for some extra details about the credit with the method [CreditApi.details]
      *
      * @param personId The id of the person
      * @param language A language code
@@ -84,7 +83,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
      * Get the movie and TV credits together in a single response.
      *
-     * You can query for some extra details about the credit with the method [CreditsApi.getDetails]
+     * You can query for some extra details about the credit with the method [CreditApi.details]
      *
      * @param personId The id of the person
      * @param language A language code
@@ -93,7 +92,11 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
         credits("combined", personId, language)
 
     private fun credits(type: String, personId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<PersonCredits>("/person/$personId/${type}_credits", language))
+        httpExecutor.execute(
+            getWithLanguage<PersonCredits>("/person/{personId}/${type}_credits", language) {
+                pathVar("personId", personId)
+            }
+        )
 
     /**
      * Get the external ids for a person. We currently support the following external sources.
@@ -109,7 +112,11 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param personId The id of the person
      */
     fun externalIds(personId: Int) =
-        httpExecutor.execute(get<PersonExternalIds>("/person/$personId/external_ids"))
+        httpExecutor.execute(
+            get<PersonExternalIds>("/person/{personId}/external_ids") {
+                pathVar("personId", personId)
+            }
+        )
 
     /**
      * Get the images for a person
@@ -117,7 +124,11 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param personId The id of the person
      */
     fun images(personId: Int) =
-        httpExecutor.execute(get<PersonImages>("/person/$personId/images"))
+        httpExecutor.execute(
+            get<PersonImages>("/person/{personId}/images") {
+                pathVar("personId", personId)
+            }
+        )
 
     /**
      * Get the images that this person has been tagged in
@@ -129,10 +140,12 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun taggedImages(personId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PersonTaggedImages>(
-                "/person/$personId/tagged_images",
+                "/person/{personId}/tagged_images",
                 page,
                 language
-            )
+            ) {
+                pathVar("personId", personId)
+            }
         )
 
     /**
@@ -142,7 +155,11 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun translations(personId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<PersonTranslations>("/person/$personId/translations", language))
+        httpExecutor.execute(
+            getWithLanguage<PersonTranslations>("/person/{personId}/translations", language) {
+                pathVar("personId", personId)
+            }
+        )
 
     /**
      * Get the most newly created person. This is a live response and will continuously change

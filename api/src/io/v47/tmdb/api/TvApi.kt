@@ -24,7 +24,9 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun details(tvId: Int, language: LocaleCode? = null, vararg append: TvRequest) =
         httpExecutor.execute(
-            getWithLanguage<TvShowDetails>("/tv/$tvId", language) {
+            getWithLanguage<TvShowDetails>("/tv/{tvId}", language) {
+                pathVar("tvId", tvId)
+
                 append.forEach { req ->
                     queryArg("append_to_response", req.value)
                 }
@@ -38,7 +40,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun alternativeTitles(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowAlternativeTitles>("/tv/$tvId/alternative_titles", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowAlternativeTitles>("/tv/{tvId}/alternative_titles", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the changes for a TV show. By default only the last 24 hours are returned.
@@ -64,7 +70,9 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
         page: Int? = null
     ) =
         httpExecutor.execute(
-            getWithPage<TvShowChanges>("/tv/$tvId/changes", page) {
+            getWithPage<TvShowChanges>("/tv/{tvId}/changes", page) {
+                pathVar("tvId", tvId)
+
                 startDate?.let { queryArg("start_date", it.format(dateFormat)) }
                 endDate?.let { queryArg("end_date", it.format(dateFormat)) }
             }
@@ -77,7 +85,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun contentRatings(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowContentRatings>("/tv/$tvId/content_ratings", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowContentRatings>("/tv/{tvId}/content_ratings", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the credits (cast and crew) that have been added to a TV show
@@ -86,7 +98,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun credits(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowCredits>("/tv/$tvId/credits", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowCredits>("/tv/{tvId}/credits", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get all of the episode groups that have been created for a TV show.
@@ -96,7 +112,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun episodeGroups(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowEpisodeGroups>("/tv/$tvId/episode_groups", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowEpisodeGroups>("/tv/{tvId}/episode_groups", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the external ids for a TV show
@@ -107,7 +127,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param tvId The id of the movie
      */
     fun externalIds(tvId: Int) =
-        httpExecutor.execute(get<TvShowExternalIds>("/tv/$tvId/external_ids"))
+        httpExecutor.execute(
+            get<TvShowExternalIds>("/tv/{tvId}/external_ids") {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the images that belong to a TV show.
@@ -123,7 +147,9 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun images(tvId: Int, language: LocaleCode? = null, vararg includeLanguage: LocaleCode?) =
         httpExecutor.execute(
-            getWithLanguage<TvShowImages>("/tv/$tvId/images", language) {
+            getWithLanguage<TvShowImages>("/tv/{tvId}/images", language) {
+                pathVar("tvId", tvId)
+
                 includeLanguage.toSet().forEach { lang ->
                     queryArg("include_image_language", lang?.toString() ?: "null")
                 }
@@ -136,7 +162,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param tvId The id of the TV show
      */
     fun keywords(tvId: Int) =
-        httpExecutor.execute(get<TvShowKeywords>("/tv/$tvId/keywords"))
+        httpExecutor.execute(
+            get<TvShowKeywords>("/tv/{tvId}/keywords") {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the list of TV show recommendations for this item
@@ -148,10 +178,12 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun recommendations(tvId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedListResults<TvListResult>>(
-                "/tv/$tvId/recommendations",
+                "/tv/{tvId}/recommendations",
                 page,
                 language
-            )
+            ) {
+                pathVar("tvId", tvId)
+            }
         )
 
     /**
@@ -164,17 +196,23 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun reviews(tvId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedListResults<TvShowReview>>(
-                "/tv/$tvId/reviews",
+                "/tv/{tvId}/reviews",
                 page,
                 language
-            )
+            ) {
+                pathVar("tvId", tvId)
+            }
         )
 
     /**
      * Get a list of seasons or episodes that have been screened in a film festival or theatre
      */
     fun screenedTheatrically(tvId: Int) =
-        httpExecutor.execute(get<TvShowScreenedTheatrically>("/tv/$tvId/screened_theatrically"))
+        httpExecutor.execute(
+            get<TvShowScreenedTheatrically>("/tv/{tvId}/screened_theatrically") {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get a list of similar TV shows. These items are assembled by looking at keywords and genres
@@ -186,10 +224,12 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun similar(tvId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedListResults<TvListResult>>(
-                "/tv/$tvId/similar",
+                "/tv/{tvId}/similar",
                 page,
                 language
-            )
+            ) {
+                pathVar("tvId", tvId)
+            }
         )
 
     /**
@@ -199,7 +239,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun translations(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowTranslations>("/tv/$tvId/translations", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowTranslations>("/tv/{tvId}/translations", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the videos that have been added to a TV show
@@ -208,7 +252,11 @@ class TvApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun videos(tvId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<TvShowVideos>("/tv/$tvId/videos", language))
+        httpExecutor.execute(
+            getWithLanguage<TvShowVideos>("/tv/{tvId}/videos", language) {
+                pathVar("tvId", tvId)
+            }
+        )
 
     /**
      * Get the most newly created TV show. This is a live response and will continuously change

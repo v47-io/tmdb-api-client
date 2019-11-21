@@ -21,7 +21,8 @@ class KeywordApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun movies(keywordId: Int, page: Int? = null, language: LocaleCode? = null, includeAdult: Boolean? = null) =
         httpExecutor.execute(
-            getWithPageAndLanguage<KeywordMovies>("/keyword/$keywordId/movies", page, language) {
+            getWithPageAndLanguage<KeywordMovies>("/keyword/{keywordId}/movies", page, language) {
+                pathVar("keywordId", keywordId)
                 includeAdult?.let { queryArg("include_adult", it) }
             }
         )

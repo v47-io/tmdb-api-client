@@ -21,7 +21,8 @@ class FindApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun byId(externalId: Any, source: ExternalSource, language: LocaleCode? = null) =
         httpExecutor.execute(
-            getWithLanguage<Find>("/find/$externalId", language) {
+            getWithLanguage<Find>("/find/{externalId}", language) {
+                pathVar("externalId", externalId)
                 queryArg("external_source", source.value)
             }
         )

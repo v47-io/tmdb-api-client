@@ -194,11 +194,11 @@ private class DiscoveryApiMovieQuery(
     }
 
     override fun voteCount(range: IntRange) {
-        if (range.start >= 0)
-            target.queryArg("vote_count.gte", range.start, replace = true)
+        if (range.first >= 0)
+            target.queryArg("vote_count.gte", range.first, replace = true)
 
-        if (range.endInclusive < Int.MAX_VALUE && range.endInclusive >= 1)
-            target.queryArg("vote_count.lte", range.endInclusive, replace = true)
+        if (range.last < Int.MAX_VALUE && range.last >= 1)
+            target.queryArg("vote_count.lte", range.last, replace = true)
     }
 
     override fun voteAverage(range: ClosedRange<Double>) {
@@ -246,11 +246,11 @@ private class DiscoveryApiMovieQuery(
     }
 
     override fun runtime(range: IntRange) {
-        if (range.start > 0)
-            target.queryArg("with_runtime.gte", range.start, replace = true)
+        if (range.first > 0)
+            target.queryArg("with_runtime.gte", range.first, replace = true)
 
-        if (range.endInclusive < Int.MAX_VALUE)
-            target.queryArg("with_runtime.lte", range.endInclusive, replace = true)
+        if (range.last < Int.MAX_VALUE)
+            target.queryArg("with_runtime.lte", range.last, replace = true)
     }
 
     override fun releaseType(releaseType: String) {
@@ -309,11 +309,11 @@ private class DiscoveryApiTvQuery(
     }
 
     override fun voteCount(range: IntRange) {
-        if (range.start >= 0)
-            target.queryArg("vote_count.gte", range.start, replace = true)
+        if (range.first >= 0)
+            target.queryArg("vote_count.gte", range.first, replace = true)
 
-        if (range.endInclusive < Int.MAX_VALUE && range.endInclusive >= 1)
-            target.queryArg("vote_count.lte", range.endInclusive, replace = true)
+        if (range.last < Int.MAX_VALUE && range.last >= 1)
+            target.queryArg("vote_count.lte", range.last, replace = true)
     }
 
     override fun voteAverage(range: ClosedRange<Double>) {
@@ -349,11 +349,11 @@ private class DiscoveryApiTvQuery(
     }
 
     override fun runtime(range: IntRange) {
-        if (range.start > 0)
-            target.queryArg("with_runtime.gte", range.start, replace = true)
+        if (range.first > 0)
+            target.queryArg("with_runtime.gte", range.first, replace = true)
 
-        if (range.endInclusive < Int.MAX_VALUE)
-            target.queryArg("with_runtime.lte", range.endInclusive, replace = true)
+        if (range.last < Int.MAX_VALUE)
+            target.queryArg("with_runtime.lte", range.last, replace = true)
     }
 
     override fun originalLanguage(language: LanguageCode) {

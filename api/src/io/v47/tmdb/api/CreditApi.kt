@@ -11,5 +11,9 @@ class CreditApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param creditId The credit id for a specific credit
      */
     fun details(creditId: String) =
-        httpExecutor.execute(get<Credits>("/credit/$creditId"))
+        httpExecutor.execute(
+            get<Credits>("/credit/{creditId}") {
+                pathVar("creditId", creditId)
+            }
+        )
 }

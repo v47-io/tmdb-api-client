@@ -25,7 +25,9 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun details(movieId: Int, language: LocaleCode? = null, vararg append: MovieRequest) =
         httpExecutor.execute(
-            getWithLanguage<MovieDetails>("/movie/$movieId", language) {
+            getWithLanguage<MovieDetails>("/movie/{movieId}", language) {
+                pathVar("movieId", movieId)
+
                 append.forEach { req ->
                     queryArg("append_to_response", req.value)
                 }
@@ -40,7 +42,9 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun alternativeTitles(movieId: Int, country: CountryCode? = null) =
         httpExecutor.execute(
-            get<MovieAlternativeTitles>("/movie/$movieId/alternative_titles") {
+            get<MovieAlternativeTitles>("/movie/{movieId}/alternative_titles") {
+                pathVar("movieId", movieId)
+
                 country?.let { queryArg("country", country.toString()) }
             }
         )
@@ -62,7 +66,9 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
         page: Int? = null
     ) =
         httpExecutor.execute(
-            get<MovieChanges>("/movie/$movieId/changes") {
+            get<MovieChanges>("/movie/{movieId}/changes") {
+                pathVar("movieId", movieId)
+
                 page?.let {
                     checkPage(it)
                     queryArg("page", it)
@@ -79,7 +85,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun credits(movieId: Int) =
-        httpExecutor.execute(get<MovieCredits>("/movie/$movieId/credits"))
+        httpExecutor.execute(
+            get<MovieCredits>("/movie/{movieId}/credits") {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get the external ids for a movie
@@ -90,7 +100,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun externalIds(movieId: Int) =
-        httpExecutor.execute(get<MovieExternalIds>("/movie/$movieId/external_ids"))
+        httpExecutor.execute(
+            get<MovieExternalIds>("/movie/{movieId}/external_ids") {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get the images that belong to a movie.
@@ -106,7 +120,9 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      */
     fun images(movieId: Int, language: LocaleCode? = null, vararg includeLanguage: LocaleCode?) =
         httpExecutor.execute(
-            getWithLanguage<MovieImages>("/movie/$movieId/images", language) {
+            getWithLanguage<MovieImages>("/movie/{movieId}/images", language) {
+                pathVar("movieId", movieId)
+
                 includeLanguage.toSet().forEach { lang ->
                     queryArg("include_image_language", lang?.toString() ?: "null")
                 }
@@ -119,7 +135,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun keywords(movieId: Int) =
-        httpExecutor.execute(get<MovieKeywords>("/movie/$movieId/keywords"))
+        httpExecutor.execute(
+            get<MovieKeywords>("/movie/{movieId}/keywords") {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get the release date along with the certification for a movie.
@@ -136,7 +156,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun releaseDates(movieId: Int) =
-        httpExecutor.execute(get<MovieReleaseDates>("/movie/$movieId/release_dates"))
+        httpExecutor.execute(
+            get<MovieReleaseDates>("/movie/{movieId}/release_dates") {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get the videos that have been added to a movie
@@ -145,7 +169,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun videos(movieId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<MovieVideos>("/movie/$movieId/videos", language))
+        httpExecutor.execute(
+            getWithLanguage<MovieVideos>("/movie/{movieId}/videos", language) {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get a list of translations that have been created for a movie
@@ -153,7 +181,11 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun translations(movieId: Int) =
-        httpExecutor.execute(get<MovieTranslations>("/movie/$movieId/translations"))
+        httpExecutor.execute(
+            get<MovieTranslations>("/movie/{movieId}/translations") {
+                pathVar("movieId", movieId)
+            }
+        )
 
     /**
      * Get a list of recommended movies for a movie
@@ -165,10 +197,12 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun recommendations(movieId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedListResults<MovieListResult>>(
-                "/movie/$movieId/recommendations",
+                "/movie/{movieId}/recommendations",
                 page,
                 language
-            )
+            ) {
+                pathVar("movieId", movieId)
+            }
         )
 
     /**
@@ -184,10 +218,12 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun similar(movieId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<PaginatedListResults<MovieListResult>>(
-                "/movie/$movieId/similar",
+                "/movie/{movieId}/similar",
                 page,
                 language
-            )
+            ) {
+                pathVar("movieId", movieId)
+            }
         )
 
     /**
@@ -200,10 +236,12 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun reviews(movieId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<MovieReviews>(
-                "/movie/$movieId/reviews",
+                "/movie/{movieId}/reviews",
                 page,
                 language
-            )
+            ) {
+                pathVar("movieId", movieId)
+            }
         )
 
     /**
@@ -216,10 +254,12 @@ class MoviesApi internal constructor(private val httpExecutor: HttpExecutor) {
     fun lists(movieId: Int, page: Int? = null, language: LocaleCode? = null) =
         httpExecutor.execute(
             getWithPageAndLanguage<MovieLists>(
-                "/movie/$movieId/lists",
+                "/movie/{movieId}/lists",
                 page,
                 language
-            )
+            ) {
+                pathVar("movieId", movieId)
+            }
         )
 
     /**

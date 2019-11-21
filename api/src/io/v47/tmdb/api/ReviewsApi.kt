@@ -11,5 +11,9 @@ class ReviewsApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param reviewId The id of the review
      */
     fun details(reviewId: String) =
-        httpExecutor.execute(get<ReviewDetails>("/review/$reviewId"))
+        httpExecutor.execute(
+            get<ReviewDetails>("/review/{reviewId}") {
+                pathVar("reviewId", reviewId)
+            }
+        )
 }

@@ -13,7 +13,11 @@ class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param networkId The id of the network
      */
     fun details(networkId: Int) =
-        httpExecutor.execute(get<Network>("/network/$networkId"))
+        httpExecutor.execute(
+            get<Network>("/network/{networkId}") {
+                pathVar("networkId", networkId)
+            }
+        )
 
     /**
      * Get the alternative names of a network
@@ -21,7 +25,11 @@ class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param networkId The id of the network
      */
     fun alternativeNames(networkId: Int) =
-        httpExecutor.execute(get<NetworkAlternativeNames>("/network/$networkId/alternative_names"))
+        httpExecutor.execute(
+            get<NetworkAlternativeNames>("/network/{networkId}/alternative_names") {
+                pathVar("networkId", networkId)
+            }
+        )
 
     /**
      * Get a networks logos by id.
@@ -38,5 +46,9 @@ class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param networkId The id of the network
      */
     fun images(networkId: Int) =
-        httpExecutor.execute(get<NetworkImages>("/network/$networkId/images"))
+        httpExecutor.execute(
+            get<NetworkImages>("/network/{networkId}/images") {
+                pathVar("networkId", networkId)
+            }
+        )
 }

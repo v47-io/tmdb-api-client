@@ -15,7 +15,11 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      * @param language A language code
      */
     fun details(collectionId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<CollectionDetails>("/collection/$collectionId", language))
+        httpExecutor.execute(
+            getWithLanguage<CollectionDetails>("/collection/{collectionId}", language) {
+                pathVar("collectionId", collectionId)
+            }
+        )
 
     /**
      * Get the images for a collection by id
@@ -24,7 +28,11 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      * @param language A language code
      */
     fun images(collectionId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<CollectionImages>("/collection/$collectionId/images", language))
+        httpExecutor.execute(
+            getWithLanguage<CollectionImages>("/collection/{collectionId}/images", language) {
+                pathVar("collectionId", collectionId)
+            }
+        )
 
     /**
      * Get the list translations for a collection by id
@@ -33,6 +41,8 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      */
     fun translations(collectionId: Int, language: LocaleCode? = null) =
         httpExecutor.execute(
-            getWithLanguage<CollectionTranslations>("/collection/$collectionId/translations", language)
+            getWithLanguage<CollectionTranslations>("/collection/{collectionId}/translations", language) {
+                pathVar("collectionId", collectionId)
+            }
         )
 }
