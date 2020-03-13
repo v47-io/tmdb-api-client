@@ -6,11 +6,7 @@ import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.reactive.asPublisher
 import org.reactivestreams.Publisher
-import java.util.concurrent.atomic.AtomicBoolean
 
 private const val BASE_URL = "https://api.themoviedb.org"
 
@@ -19,26 +15,25 @@ class HttpExecutor(
     private val httpClientFactory: HttpClientFactory,
     private val apiKey: String
 ) {
-    private lateinit var httpClient: HttpClient
-    private var queue = HttpExecutorQueue(Dispatchers.IO)
-    private var httpClientInitialized = AtomicBoolean(false)
+    private val httpClient: HttpClient by lazy {
+        httpClientFactory.createHttpClient(BASE_URL)
+    }
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
         val httpRequest = createHttpRequest(request)
 
-        if (!httpClientInitialized.getAndSet(true)) {
-            httpClient = httpClientFactory.createHttpClient(BASE_URL)
-            queue.start(httpClient)
-        }
-
-        @Suppress("EXPERIMENTAL_API_USAGE")
         return Flowable
-            .fromPublisher(queue.enqueue<T>(httpRequest, request.responseType).consumeAsFlow().asPublisher())
+            .fromPublisher(
+                httpClient.execute(
+                    httpRequest,
+                    request.responseType
+                )
+            )
             .filter { it.body != null }
             .map { resp ->
                 when {
-                    resp.status == 200 -> resp.body
+                    resp.status == 200 -> resp.body as T
                     resp.body is ErrorResponse -> throw ErrorResponseException(
                         resp.body as ErrorResponse,
                         httpRequest
