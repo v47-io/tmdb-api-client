@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.60' apply false
-    id "org.jetbrains.kotlin.kapt" version '1.3.60' apply false
-    id 'org.jetbrains.kotlin.plugin.allopen' version '1.3.60' apply false
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.60' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.3.70' apply false
+    id "org.jetbrains.kotlin.kapt" version '1.3.70' apply false
+    id 'org.jetbrains.kotlin.plugin.allopen' version '1.3.70' apply false
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.70' apply false
 
-    id 'io.gitlab.arturbosch.detekt' version '1.1.1' apply false
+    id 'io.gitlab.arturbosch.detekt' version '1.7.0-beta1' apply false
     id 'net.researchgate.release' version '2.8.1'
     // id 'org.jetbrains.dokka' version '0.9.18' apply false
 }
@@ -58,12 +58,17 @@ subprojects {
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
-            kotlinOptions.jvmTarget = '11'
+
+            jvmTarget = '11'
+            javaParameters = true
         }
     }
 
     compileTestKotlin {
-        kotlinOptions.jvmTarget = '11'
+        kotlinOptions {
+            jvmTarget = '11'
+            javaParameters = true
+        }
     }
 
     repositories {
@@ -83,7 +88,6 @@ subprojects {
     detekt {
         input = files('src')
         config = files('../detekt.yml')
-        filters = '.*test.*,.*/resources/.*,.*/tmp/.*'
 
         reports {
             xml {
@@ -91,10 +95,6 @@ subprojects {
                 destination = file("$buildDir/reports/detekt.xml")
             }
         }
-    }
-
-    jacoco {
-        toolVersion = '0.8.4'
     }
 
     test {

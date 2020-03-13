@@ -2,19 +2,14 @@ package io.v47.tmdb.http
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.micronaut.core.annotation.AnnotationMetadataResolver
 import io.micronaut.core.io.ResourceResolver
 import io.micronaut.http.client.DefaultHttpClient
 import io.micronaut.http.client.DefaultHttpClientConfiguration
-import io.micronaut.http.client.LoadBalancer
 import io.micronaut.http.client.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
-import io.micronaut.http.filter.HttpClientFilter
 import io.micronaut.jackson.codec.JsonMediaTypeCodec
 import io.micronaut.jackson.codec.JsonStreamMediaTypeCodec
 import io.micronaut.runtime.ApplicationConfiguration
-import io.netty.channel.MultithreadEventLoopGroup
-import io.netty.util.concurrent.DefaultThreadFactory
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
 import java.net.URL
@@ -31,7 +26,6 @@ class StandaloneMnClientFactory : HttpClientFactory {
         setReadTimeout(Duration.ofSeconds(30))
     }
 
-    private val threadFactory = DefaultThreadFactory(MultithreadEventLoopGroup::class.java)
     private val sslFactory = NettyClientSslBuilder(ResourceResolver())
 
     private val objectMapper = ObjectMapper().apply {
@@ -52,14 +46,10 @@ class StandaloneMnClientFactory : HttpClientFactory {
     override fun createHttpClient(baseUrl: String): HttpClient =
         HttpClientImpl(
             DefaultHttpClient(
-                LoadBalancer.fixed(URL(baseUrl)),
+                URL(baseUrl),
                 httpClientConfiguration,
-                null,
-                threadFactory,
                 sslFactory,
-                mediaTypeRegistry,
-                AnnotationMetadataResolver.DEFAULT,
-                emptyList<HttpClientFilter>()
+                mediaTypeRegistry
             ),
             getBasePath(baseUrl)
         )

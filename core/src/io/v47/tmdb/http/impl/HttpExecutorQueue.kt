@@ -14,7 +14,6 @@ import kotlinx.coroutines.time.delay
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.CoroutineContext
 
 internal class HttpExecutorQueue(parentContext: CoroutineContext) : CoroutineScope {
@@ -176,16 +175,11 @@ private class QueuedRequest<T>(val httpRequest: HttpRequest, val responseType: T
     private val _responseChannel = Channel<HttpResponse<T>>(Channel.UNLIMITED)
     val responseChannel: ReceiveChannel<HttpResponse<T>> get() = _responseChannel
 
-    private var _hasResponded = AtomicBoolean(false)
-    val hasResponded get() = _hasResponded.get()
-
     suspend fun offerResponse(response: HttpResponse<T>) {
-        _hasResponded.set(true)
         _responseChannel.send(response)
     }
 
     fun offerException(x: Throwable) {
-        _hasResponded.set(true)
         _responseChannel.close(x)
     }
 
@@ -193,5 +187,3 @@ private class QueuedRequest<T>(val httpRequest: HttpRequest, val responseType: T
         _responseChannel.close()
     }
 }
-
-private class RateLimitException(val delaySeconds: Int) : RuntimeException()
