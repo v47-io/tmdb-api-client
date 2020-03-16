@@ -23,7 +23,7 @@ abstract class TmdbType(private vararg val ignoredProperties: String) : Serializ
 
     @Suppress("unused")
     fun handleUnknownProperty(key: String, value: Any?) {
-        if (key !in ignoredProperties)
+        if (key != "@class" && key !in ignoredProperties)
             logger.trace("Unknown property: '$key' -> '$value'")
     }
 }
