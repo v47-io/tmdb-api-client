@@ -3,9 +3,10 @@ package io.v47.tmdb.http
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.core.io.ResourceResolver
-import io.micronaut.http.client.DefaultHttpClient
 import io.micronaut.http.client.DefaultHttpClientConfiguration
-import io.micronaut.http.client.ssl.NettyClientSslBuilder
+import io.micronaut.http.client.loadbalance.FixedLoadBalancer
+import io.micronaut.http.client.netty.DefaultHttpClient
+import io.micronaut.http.client.netty.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
 import io.micronaut.jackson.codec.JsonMediaTypeCodec
 import io.micronaut.jackson.codec.JsonStreamMediaTypeCodec
@@ -46,10 +47,13 @@ class StandaloneMnClientFactory : HttpClientFactory {
     override fun createHttpClient(baseUrl: String): HttpClient =
         HttpClientImpl(
             DefaultHttpClient(
-                URL(baseUrl),
+                FixedLoadBalancer(URL(baseUrl)),
                 httpClientConfiguration,
+                null,
+                null,
                 sslFactory,
-                mediaTypeRegistry
+                mediaTypeRegistry,
+                null
             ),
             getBasePath(baseUrl)
         )
