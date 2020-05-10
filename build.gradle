@@ -177,6 +177,10 @@ subprojects {
 
 release {
     tagTemplate = 'v$version'
+
+    git {
+        requireBranch = '1.x'
+    }
 }
 
 task build {
