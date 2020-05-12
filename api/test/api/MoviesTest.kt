@@ -1,6 +1,7 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.CountryCode
+import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.model.Release
 import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.*
@@ -9,6 +10,7 @@ import java.time.LocalDate
 
 class MoviesTest : AbstractTmdbTest() {
     companion object {
+        const val KUNG_FU_HUSTLE_ID = 9470
         const val THOR_RAGNAROK_ID = 284053
         const val THOR_RUSSIAN_TITLE = "Тор 3: Рагнарёк" // it's getting worse
         const val CAST_LOKI_CREDIT_ID = "545d46c7c3a3686cbb00002d"
@@ -35,6 +37,9 @@ class MoviesTest : AbstractTmdbTest() {
             THOR_RUSSIAN_TITLE,
             details.alternativeTitles!!.titles.find { it.country == CountryCode.RU }?.title
         )
+
+        val kungFuHustleDetails = movie.details(KUNG_FU_HUSTLE_ID).blockingFirst()
+        assertEquals(LanguageCode.zh, kungFuHustleDetails.originalLanguage)
     }
 
     @Test
