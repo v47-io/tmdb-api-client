@@ -21,7 +21,7 @@ class TvTest : AbstractTmdbTest() {
         val details = tvShow.details(
             AGENTS_OF_SHIELD_ID,
             language = LocaleCode.es_ES,
-            append = *arrayOf(TvRequest.Translations, TvRequest.Videos)
+            append = *TvRequest.values()
         ).blockingFirst()
 
         assertEquals(AGENTS_OF_SHIELD_NAME_ES, details.name)

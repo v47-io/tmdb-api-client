@@ -25,6 +25,9 @@ internal interface MovieChangesMixin {
 internal interface MovieChangesChangeItemMixin {
     @get:JsonProperty("iso_639_1")
     val language: LanguageCode?
+
+    @get:JsonProperty("iso_3166_1")
+    val country: CountryCode?
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)

@@ -21,7 +21,7 @@ class TvEpisodesTest : AbstractTmdbTest() {
             AGENTS_OF_SHIELD_ID,
             SEASON,
             EPISODE,
-            append = *arrayOf(TvEpisodeRequest.Images)
+            append = *TvEpisodeRequest.values()
         ).blockingFirst()
 
         assertNotNull(results.images)

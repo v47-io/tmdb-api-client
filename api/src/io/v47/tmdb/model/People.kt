@@ -41,6 +41,7 @@ data class PersonDetails(
     val externalIds: PersonExternalIds?,
     val images: PersonImages?,
     val taggedImages: PersonTaggedImages?,
+    val translations: PersonTranslations?,
     val changes: PersonChanges?
 ) : TmdbType(), TmdbIntId
 
@@ -127,7 +128,9 @@ data class PeoplePopular(
         val adult: Boolean?,
         override val id: Int?,
         val knownFor: List<MovieTvPersonListResult> = emptyList(),
+        val knownForDepartment: String?,
         val name: String?,
+        val gender: Gender?,
         val popularity: Double?
     ) : TmdbType(), TmdbIntId
 }
