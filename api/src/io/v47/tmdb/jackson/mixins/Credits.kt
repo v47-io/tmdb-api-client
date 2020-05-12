@@ -3,8 +3,10 @@ package io.v47.tmdb.jackson.mixins
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.CreditMediaDeserializer
 import io.v47.tmdb.jackson.deserialization.CreditPersonKnownForDeserializer
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import io.v47.tmdb.model.CreditMedia
 import io.v47.tmdb.model.CreditPersonKnownFor
 
@@ -15,10 +17,16 @@ internal interface CreditsMixin {
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CreditMediaMovieMixin
+internal interface CreditMediaMovieMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CreditMediaTvMixin
+internal interface CreditMediaTvMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 internal interface CreditMediaTvEpisodeMixin
@@ -33,7 +41,13 @@ internal interface CreditPersonMixin {
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CreditPersonKnownForMovieMixin
+internal interface CreditPersonKnownForMovieMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CreditPersonKnownForTvMixin
+internal interface CreditPersonKnownForTvMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}

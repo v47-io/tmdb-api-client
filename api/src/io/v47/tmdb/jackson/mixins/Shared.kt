@@ -7,13 +7,20 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.MovieTvPersonListResultDeserializer
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import io.v47.tmdb.model.MovieTvPersonListResult
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface MovieListResultMixin
+internal interface MovieListResultMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface TvListResultMixin
+internal interface TvListResultMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 internal interface TvListResultTvListNetworkMixin
@@ -33,7 +40,10 @@ internal interface PersonListResultMixin {
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CollectionInfoMixin
+internal interface CollectionInfoMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 internal interface CompanyInfoMixin
@@ -69,7 +79,13 @@ internal interface PaginatedListResultsMixin
 internal interface PaginatedMovieListResultsWithDatesMixin
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CastMemberMixin
+internal interface CastMemberMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-internal interface CrewMemberMixin
+internal interface CrewMemberMixin {
+    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?
+}
