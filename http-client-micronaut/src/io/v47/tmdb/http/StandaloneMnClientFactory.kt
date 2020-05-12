@@ -38,6 +38,7 @@ class StandaloneMnClientFactory : HttpClientFactory {
     }
 
     private val httpClientConfiguration = DefaultHttpClientConfiguration().apply {
+        @Suppress("MagicNumber")
         setReadTimeout(Duration.ofSeconds(30))
     }
 
