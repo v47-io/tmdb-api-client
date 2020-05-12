@@ -6,7 +6,6 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.ItemStatus
 import io.v47.tmdb.model.ListDetails
-import java.net.URLEncoder
 
 class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
     /**
@@ -35,6 +34,4 @@ class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
                 queryArg("movie_id", movieId)
             }
         )
-
-    private fun String.urlEncode(): String = URLEncoder.encode(this, Charsets.UTF_8)
 }

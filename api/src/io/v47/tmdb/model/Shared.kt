@@ -189,6 +189,8 @@ data class TranslationListResult(
         val name: String?,
         val title: String?,
         val overview: String?,
+        val tagline: String?,
+        val runtime: Int?,
         val homepage: String?
     ) : TmdbType()
 }

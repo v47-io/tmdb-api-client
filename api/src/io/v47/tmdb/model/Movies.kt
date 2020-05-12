@@ -84,7 +84,8 @@ data class MovieChanges(
         val time: String?,
         val language: LanguageCode?,
         val value: Any?,
-        val originalValue: Any?
+        val originalValue: Any?,
+        val country: CountryCode?
     ) : TmdbType(), TmdbStringId
 }
 

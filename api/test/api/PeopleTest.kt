@@ -19,7 +19,7 @@ class PeopleTest : AbstractTmdbTest() {
         val details = Flowable.fromPublisher(
             person.details(
                 CHRIS_HEMSWORTH_ID,
-                append = *arrayOf(PeopleRequest.CombinedCredits)
+                append = *PeopleRequest.values()
             )
         ).blockingFirst()
 

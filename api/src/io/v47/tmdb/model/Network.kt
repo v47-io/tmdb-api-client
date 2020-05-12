@@ -19,6 +19,7 @@ import com.neovisionaries.i18n.CountryCode
 
 data class Network(
     override val id: Int,
+    val logoPath: String?,
     val name: String?,
     val homepage: String?,
     val headquarters: String?,
