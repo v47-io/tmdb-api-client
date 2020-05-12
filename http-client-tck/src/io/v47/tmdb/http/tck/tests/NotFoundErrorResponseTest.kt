@@ -24,6 +24,7 @@ import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 
+@Suppress("MagicNumber")
 internal class NotFoundErrorResponseTest : AbstractTckTest("https://api.themoviedb.org") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkResponse = ErrorResponse("The resource you requested could not be found.", 34)

@@ -24,6 +24,7 @@ import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 
+@Suppress("MagicNumber")
 internal class AuthErrorResponseTest : AbstractTckTest("https://api.themoviedb.org") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkResponse = ErrorResponse("Invalid API key: You must be granted a valid key.", 7)

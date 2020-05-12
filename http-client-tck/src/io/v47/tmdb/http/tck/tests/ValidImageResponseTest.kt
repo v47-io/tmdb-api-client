@@ -23,6 +23,7 @@ import io.v47.tmdb.http.impl.HttpRequestImpl
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.TypeInfo
 
+@Suppress("MagicNumber")
 internal class ValidImageResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val request = HttpRequestImpl(
