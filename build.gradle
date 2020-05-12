@@ -6,12 +6,14 @@ plugins {
 
     id 'io.gitlab.arturbosch.detekt' version '1.8.0' apply false
     id 'net.researchgate.release' version '2.8.1'
+    id 'com.github.hierynomus.license' version '0.15.0' apply false
     // id 'org.jetbrains.dokka' version '0.9.18' apply false
 }
 
 subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'io.gitlab.arturbosch.detekt'
+    apply plugin: 'com.github.hierynomus.license'
     // apply plugin: 'org.jetbrains.dokka'
 
     apply plugin: 'jacoco'
@@ -101,6 +103,18 @@ subprojects {
         useJUnitPlatform()
         jacoco {
             destinationFile = file("$buildDir/jacoco/test.exec")
+        }
+    }
+
+    license {
+        exclude '**/*.json'
+        exclude '**/*.properties'
+        exclude '**/META-INF/**/*'
+
+        header = file('../HEADER.txt')
+
+        ext {
+            year = Calendar.getInstance().get(Calendar.YEAR)
         }
     }
 
