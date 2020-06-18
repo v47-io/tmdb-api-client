@@ -24,7 +24,7 @@ class CompaniesTest : AbstractTmdbTest() {
         private const val COMPANY_ID = 2
 
         // Matching values
-        private const val COMPANY_HEADQUARTERS = "Burbank, California, United States"
+        private const val COMPANY_HEADQUARTERS = "Burbank, California"
         private const val COMPANY_NAME = "Walt Disney Pictures"
 
         private const val COMPANY_ALTERNATIVE_NAME = "Disney"
