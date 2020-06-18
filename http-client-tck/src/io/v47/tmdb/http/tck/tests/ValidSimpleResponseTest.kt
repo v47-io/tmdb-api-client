@@ -26,7 +26,7 @@ import io.v47.tmdb.utils.toTypeInfo
 internal class ValidSimpleResponseTest : AbstractTckTest("https://api.themoviedb.org") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val companyName = "Walt Disney Pictures"
-        val companyHeadquarters = "Burbank, California, United States"
+        val companyHeadquarters = "Burbank, California"
 
         val request = HttpRequestImpl(
             HttpMethod.Get,
@@ -40,7 +40,7 @@ internal class ValidSimpleResponseTest : AbstractTckTest("https://api.themoviedb
                 request,
                 tmdbTypeReference<Company>().toTypeInfo()
             )
-        ).map { it.body }.blockingFirst()
+        ).map { it.body!! }.blockingFirst()
 
         val checkCompany = Company(companyHeadquarters, companyName)
 
