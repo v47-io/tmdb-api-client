@@ -4,8 +4,8 @@ ext {
     slf4jVersion = '1.7.30'
 
     // Implementation Libraries
-    jacksonVersion = '2.11.0'
-    micronautVersion = '2.0.0.RC1'
+    jacksonVersion = '2.11.1'
+    micronautVersion = '2.0.0'
     nvI18nVersion = '1.27'
     reactiveStreamsVersion = '1.0.3'
     rxJavaVersion = '2.2.19'

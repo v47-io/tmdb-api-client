@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 class TvTest : AbstractTmdbTest() {
     companion object {
         const val AGENTS_OF_SHIELD_ID = 1403
-        const val AGENTS_OF_SHIELD_NAME_ES = "Marvel's Agentes de S.H.I.E.L.D."
+        const val AGENTS_OF_SHIELD_NAME_ES = "Marvel Agentes de S.H.I.E.L.D."
 
         const val GAME_OF_THRONES_ID = 1399
         const val SUPERGIRL_ID = 62688
