@@ -3,7 +3,11 @@ apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
 
 allOpen {
     annotation('io.micronaut.aop.Around')
-    annotation('javax.inject.Singleton')
+    annotation('jakarta.inject.Singleton')
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {

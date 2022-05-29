@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import io.micronaut.http.client.HttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
+import java.net.URI
 import java.net.URL
 import io.micronaut.http.client.HttpClient as MnHttpClient
 
@@ -35,7 +36,7 @@ class ContextMnClientFactory(private val beanContext: BeanContext) : HttpClientF
             beanContext.createBean(
                 MnHttpClient::class.java,
                 mapOf(
-                    "loadBalancer" to LoadBalancer.fixed(URL("${url.protocol}://${url.host}$portPart")),
+                    "loadBalancer" to LoadBalancer.fixed(URI("${url.protocol}://${url.host}$portPart")),
                     "configuration" to beanContext.getBean(HttpClientConfiguration::class.java)
                 )
             ),

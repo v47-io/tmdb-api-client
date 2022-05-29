@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.core.io.ResourceResolver
 import io.micronaut.http.client.DefaultHttpClientConfiguration
-import io.micronaut.http.client.loadbalance.FixedLoadBalancer
+import io.micronaut.http.client.LoadBalancer
 import io.micronaut.http.client.netty.DefaultHttpClient
 import io.micronaut.http.client.netty.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
@@ -28,7 +28,7 @@ import io.micronaut.jackson.codec.JsonStreamMediaTypeCodec
 import io.micronaut.runtime.ApplicationConfiguration
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
-import java.net.URL
+import java.net.URI
 import java.time.Duration
 
 class StandaloneMnClientFactory : HttpClientFactory {
@@ -63,13 +63,14 @@ class StandaloneMnClientFactory : HttpClientFactory {
     override fun createHttpClient(baseUrl: String): HttpClient =
         HttpClientImpl(
             DefaultHttpClient(
-                FixedLoadBalancer(URL(baseUrl)),
+                LoadBalancer.fixed(URI(baseUrl)),
                 httpClientConfiguration,
                 null,
                 null,
                 sslFactory,
                 mediaTypeRegistry,
-                null
+                null,
+                emptyList()
             ),
             getBasePath(baseUrl)
         )

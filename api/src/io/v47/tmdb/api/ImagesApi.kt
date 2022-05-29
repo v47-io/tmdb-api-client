@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package io.v47.tmdb.api
 
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.api.ErrorResponse
@@ -84,6 +84,7 @@ class ImagesApi internal constructor(
                         resp.body as ErrorResponse,
                         request
                     )
+
                     else -> throw IllegalArgumentException("Invalid error response: $resp")
                 }
             }

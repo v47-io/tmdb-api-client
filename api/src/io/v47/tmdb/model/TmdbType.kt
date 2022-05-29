@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package io.v47.tmdb.model
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 
+@Suppress("SerialVersionUIDInSerializableClass")
 abstract class TmdbType(private vararg val ignoredProperties: String) : Serializable {
     private val logger by lazy { LoggerFactory.getLogger(javaClass)!! }
 

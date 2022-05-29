@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import io.v47.tmdb.TmdbClient
 import io.v47.tmdb.http.ContextMnClientFactory
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @Factory
 class SomeFactory {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package io.v47.tmdb.autoconfigure
 
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.TmdbClient
 import io.v47.tmdb.config.TmdbAutoConfigurationTestConfiguration
 import org.junit.jupiter.api.Test

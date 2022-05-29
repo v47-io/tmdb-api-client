@@ -1,12 +1,12 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.0' apply false
-    id "org.jetbrains.kotlin.kapt" version '1.4.0' apply false
-    id 'org.jetbrains.kotlin.plugin.allopen' version '1.4.0' apply false
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.4.0' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21' apply false
+    id "org.jetbrains.kotlin.kapt" version '1.6.21' apply false
+    id 'org.jetbrains.kotlin.plugin.allopen' version '1.6.21' apply false
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21' apply false
 
-    id 'io.gitlab.arturbosch.detekt' version '1.11.2' apply false
+    id 'io.gitlab.arturbosch.detekt' version '1.20.0' apply false
     id 'net.researchgate.release' version '2.8.1'
-    id 'com.github.hierynomus.license' version '0.15.0' apply false
+    id 'com.github.hierynomus.license' version '0.16.1' apply false
     // id 'org.jetbrains.dokka' version '0.9.18' apply false
 }
 
@@ -18,7 +18,6 @@ subprojects {
 
     apply plugin: 'jacoco'
 
-    apply plugin: 'maven'
     apply plugin: 'maven-publish'
 
     apply from: '../libraries.gradle'
@@ -74,7 +73,7 @@ subprojects {
     }
 
     repositories {
-        maven { url 'https://nexus.vemilyus.com/repository/maven-all/' }
+        maven { url 'https://nexus3.v47.dev/repository/maven-all/' }
     }
 
     dependencies {
@@ -92,10 +91,7 @@ subprojects {
         config = files('../detekt.yml')
 
         reports {
-            xml {
-                enabled = true
-                destination = file("$buildDir/reports/detekt.xml")
-            }
+            xml.required.set(true)
         }
     }
 
@@ -175,9 +171,9 @@ subprojects {
                     name 'vemilyus-nexus'
 
                     if (project.version.endsWith('-SNAPSHOT'))
-                        url 'https://nexus.vemilyus.com/repository/snapshots/'
+                        url 'https://nexus3.v47.dev/repository/snapshots/'
                     else
-                        url 'https://nexus.vemilyus.com/repository/releases/'
+                        url 'https://nexus.v47.dev/repository/releases/'
 
                     credentials(PasswordCredentials) {
                         username nexusUser

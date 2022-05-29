@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ class CompaniesTest : AbstractTmdbTest() {
         private const val COMPANY_HEADQUARTERS = "Burbank, California"
         private const val COMPANY_NAME = "Walt Disney Pictures"
 
-        private const val COMPANY_ALTERNATIVE_NAME = "Disney"
+        private const val COMPANY_ALTERNATIVE_NAME = "Disney Pictures"
     }
 
     @Test
@@ -44,7 +44,7 @@ class CompaniesTest : AbstractTmdbTest() {
     fun testGetAlternativeNames() {
         val alternativeNames = client.company.alternativeNames(COMPANY_ID).blockingFirst()
 
-        assertEquals(alternativeNames.results.firstOrNull()?.name, COMPANY_ALTERNATIVE_NAME)
+        assertEquals(COMPANY_ALTERNATIVE_NAME, alternativeNames.results.firstOrNull()?.name)
     }
 
     @Test

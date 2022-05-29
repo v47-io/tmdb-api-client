@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package io.v47.tmdb.http.tck.tests
 
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.impl.HttpRequestImpl
@@ -37,13 +37,15 @@ internal class ValidComplexResponseTest : AbstractTckTest("https://api.themovied
                 request,
                 tmdbTypeReference<CompanyAlternativeNames>().toTypeInfo()
             )
-        ).map { it.body }.blockingFirst()
+        ).map { it.body!! }.blockingFirst()
 
         val checkValue = CompanyAlternativeNames(
             2,
             listOf(
+                CompanyAlternativeNames.AlternativeName("Disney Pictures", ""),
+                CompanyAlternativeNames.AlternativeName("월트 디즈니 픽처스", ""),
                 CompanyAlternativeNames.AlternativeName("Disney", ""),
-                CompanyAlternativeNames.AlternativeName("월트 디즈니 픽처스", "")
+                CompanyAlternativeNames.AlternativeName("Walt Disney", ""),
             )
         )
 

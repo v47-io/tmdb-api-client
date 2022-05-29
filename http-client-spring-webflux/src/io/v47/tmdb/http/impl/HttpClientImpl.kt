@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package io.v47.tmdb.http.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.reactivex.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpRequest
@@ -33,31 +32,33 @@ import org.springframework.http.MediaType
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
     private val om = ObjectMapper().apply {
         findAndRegisterModules()
     }
 
-    private val imageErrorRegex = Regex("""<h1>(.+?)</h1>""", RegexOption.IGNORE_CASE)
+    private val imageErrorRegex = Regex("""<h\d>(.+?)</h\d>""", RegexOption.IGNORE_CASE)
 
-    override fun execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<out Any>> {
+    @Suppress("UNCHECKED_CAST")
+    override fun execute(
+        request: HttpRequest,
+        responseType: TypeInfo
+    ): Publisher<HttpResponse<out Any>> {
         val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
 
         val requestSpec = request.toRequestSpec(jsonBody)
 
-        return Flowable.fromPublisher(requestSpec.exchange())
-            .switchMap { resp ->
+        return requestSpec
+            .exchangeToMono { resp ->
                 if (resp.statusCode() == HttpStatus.OK) {
-                    val typeReference = ParameterizedTypeReference.forType<Any>(responseType.fullType)
-                    val bodyFlux = resp.bodyToFlux(typeReference)
+                    val typeReference =
+                        ParameterizedTypeReference.forType<Any>(responseType.fullType)
 
-                    Flowable.fromPublisher(bodyFlux)
-                        .map { resp to it }
+                    resp.bodyToMono(typeReference).map { resp to it }
                 } else {
-                    val bodyFlux = resp.bodyToMono(ByteArray::class.java)
-
-                    Flowable.fromPublisher(bodyFlux)
+                    resp.bodyToMono(ByteArray::class.java)
                         .map { resp to readErrorBody(it, resp.rawStatusCode()) }
                 }
             }
@@ -66,18 +67,20 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                     resp.rawStatusCode(),
                     resp.headers().asHttpHeaders().toMap(),
                     body
-                ) as HttpResponse<out Any>
+                )
             }
-            .onErrorReturn { t ->
+            .onErrorResume { t ->
                 if (t is HttpClientErrorException)
-                    HttpResponseImpl(
-                        t.rawStatusCode,
-                        t.responseHeaders?.toMap() ?: emptyMap(),
-                        createErrorResponse(t)
+                    Mono.just(
+                        HttpResponseImpl(
+                            t.rawStatusCode,
+                            t.responseHeaders?.toMap() ?: emptyMap(),
+                            createErrorResponse(t)
+                        )
                     )
                 else
                     throw IllegalArgumentException("Not a HttpClientErrorException", t)
-            }
+            } as Publisher<HttpResponse<out Any>>
     }
 
     @Suppress("ComplexMethod")
@@ -133,7 +136,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
             .map { it.toErrorResponse() }
             .getOrElse {
                 val txt = String(bodyByteArray, Charsets.UTF_8).let { str ->
-                    val imageErrorMatch = imageErrorRegex.matchEntire(str)
+                    val imageErrorMatch = imageErrorRegex.find(str)
                     if (imageErrorMatch != null)
                         imageErrorMatch.groupValues[1]
                     else

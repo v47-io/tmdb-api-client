@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package io.v47.tmdb.http.impl
 
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
@@ -53,6 +53,7 @@ class HttpExecutor(
                         resp.body as ErrorResponse,
                         httpRequest
                     )
+
                     else -> throw IllegalArgumentException("Invalid error response: $resp")
                 }
             }
@@ -62,6 +63,12 @@ class HttpExecutor(
         val url = "/${tmdbRequest.apiVersion}/${tmdbRequest.path.trim(' ', '/')}"
         val query = tmdbRequest.queryArgs + ("api_key" to listOf(apiKey))
 
-        return HttpRequestImpl(tmdbRequest.method, url, tmdbRequest.pathVariables, query, tmdbRequest.requestEntity)
+        return HttpRequestImpl(
+            tmdbRequest.method,
+            url,
+            tmdbRequest.pathVariables,
+            query,
+            tmdbRequest.requestEntity
+        )
     }
 }

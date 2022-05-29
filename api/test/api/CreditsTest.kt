@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ class CreditsTest : AbstractTmdbTest() {
     companion object {
         const val TV_CREDIT_ID = "5bf57dad9251417c1d047265"
         const val TV_MEDIA_ID = 1403
-        const val TV_CHARACTER = """Elena "Yo-Yo" Rodriguez / Slingshot"""
+        const val TV_CHARACTER = """Elena 'Yo-Yo' Rodriguez / Slingshot"""
 
         const val MOVIE_CREDIT_ID = "545d46a80e0a261fb3004e81"
         const val MOVIE_MEDIA_ID = 284053

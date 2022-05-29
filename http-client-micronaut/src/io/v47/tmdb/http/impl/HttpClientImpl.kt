@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 The tmdb-api-v2 Authors
+ * Copyright 2022 The tmdb-api-v2 Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpRequest
@@ -38,11 +38,17 @@ import io.micronaut.http.HttpRequest as MnHttpRequest
 import io.micronaut.http.HttpResponse as MnHttpResponse
 import io.micronaut.http.client.HttpClient as MnHttpClient
 
-internal class HttpClientImpl(private val rawClient: MnHttpClient, private val basePath: String = "") : HttpClient {
+internal class HttpClientImpl(
+    private val rawClient: MnHttpClient,
+    private val basePath: String = ""
+) : HttpClient {
     private val byteBufferArgument = Argument.of(ByteBuffer::class.java)
-    private val imageErrorRegex = Regex("""<h1>(.+?)</h1>""", RegexOption.IGNORE_CASE)
+    private val imageErrorRegex = Regex("""<h\d>(.+?)</h\d>""", RegexOption.IGNORE_CASE)
 
-    override fun execute(request: HttpRequest, responseType: TypeInfo): Publisher<HttpResponse<out Any>> {
+    override fun execute(
+        request: HttpRequest,
+        responseType: TypeInfo
+    ): Publisher<HttpResponse<out Any>> {
         val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
         val argument = if (jsonBody) responseType.toArgument() else null
 
@@ -60,7 +66,6 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
                 throw IllegalArgumentException("Not a HttpClientResponseException", t)
         }.map { resp ->
             if (resp.code() == HttpStatus.OK.code)
-                @Suppress("UNCHECKED_CAST")
                 resp.toHttpResponse(argument)
             else
                 HttpResponseImpl(
@@ -80,7 +85,7 @@ internal class HttpClientImpl(private val rawClient: MnHttpClient, private val b
                     body.read(tmp)
                     val str = String(tmp, Charsets.UTF_8)
 
-                    val imageErrorMatch = imageErrorRegex.matchEntire(str)
+                    val imageErrorMatch = imageErrorRegex.find(str)
                     if (imageErrorMatch != null)
                         imageErrorMatch.groupValues[1]
                     else
