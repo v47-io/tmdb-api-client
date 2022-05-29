@@ -34,7 +34,7 @@ class TvSeasonsTest : AbstractTmdbTest() {
         val details = tvSeason.details(
             AGENTS_OF_SHIELD_ID,
             SEASON,
-            append = *TvSeasonRequest.values()
+            append = TvSeasonRequest.values()
         ).blockingFirst()
 
         Assertions.assertNotNull(details.credits)

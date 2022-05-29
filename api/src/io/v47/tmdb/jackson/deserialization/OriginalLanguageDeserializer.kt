@@ -27,7 +27,7 @@ class OriginalLanguageDeserializer : StdDeserializer<LanguageCode?>(LanguageCode
         return if (p.currentToken() == JsonToken.VALUE_STRING) {
             val str = p.valueAsString
             val languageCode = LanguageCode.getByCode(str)
-                ?: CountryCode.getByAlpha2Code(str.toUpperCase())?.toLocale()?.let { LanguageCode.valueOf(it.language) }
+                ?: CountryCode.getByAlpha2Code(str.uppercase())?.toLocale()?.let { LanguageCode.valueOf(it.language) }
 
             if (languageCode == LanguageCode.undefined)
                 null

@@ -28,7 +28,7 @@ internal class ImageSizeDeserializer : StdScalarDeserializer<ImageSize>(ImageSiz
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ImageSize {
         val rawString = p.valueAsString ?: throwParseException(p)
 
-        val str = rawString.trim(' ', '"').toLowerCase()
+        val str = rawString.trim(' ', '"').lowercase()
         return if (str == "original")
             Original
         else {

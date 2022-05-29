@@ -42,7 +42,7 @@ class MoviesTest : AbstractTmdbTest() {
     fun testGetDetailsWithTitles() {
         val details = movie.details(
             THOR_RAGNAROK_ID,
-            append = *MovieRequest.values()
+            append = MovieRequest.values()
         ).blockingFirst()
 
         assertEquals(THOR_RAGNAROK_ID, details.id)

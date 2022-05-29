@@ -42,29 +42,27 @@ internal class EnumDeserializerModifier : BeanDeserializerModifier() {
             val isString = intVal == 0 && strVal != "0"
             val enumConstants = rawClass.enumConstants
             if (isString) {
-                val lc = strVal.toLowerCase()
+                val lc = strVal.lowercase()
                 val found = enumConstants.find { it.name == lc }
-                if (found != null)
-                    return found
+                if (found != null) return found
 
-                val uc = strVal.toUpperCase()
-                return enumConstants.find { it.name.toUpperCase() == uc }
-                    ?: when (rawClass) {
-                        CountryCode::class.java -> CountryCode.UNDEFINED
-                        LanguageCode::class.java -> LanguageCode.undefined
-                        else -> throw invalidFormatException(p, rawClass, strVal)
-                    }
-            } else
-                return enumConstants.find { it.ordinal == intVal }
-                    ?: throw invalidFormatException(p, rawClass, strVal)
+                val uc = strVal.uppercase()
+                return enumConstants.find { it.name.uppercase() == uc } ?: when (rawClass) {
+                    CountryCode::class.java -> CountryCode.UNDEFINED
+                    LanguageCode::class.java -> LanguageCode.undefined
+                    else -> throw invalidFormatException(p, rawClass, strVal)
+                }
+            } else return enumConstants.find { it.ordinal == intVal }
+                ?: throw invalidFormatException(p, rawClass, strVal)
         }
 
-        private fun invalidFormatException(p: JsonParser, rawClass: Class<*>, value: Any): InvalidFormatException =
+        private fun invalidFormatException(p: JsonParser, rawClass: Class<*>, value: Any) =
             InvalidFormatException(
-                p,
-                "value not found in ${rawClass.enumConstants.joinToString(prefix = "[", postfix = "]")}",
-                value,
-                rawClass
+                p, "value not found in ${
+                    rawClass.enumConstants.joinToString(
+                        prefix = "[", postfix = "]"
+                    )
+                }", value, rawClass
             )
     }
 }
