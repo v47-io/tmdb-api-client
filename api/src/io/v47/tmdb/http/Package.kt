@@ -16,6 +16,7 @@
 package io.v47.tmdb.http
 
 import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.http.impl.ApiVersion
 import io.v47.tmdb.http.impl.TmdbRequest
 import io.v47.tmdb.utils.TypeInfo
 import io.v47.tmdb.utils.checkPage
@@ -25,7 +26,10 @@ import io.v47.tmdb.utils.toTypeInfo
 internal inline fun <T : Any> request(block: TmdbRequestBuilder<T>.() -> Unit): TmdbRequest<T> =
     TmdbRequestBuilderImpl<T>().apply(block).build()
 
-internal inline fun <reified T : Any> request(path: String, block: TmdbRequestBuilder<T>.() -> Unit = {}) =
+internal inline fun <reified T : Any> request(
+    path: String,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
     request<T> {
         path(path)
         responseType(tmdbTypeReference<T>().toTypeInfo())
@@ -33,7 +37,10 @@ internal inline fun <reified T : Any> request(path: String, block: TmdbRequestBu
         block()
     }
 
-internal inline fun <reified T : Any> get(path: String, block: TmdbRequestBuilder<T>.() -> Unit = {}) =
+internal inline fun <reified T : Any> get(
+    path: String,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
     request<T>(path) {
         block()
         method(HttpMethod.Get)
@@ -82,16 +89,22 @@ internal inline fun <reified T : Any> getWithPageAndLanguage(
     }
 
 @Suppress("MagicNumber")
-internal inline fun <reified T : Any> requestV4(path: String, block: TmdbRequestBuilder<T>.() -> Unit = {}) =
+internal inline fun <reified T : Any> requestV4(
+    path: String,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
     request<T> {
-        apiVersion(4)
+        apiVersion(ApiVersion.V4)
         path(path)
         responseType(tmdbTypeReference<T>().toTypeInfo())
 
         block()
     }
 
-internal inline fun <reified T : Any> getV4(path: String, block: TmdbRequestBuilder<T>.() -> Unit = {}) =
+internal inline fun <reified T : Any> getV4(
+    path: String,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
     requestV4<T>(path) {
         block()
         method(HttpMethod.Get)
@@ -126,7 +139,7 @@ internal inline fun <reified T : Any> postV4(
 
 internal interface TmdbRequestBuilder<T : Any> {
     fun method(httpMethod: HttpMethod)
-    fun apiVersion(apiVersion: Int)
+    fun apiVersion(apiVersion: ApiVersion)
     fun path(path: String)
     fun pathVar(name: String, value: Any)
     fun queryArg(name: String, value: Any, replace: Boolean = false)
@@ -137,7 +150,7 @@ internal interface TmdbRequestBuilder<T : Any> {
 @Suppress("MagicNumber")
 internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     private var _method = HttpMethod.Get
-    private var _apiVersion = 3
+    private var _apiVersion = ApiVersion.V3
     private var _path: String? = null
     private var _pathVariables = mutableMapOf<String, Any>()
     private var _queryArgs = mutableMapOf<String, MutableList<Any>>()
@@ -148,7 +161,7 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
         _method = httpMethod
     }
 
-    override fun apiVersion(apiVersion: Int) {
+    override fun apiVersion(apiVersion: ApiVersion) {
         _apiVersion = apiVersion
     }
 
@@ -176,7 +189,6 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     }
 
     fun build(): TmdbRequest<T> {
-        require(_apiVersion == 3 || _apiVersion == 4) { "This is not a valid request API version: $_apiVersion" }
         require(!_path.isNullOrBlank()) { "This is not a valid request path: $_path" }
         requireNotNull(_responseType) { "You must set a response type!" }
 

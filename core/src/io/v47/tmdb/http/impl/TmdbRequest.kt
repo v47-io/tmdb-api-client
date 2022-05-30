@@ -24,8 +24,13 @@ data class TmdbRequest<T : Any>(
     val method: HttpMethod,
     val path: String,
     val pathVariables: Map<String, Any>,
-    val apiVersion: Int,
+    val apiVersion: ApiVersion,
     val queryArgs: Map<String, List<Any>>,
     val requestEntity: Any?,
     val responseType: TypeInfo
 )
+
+enum class ApiVersion(val value: Int) {
+    V3(3),
+    V4(4)
+}
