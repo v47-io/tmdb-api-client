@@ -84,6 +84,7 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
             PeoplePopular.PopularPerson::class.java to PeoplePopularPopularPersonMixin::class.java,
 
             ReviewDetails::class.java to ReviewDetailsMixin::class.java,
+            ReviewAuthorDetails::class.java to ReviewAuthorDetailsMixin::class.java,
 
             MovieListResult::class.java to MovieListResultMixin::class.java,
             TvListResult::class.java to TvListResultMixin::class.java,
@@ -110,6 +111,7 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
             TvShowEpisodeGroups.TvShowEpisodeGroup::class.java to TvShowEpisodeGroupsTvShowEpisodeGroupMixin::class.java,
             TvShowExternalIds::class.java to TvShowExternalIdsMixin::class.java,
             TvShowScreenedTheatrically.ScreenedResult::class.java to TvShowScreenTheatricallyScreenedResultMixin::class.java,
+            TvShowReview::class.java to TvShowReviewMixin::class.java,
 
             TvEpisodeGroupDetails::class.java to TvEpisodeGroupDetailsMixin::class.java,
 

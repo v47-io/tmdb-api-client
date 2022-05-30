@@ -17,9 +17,11 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import java.time.Instant
 import java.time.LocalDate
 
 data class TvShowDetails(
+    val adult: Boolean?,
     val backdropPath: String?,
     val createdBy: List<PersonListResult> = emptyList(),
     val episodeRunTime: List<Int> = emptyList(),
@@ -43,8 +45,11 @@ data class TvShowDetails(
     val popularity: Double?,
     val posterPath: String?,
     val productionCompanies: List<CompanyInfo> = emptyList(),
+    val productionCountries: List<Country> = emptyList(),
     val seasons: List<TvSeasonDetails> = emptyList(),
+    val spokenLanguages: List<Language> = emptyList(),
     val status: TvShowStatus?,
+    val tagline: String?,
     val type: TvShowType?,
     val voteAverage: Double?,
     val voteCount: Int?,
@@ -131,7 +136,8 @@ data class TvShowExternalIds(
 data class TvShowImages(
     override val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
-    val posters: List<ImageListResult> = emptyList()
+    val posters: List<ImageListResult> = emptyList(),
+    val logos: List<ImageListResult> = emptyList(),
 ) : TmdbType(), TmdbIntId
 
 data class TvShowKeywords(
@@ -143,7 +149,10 @@ data class TvShowReview(
     override val id: String?,
     val url: String?,
     val author: String?,
-    val content: String?
+    val authorDetails: ReviewAuthorDetails?,
+    val content: String?,
+    val createdAt: Instant?,
+    val updatedAt: Instant?,
 ) : TmdbType(), TmdbStringId
 
 data class TvShowScreenedTheatrically(

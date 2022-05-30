@@ -16,14 +16,18 @@
 package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.LanguageCode
+import java.time.Instant
 
 data class ReviewDetails(
     override val id: String?,
     val author: String?,
+    val authorDetails: ReviewAuthorDetails?,
     val content: String?,
     val language: LanguageCode?,
     val mediaId: Int?,
     val mediaTitle: String?,
     val mediaType: MediaType?,
-    val url: String?
+    val url: String?,
+    val createdAt: Instant?,
+    val updatedAt: Instant?,
 ) : TmdbType(), TmdbStringId

@@ -19,6 +19,7 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import java.time.Instant
 import java.time.LocalDate
 
 interface MovieTvPersonListResult : TmdbIntId {
@@ -59,7 +60,8 @@ data class TvListResult(
     val voteCount: Int?,
     val name: String?,
     val originalName: String?,
-    override val mediaType: MediaType?
+    override val mediaType: MediaType?,
+    val adult: Boolean?,
 ) : TmdbType(), MovieTvPersonListResult {
     data class TvListNetwork(
         val id: Long?,
@@ -85,16 +87,20 @@ enum class MediaType {
 }
 
 interface IPerson : TmdbIntId {
+    val adult: Boolean?
     val gender: Gender?
     override val id: Int?
     val name: String?
     val profilePath: String?
+    val knownForDepartment: String?
+    val popularity: Double?
 }
 
 enum class Gender {
     Unset,
     Female,
-    Male
+    Male,
+    Other
 }
 
 interface ICastMember : IPerson {
@@ -108,15 +114,15 @@ interface ICrewMember : IPerson {
 
 data class PersonListResult(
     override val profilePath: String?,
-    val adult: Boolean?,
+    override val adult: Boolean?,
     override val gender: Gender?,
     override val id: Int?,
     override val mediaType: MediaType?,
     val knownFor: List<MovieTvPersonListResult> = emptyList(),
-    val knownForDepartment: String?,
+    override val knownForDepartment: String?,
     val creditId: String?,
     override val name: String?,
-    val popularity: Double?
+    override val popularity: Double?
 ) : TmdbType(), IPerson, MovieTvPersonListResult
 
 data class Genre(
@@ -143,14 +149,18 @@ data class CompanyInfo(
 ) : TmdbType(), TmdbIntId
 
 data class CreditListResult(
+    override val adult: Boolean?,
     val castId: Int?,
     override val character: String?,
+    override val knownForDepartment: String?,
+    override val popularity: Double?,
     val creditId: String?,
     override val department: String?,
     override val gender: Gender?,
     override val id: Int?,
     override val job: String?,
     override val name: String?,
+    val originalName: String?,
     val order: Int?,
     override val profilePath: String?
 ) : TmdbType(), ICastMember, ICrewMember
@@ -175,7 +185,9 @@ data class VideoListResult(
     val name: String?,
     val site: String?,
     val size: Int?,
-    val type: VideoType?
+    val type: VideoType?,
+    val official: Boolean?,
+    val publishedAt: Instant?,
 ) : TmdbType(), TmdbStringId
 
 data class TranslationListResult(
@@ -239,7 +251,8 @@ data class CastMember(
     val video: Boolean?,
     val releaseDate: LocalDate?,
     val title: String?,
-    val adult: Boolean?
+    val adult: Boolean?,
+    val order: Int?,
 ) : TmdbType(), TmdbIntId
 
 data class CrewMember(
@@ -328,3 +341,10 @@ enum class TvShowType {
     Miniseries,
     Video
 }
+
+data class ReviewAuthorDetails(
+    val name: String?,
+    val username: String?,
+    val avatarPath: String?,
+    val rating: Double?
+) : TmdbType()

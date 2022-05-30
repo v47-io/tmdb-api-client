@@ -106,7 +106,8 @@ data class MovieExternalIds(
 data class MovieImages(
     override val id: Int?,
     val backdrops: List<ImageListResult> = emptyList(),
-    val posters: List<ImageListResult> = emptyList()
+    val posters: List<ImageListResult> = emptyList(),
+    val logos: List<ImageListResult> = emptyList(),
 ) : TmdbType(), TmdbIntId
 
 data class MovieKeywords(

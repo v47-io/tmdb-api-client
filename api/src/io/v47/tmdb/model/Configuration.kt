@@ -58,6 +58,7 @@ object Original : ImageSize() {
 data class Country(
     val code: CountryCode?,
     val englishName: String?,
+    val nativeName: String?,
     val name: String?
 ) : TmdbType()
 

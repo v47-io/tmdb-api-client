@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Bean
 
 @TestConfiguration
 class TmdbConfiguration {
-    @Value("#{environment.API_KEY}")
+    @Value("#{environment['API_KEY']}")
     private lateinit var apiKey: String
 
     @Bean

@@ -16,7 +16,7 @@
 package io.v47.tmdb.jackson.mixins
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
@@ -26,10 +26,10 @@ import io.v47.tmdb.jackson.deserialization.ImageSizeDeserializer
 import io.v47.tmdb.jackson.serialization.ImageSizeSerializer
 import io.v47.tmdb.model.ImageSize
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface ConfigurationMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface ConfigurationImagesMixin {
     @get:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
     @get:JsonSerialize(contentUsing = ImageSizeSerializer::class)
@@ -52,13 +52,13 @@ internal interface ConfigurationImagesMixin {
     val stillSizes: List<ImageSize>
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CountryMixin {
     @get:JsonProperty("iso_3166_1")
     val code: CountryCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface LanguageMixin {
     @get:JsonProperty("iso_639_1")
     val code: LanguageCode?

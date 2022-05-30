@@ -16,7 +16,7 @@
 package io.v47.tmdb.jackson.mixins
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
@@ -25,22 +25,22 @@ import io.v47.tmdb.jackson.deserialization.MovieTvPersonListResultDeserializer
 import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import io.v47.tmdb.model.MovieTvPersonListResult
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface MovieListResultMixin {
     @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface TvListResultMixin {
     @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface TvListResultTvListNetworkMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface TvListResultTvListNetworkTvListNetworkLogoMixin
 
 internal interface TitleMixin {
@@ -48,30 +48,31 @@ internal interface TitleMixin {
     val country: CountryCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface PersonListResultMixin {
     @get:JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
     val knownFor: List<MovieTvPersonListResult>
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CollectionInfoMixin {
     @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CompanyInfoMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CreditListResultMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface ImageListResultMixin {
     @get:JsonProperty("iso_639_1")
     val language: LanguageCode?
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface VideoListResultMixin {
     @get:JsonProperty("iso_639_1")
     val language: LanguageCode?
@@ -80,7 +81,7 @@ internal interface VideoListResultMixin {
     val country: CountryCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface TranslationListResultMixin {
     @get:JsonProperty("iso_639_1")
     val language: LanguageCode?
@@ -89,20 +90,23 @@ internal interface TranslationListResultMixin {
     val country: CountryCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface PaginatedListResultsMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface PaginatedMovieListResultsWithDatesMixin
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CastMemberMixin {
     @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface CrewMemberMixin {
     @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?
 }
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+internal interface ReviewAuthorDetailsMixin

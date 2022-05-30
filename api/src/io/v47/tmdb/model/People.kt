@@ -75,6 +75,7 @@ data class PersonTaggedImages(
     override val totalResults: Int?
 ) : TmdbType(), TmdbIntId, Paginated<PersonTaggedImages.TaggedImage> {
     data class TaggedImage(
+        override val id: String?,
         val aspectRatio: Double?,
         val filePath: String?,
         val height: Int?,
@@ -85,7 +86,7 @@ data class PersonTaggedImages(
         val imageType: String?,
         val media: MovieTvPersonListResult?,
         val mediaType: MediaType?
-    ) : TmdbType()
+    ) : TmdbType(), TmdbStringId
 }
 
 data class PersonTranslations(

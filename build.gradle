@@ -189,6 +189,6 @@ release {
     tagTemplate = 'v$version'
 }
 
-task build {
+task build(group: "build") {
     dependsOn subprojects.findResults { it.tasks.findByName('build') }
 }

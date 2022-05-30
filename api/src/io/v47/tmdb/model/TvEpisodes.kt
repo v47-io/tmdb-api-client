@@ -27,6 +27,7 @@ data class TvEpisodeDetails(
     val overview: String?,
     override val id: Int?,
     val productionCode: String?,
+    val runtime: Int?,
     val seasonNumber: String?,
     val showId: Int?,
     val stillPath: String?,
