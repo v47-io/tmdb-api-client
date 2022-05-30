@@ -1,6 +1,5 @@
 ext {
     // Core Libraries
-    coroutinesVersion = '1.6.2'
     slf4jVersion = '1.7.36'
 
     // Implementation Libraries
@@ -19,8 +18,6 @@ ext {
     libraries = [
             // Core Libraries
             stdlib             : 'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
-            coroutines         : "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
-            coroutinesReactive : "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutinesVersion",
             slf4j              : "org.slf4j:slf4j-api:$slf4jVersion",
 
             // Implementation Libraries
@@ -42,8 +39,6 @@ ext {
             springWebflux      : "org.springframework:spring-webflux:$springVersion",
 
             // Testing Libraries
-            coroutinesCore     : "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
-
             jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
             junitApi           : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
             junitEngine        : "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",

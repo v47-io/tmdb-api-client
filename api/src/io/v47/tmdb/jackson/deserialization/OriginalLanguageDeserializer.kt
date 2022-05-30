@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
-class OriginalLanguageDeserializer : StdDeserializer<LanguageCode?>(LanguageCode::class.java) {
+internal class OriginalLanguageDeserializer : StdDeserializer<LanguageCode?>(LanguageCode::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext?): LanguageCode? {
         return if (p.currentToken() == JsonToken.VALUE_STRING) {
             val str = p.valueAsString
