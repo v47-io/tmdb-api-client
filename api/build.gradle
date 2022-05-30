@@ -4,6 +4,8 @@ dependencies {
     compileOnly libraries.jacksonDatabind
     api libraries.nvI18n
 
+    implementation libraries.rxJava
+
     testImplementation project(':http-client-micronaut')
 
     testRuntimeOnly libraries.mnHttpClient

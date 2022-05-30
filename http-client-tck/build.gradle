@@ -1,3 +1,5 @@
 dependencies {
     api project(':core')
+
+    implementation libraries.rxJava
 }

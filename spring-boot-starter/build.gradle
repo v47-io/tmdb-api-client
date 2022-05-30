@@ -11,6 +11,7 @@ dependencies {
     implementation libraries.jacksonDatabind
 
     testImplementation libraries.sbsTest
+    testImplementation libraries.rxJava
 
     testRuntimeOnly libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
