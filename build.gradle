@@ -1,3 +1,7 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21' apply false
     id "org.jetbrains.kotlin.kapt" version '1.6.21' apply false
@@ -8,6 +12,10 @@ plugins {
     id 'net.researchgate.release' version '2.8.1'
     id 'com.github.hierynomus.license' version '0.16.1' apply false
     // id 'org.jetbrains.dokka' version '0.9.18' apply false
+}
+
+task reportMerge(type: ReportMergeTask) {
+    output = project.layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
 
 subprojects {
@@ -92,6 +100,17 @@ subprojects {
 
         reports {
             xml.required.set(true)
+            sarif.required.set(true)
+        }
+    }
+
+    plugins.withType(DetektPlugin) {
+        tasks.withType(Detekt) { detektTask ->
+            finalizedBy(reportMerge)
+
+            reportMerge.configure { mergeTask ->
+                mergeTask.input.from(detektTask.sarifReportFile)
+            }
         }
     }
 

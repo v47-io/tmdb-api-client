@@ -26,3 +26,8 @@ jobs:
           arguments: --console=plain build
         env:
           API_KEY: ${{ secrets.TMDB_API_KEY }}
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v1
+        if: success() || failure()
+        with:
+          sarif_file: build/reports/detekt/merge.sarif
