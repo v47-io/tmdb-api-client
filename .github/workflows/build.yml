@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Prepare environment
+        run: chmod +x ./gradlew
+      - name: Build and test using gradle
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          arguments: --console=plain build
+        env:
+          API_KEY: ${{ secrets.TMDB_API_KEY }}
