@@ -19,11 +19,11 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
+import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
 import io.v47.tmdb.http.impl.HttpRequestImpl
 import io.v47.tmdb.model.*
-import io.v47.tmdb.utils.TypeInfo
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 

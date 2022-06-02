@@ -23,15 +23,11 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.reactivex.rxjava3.core.Flowable
-import io.v47.tmdb.http.HttpClient
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.HttpRequest
-import io.v47.tmdb.http.HttpResponse
+import io.v47.tmdb.http.*
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
 import io.v47.tmdb.http.utils.toArgument
-import io.v47.tmdb.utils.TypeInfo
 import org.reactivestreams.Publisher
 import java.net.URLEncoder
 import io.micronaut.http.HttpRequest as MnHttpRequest

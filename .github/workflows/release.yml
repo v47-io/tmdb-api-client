@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Prepare environment
+        run: chmod +x ./gradlew
+      - name: Build and test using gradle
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          arguments: --console=plain build
+        env:
+          API_KEY: ${{ secrets.TMDB_API_KEY }}
+      - name: Read library version
+        id: version_property
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: ./gradle.properties
+          property: version
+      - name: Publish to Central Repository
+        if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          arguments: --console=plain publish releaseNexusRepositories
+          execution-only-caches: true
+        env:
+          API_KEY: ${{ secrets.TMDB_API_KEY }}
+          OSSRH_USER: ${{ secrets.OSSRH_USER }}
+          OSSRH_PASS: ${{ secrets.OSSRH_PASS }}
+          SIGNING_PASSWORD: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
+          SIGNING_KEY_ID: ${{ secrets.OSSRH_SIGNING_KEY_ID }}
+          SIGNING_SECRET_KEY_RING_BASE64: ${{ secrets.OSSRH_SIGNING_SECRET_KEY_RING_BASE64 }}
+      - name: Archive logs on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-test-reports
+          path: build/reports

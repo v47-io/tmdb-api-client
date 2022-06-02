@@ -19,9 +19,9 @@ import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpResponse
+import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.impl.HttpRequestImpl
 import io.v47.tmdb.http.tck.TckTestResult
-import io.v47.tmdb.utils.TypeInfo
 
 @Suppress("MagicNumber")
 internal class ValidImageResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {

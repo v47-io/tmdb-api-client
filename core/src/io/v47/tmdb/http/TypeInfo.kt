@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("MagicNumber")
+package io.v47.tmdb.http
 
-package io.v47.tmdb.http.impl
+import java.lang.reflect.Type
 
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
+sealed class TypeInfo {
+    abstract val fullType: Type
 
-data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo
-)
+    data class Simple(val type: Class<*>) : TypeInfo() {
+        override val fullType get() = type
+    }
 
-enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
+    data class Generic(
+        val rawType: Class<*>,
+        val typeArguments: List<TypeInfo>,
+        override val fullType: Type
+    ) : TypeInfo()
 }

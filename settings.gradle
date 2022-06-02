@@ -1,4 +1,4 @@
-rootProject.name = 'tmdb-api-v2'
+rootProject.name = 'tmdb-api-client'
 
 include 'core',
         'http-client-tck',

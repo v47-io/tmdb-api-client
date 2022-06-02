@@ -11,7 +11,7 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' version '1.20.0' apply false
     id 'net.researchgate.release' version '2.8.1'
     id 'com.github.hierynomus.license' version '0.16.1' apply false
-    // id 'org.jetbrains.dokka' version '0.9.18' apply false
+    id 'org.jetbrains.dokka' version '1.6.21'
 }
 
 task reportMerge(type: ReportMergeTask) {
@@ -22,7 +22,7 @@ subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'io.gitlab.arturbosch.detekt'
     apply plugin: 'com.github.hierynomus.license'
-    // apply plugin: 'org.jetbrains.dokka'
+    apply plugin: 'org.jetbrains.dokka'
 
     apply plugin: 'jacoco'
 
@@ -133,28 +133,32 @@ subprojects {
         }
     }
 
-    /*dokka {
-        moduleName = project.name
-
-        outputFormat = 'html'
-        outputDirectory = "$buildDir/kdoc"
-
-        jdkVersion = 11
-
-        impliedPlatforms = ["JVM"]
-
-        noStdlibLink = false
+    dokkaHtmlPartial {
+        dokkaSourceSets {
+            configureEach {
+                perPackageOption {
+                    matchingRegex.set(".*\\.(impl|utils).*")
+                    suppress.set(true)
+                }
+            }
+        }
     }
 
-    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputFormat = 'javadoc'
-        outputDirectory = "$buildDir/javadoc"
+    dokkaJavadoc {
+        dokkaSourceSets {
+            configureEach {
+                perPackageOption {
+                    matchingRegex.set(".*\\.(impl|utils).*")
+                    suppress.set(true)
+                }
+            }
+        }
     }
 
     task packageJavadoc(type: Jar, dependsOn: dokkaJavadoc) {
         classifier = 'javadoc'
-        from "$buildDir/javadoc"
-    }*/
+        from "$buildDir/dokka/javadoc"
+    }
 
     task packageSources(type: Jar) {
         classifier = 'sources'
@@ -175,9 +179,9 @@ subprojects {
                     classifier 'sources'
                 }
 
-                /*artifact packageJavadoc {
+                artifact packageJavadoc {
                     classifier 'javadoc'
-                }*/
+                }
             }
         }
 
@@ -202,6 +206,10 @@ subprojects {
             }
         }
     }
+}
+
+repositories {
+    mavenCentral()
 }
 
 release {

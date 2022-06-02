@@ -16,7 +16,7 @@
 package io.v47.tmdb.http.utils
 
 import io.micronaut.core.type.Argument
-import io.v47.tmdb.utils.TypeInfo
+import io.v47.tmdb.http.TypeInfo
 
 internal fun TypeInfo.toArgument() =
     when (this) {

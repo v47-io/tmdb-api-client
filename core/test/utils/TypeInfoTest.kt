@@ -16,6 +16,7 @@
 package io.v47.tmdb.utils
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import io.v47.tmdb.http.TypeInfo
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

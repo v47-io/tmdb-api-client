@@ -15,27 +15,16 @@
  */
 package io.v47.tmdb.utils
 
+import io.v47.tmdb.http.TypeInfo
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.lang.reflect.WildcardType
 
-sealed class TypeInfo {
-    abstract val fullType: Type
-
-    data class Simple(val type: Class<*>) : TypeInfo() {
-        override val fullType get() = type
-    }
-
-    data class Generic(
-        val rawType: Class<*>,
-        val typeArguments: List<TypeInfo>,
-        override val fullType: Type
-    ) : TypeInfo()
-}
-
 inline fun <reified T : Any> tmdbTypeReference() = object : TmdbTypeReference<T>() {}
 
-abstract class TmdbTypeReference<T : Any> protected constructor() : Comparable<TmdbTypeReference<T>> {
+abstract class TmdbTypeReference<T : Any> protected constructor() :
+    Comparable<TmdbTypeReference<T>> {
+
     val type: Type
 
     init {
@@ -60,6 +49,7 @@ private fun Type.toTypeInfo(): TypeInfo =
             lowerBounds.size == 1 -> lowerBounds[0].toTypeInfo()
             else -> throw IllegalArgumentException("Cannot convert wildcard type without singular bound!")
         }
+
         else -> throw IllegalArgumentException("Cannot convert ${javaClass.canonicalName} into TypeInfo!")
     }
 
@@ -67,7 +57,11 @@ private fun ParameterizedType.toTypeInfo(): TypeInfo {
     val typeArgumentInfos = actualTypeArguments.map { it.toTypeInfo() }
 
     return if (typeArgumentInfos.isNotEmpty())
-        TypeInfo.Generic(rawType as Class<*>, typeArgumentInfos, this)
+        TypeInfo.Generic(
+            rawType as Class<*>,
+            typeArgumentInfos,
+            this
+        )
     else
         TypeInfo.Simple(rawType as Class<*>)
 }

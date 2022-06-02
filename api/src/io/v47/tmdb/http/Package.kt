@@ -18,7 +18,6 @@ package io.v47.tmdb.http
 import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.impl.ApiVersion
 import io.v47.tmdb.http.impl.TmdbRequest
-import io.v47.tmdb.utils.TypeInfo
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
