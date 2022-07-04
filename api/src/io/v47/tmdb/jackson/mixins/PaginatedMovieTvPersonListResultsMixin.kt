@@ -22,7 +22,7 @@ import io.v47.tmdb.jackson.deserialization.MovieTvPersonListResultDeserializer
 import io.v47.tmdb.model.MovieTvPersonListResult
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-interface PaginatedMovieTvPersonListResultsMixin {
+internal interface PaginatedMovieTvPersonListResultsMixin {
     @get:JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
     val results: List<MovieTvPersonListResult>
 }
