@@ -145,6 +145,8 @@ subprojects {
                     matchingRegex.set(".*\\.(impl|utils).*")
                     suppress.set(true)
                 }
+
+                includes.from("$projectDir/docs.md")
             }
         }
     }
@@ -156,6 +158,8 @@ subprojects {
                     matchingRegex.set(".*\\.(impl|utils).*")
                     suppress.set(true)
                 }
+
+                includes.from("$projectDir/docs.md")
             }
         }
     }

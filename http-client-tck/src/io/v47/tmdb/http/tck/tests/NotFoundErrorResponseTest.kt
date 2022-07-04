@@ -62,7 +62,6 @@ internal class NotFoundErrorResponseTest : AbstractTckTest("https://api.themovie
         return if (result.status != 404)
             TckTestResult.Failure(404, result.status)
         else {
-            @Suppress("CAST_NEVER_SUCCEEDS")
             val errorResponse = result.body as? ErrorResponse
             if (errorResponse !is ErrorResponse || errorResponse != checkResponse)
                 TckTestResult.Failure(checkResponse, errorResponse)

@@ -33,7 +33,15 @@ package io.v47.tmdb
 
 import io.v47.tmdb.http.Java11HttpClientFactory
 
+/**
+ * A factory used to create [TmdbClient] instances that don't require any surrounding framework.
+ */
 object StandaloneTmdbClient {
+    /**
+     * Creates a new [TmdbClient] that authenticates all request using the provided API key.
+     *
+     * @param apiKey TMDb API key
+     */
     @JvmStatic
     @JvmName("WithApiKey")
     operator fun invoke(apiKey: String): TmdbClient {

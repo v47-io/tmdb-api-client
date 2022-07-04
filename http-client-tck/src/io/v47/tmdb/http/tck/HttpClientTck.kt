@@ -34,6 +34,12 @@ package io.v47.tmdb.http.tck
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.tck.tests.*
 
+/**
+ * The TMDb API HttpClient TCK runner.
+ *
+ * Just call [verify] to ensure your [HttpClient][io.v47.tmdb.http.HttpClient] implementation
+ * is compatible.
+ */
 class HttpClientTck {
     private val tests = listOf<TckTest>(
         ValidSimpleResponseTest(),

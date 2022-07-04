@@ -41,6 +41,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Configuration
 
+/**
+ * Autoconfigures a [TmdbClient] bean if it doesn't already exist.
+ */
 @Configuration
 @Conditional(TmdbAutoConfigurationCondition::class)
 class TmdbAutoConfiguration {
