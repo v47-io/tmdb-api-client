@@ -15,7 +15,6 @@
  */
 package io.v47.tmdb.http.impl
 
-import com.fasterxml.jackson.core.JacksonException
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.*
@@ -68,10 +67,10 @@ internal class HttpClientImpl(
         }
     }
 
-    private fun createErrorResponse(jResponse: JHttpResponse<ByteArray>): ErrorResponse {
-        return try {
+    private fun createErrorResponse(jResponse: JHttpResponse<ByteArray>) =
+        runCatching {
             objectMapper.readValue(jResponse.body(), RawErrorResponse::class.java).toErrorResponse()
-        } catch (_: JacksonException) {
+        }.getOrElse {
             val str = String(jResponse.body())
             val imageErrorMatch = imageErrorRegex.find(str)
 
@@ -82,9 +81,8 @@ internal class HttpClientImpl(
 
             ErrorResponse(msg, jResponse.statusCode())
         }
-    }
 
-    private fun HttpRequest.toJHttpRequest(json: Boolean = true): JHttpRequest =
+    private fun HttpRequest.toJHttpRequest(json: Boolean = true) =
         JHttpRequest.newBuilder(URI(createUri()))
             .apply {
                 val actualBody = if (body is ByteArray)
