@@ -11,3 +11,13 @@ dependencies {
     testImplementation libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
 }
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'Core types and interfaces for the TMDB API client'
+            }
+        }
+    }
+}

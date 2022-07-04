@@ -3,3 +3,13 @@ dependencies {
 
     implementation libraries.rxJava
 }
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'TCK for TMDb HttpClient implementations'
+            }
+        }
+    }
+}

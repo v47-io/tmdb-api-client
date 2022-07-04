@@ -8,9 +8,12 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.allopen' version '1.6.21' apply false
     id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21' apply false
 
-    id 'io.gitlab.arturbosch.detekt' version '1.20.0' apply false
-    id 'net.researchgate.release' version '2.8.1'
+
     id 'com.github.hierynomus.license' version '0.16.1' apply false
+    id 'com.github.jk1.dependency-license-report' version '2.1'
+    id 'io.gitlab.arturbosch.detekt' version '1.21.0-RC2' apply false
+    id 'name.remal.maven-publish-ossrh' version '1.5.0' apply false
+    id 'net.researchgate.release' version '3.0.0'
     id 'org.jetbrains.dokka' version '1.6.21'
 }
 
@@ -126,7 +129,7 @@ subprojects {
         exclude '**/*.properties'
         exclude '**/META-INF/**/*'
 
-        header = file('../HEADER.txt')
+        header = file('../LICENSE')
 
         ext {
             year = Calendar.getInstance().get(Calendar.YEAR)
@@ -157,7 +160,7 @@ subprojects {
 
     task packageJavadoc(type: Jar, dependsOn: dokkaJavadoc) {
         classifier = 'javadoc'
-        from "$buildDir/dokka/javadoc"
+        from dokkaJavadoc.outputDirectory
     }
 
     task packageSources(type: Jar) {
@@ -169,11 +172,12 @@ subprojects {
 
     publishing {
         publications {
-            mavenProject(MavenPublication) {
-                from components.java
+            tmdbApiClient(MavenPublication) {
                 groupId project.group
                 artifactId project.name
                 version project.version
+
+                from components.java
 
                 artifact packageSources {
                     classifier 'sources'
@@ -182,25 +186,47 @@ subprojects {
                 artifact packageJavadoc {
                     classifier 'javadoc'
                 }
+
+                pom {
+                    name = "TMDb API Client :: ${project.name}"
+                    url = "https://github.com/v47-io/tmdb-api-client"
+
+                    licenses {
+                        license {
+                            name = 'BSD 3-Clause License'
+                            url = 'https://opensource.org/licenses/BSD-3-Clause'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'vemilyus'
+                            name = 'Alex Katlein'
+                            email = 'dev@vemilyus.com'
+                        }
+                    }
+
+                    scm {
+                        connection = 'scm:git:git://github.com/v47-io/tmdb-api-client.git'
+                        developerConnection = 'scm:git:git://github.com/v47-io/tmdb-api-client.git'
+                        url = 'https://github.com/v47-io/tmdb-api-client'
+                    }
+                }
             }
         }
 
-        def nexusUser = project.hasProperty('nexusUser') ? project.property('nexusUser') : System.getenv('NEXUS_USER')
-        def nexusPass = project.hasProperty('nexusPass') ? project.property('nexusPass') : System.getenv('NEXUS_PASS')
+        def ossrhUser = project.hasProperty("ossrhUser") ? project.getProperty("ossrhUser") : System.getenv("OSSRH_USER")
+        def ossrhPass = project.hasProperty("ossrhPass") ? project.getProperty("ossrhPass") : System.getenv("OSSRH_PASS")
 
-        if (nexusUser != null && nexusPass != null) {
+        if (ossrhUser != null && ossrhPass != null) {
+            apply plugin: 'signing'
+            apply plugin: 'name.remal.maven-publish-ossrh'
+
             repositories {
-                maven {
-                    name 'vemilyus-nexus'
-
-                    if (project.version.endsWith('-SNAPSHOT'))
-                        url 'https://nexus3.v47.dev/repository/snapshots/'
-                    else
-                        url 'https://nexus.v47.dev/repository/releases/'
-
-                    credentials(PasswordCredentials) {
-                        username nexusUser
-                        password nexusPass
+                ossrh {
+                    credentials {
+                        username = ossrhUser
+                        password = ossrhPass
                     }
                 }
             }
@@ -214,8 +240,4 @@ repositories {
 
 release {
     tagTemplate = 'v$version'
-}
-
-task build(group: "build") {
-    dependsOn subprojects.findResults { it.tasks.findByName('build') }
 }

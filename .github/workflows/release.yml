@@ -30,7 +30,7 @@ jobs:
           path: ./gradle.properties
           property: version
       - name: Publish to Central Repository
-        if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
+        # if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
         uses: burrunan/gradle-cache-action@v1
         with:
           arguments: --console=plain publish releaseNexusRepositories

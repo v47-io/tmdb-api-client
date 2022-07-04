@@ -16,3 +16,13 @@ dependencies {
     testRuntimeOnly libraries.jacksonModuleKotlin
     testRuntimeOnly libraries.logback
 }
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'Spring Boot starter for the TMDb API client and Webflux integration'
+            }
+        }
+    }
+}

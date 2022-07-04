@@ -30,3 +30,13 @@ dependencies {
 
     testRuntimeOnly libraries.logback
 }
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'HttpClient implementation and integration for Micronaut'
+            }
+        }
+    }
+}
