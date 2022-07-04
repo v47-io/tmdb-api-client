@@ -23,6 +23,7 @@ ext {
             // Implementation Libraries
             jacksonAnnotations : "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
             jacksonDatabind    : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
 
             mnInject           : "io.micronaut:micronaut-inject-java:$micronautVersion",
             mnHttpClient       : "io.micronaut:micronaut-http-client:$micronautVersion",
@@ -39,7 +40,6 @@ ext {
             springWebflux      : "org.springframework:spring-webflux:$springVersion",
 
             // Testing Libraries
-            jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
             junitApi           : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
             junitEngine        : "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
 

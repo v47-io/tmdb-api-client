@@ -1,0 +1,12 @@
+dependencies {
+    implementation libraries.jacksonDatabind
+    runtimeOnly libraries.jacksonModuleKotlin
+
+    implementation libraries.reactiveStreams
+    implementation libraries.rxJava
+
+    implementation project(':core')
+
+    testImplementation project(':api')
+    testImplementation project(':http-client-tck')
+}

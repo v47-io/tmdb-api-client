@@ -5,4 +5,6 @@ include 'core',
         'http-client-micronaut',
         'http-client-spring-webflux',
         'spring-boot-starter',
-        'api'
+        'api',
+        'standalone',
+        'http-client-java11'

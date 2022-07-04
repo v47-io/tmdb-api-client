@@ -1,0 +1,6 @@
+dependencies {
+    api project(':api')
+    api project(':core')
+
+    implementation project(':http-client-java11')
+}
