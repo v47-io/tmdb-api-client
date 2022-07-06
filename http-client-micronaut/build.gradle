@@ -11,10 +11,13 @@ kapt {
 }
 
 dependencies {
-    implementation project(':core')
+    compileOnly project(':api')
+    compileOnly project(':core')
 
+    kapt libraries.mnGraal
+    kapt libraries.mnInject
     implementation libraries.mnHttpClient
-    implementation libraries.jacksonDatabind
+    compileOnly libraries.jacksonDatabind
     runtimeOnly libraries.jacksonModuleKotlin
 
     implementation libraries.reactiveStreams
@@ -35,7 +38,7 @@ publishing {
     publications {
         tmdbApiClient(MavenPublication) {
             pom {
-                description = 'HttpClient implementation and integration for Micronaut'
+                description = 'HttpClient implementation and integration for Micronaut (including GraalVM)'
             }
         }
     }

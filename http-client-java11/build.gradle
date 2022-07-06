@@ -5,7 +5,7 @@ dependencies {
     implementation libraries.reactiveStreams
     implementation libraries.rxJava
 
-    implementation project(':core')
+    compileOnly project(':core')
 
     testImplementation project(':api')
     testImplementation project(':http-client-tck')

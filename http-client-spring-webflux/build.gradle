@@ -1,7 +1,7 @@
 apply plugin: 'org.jetbrains.kotlin.plugin.spring'
 
 dependencies {
-    implementation project(':core')
+    compileOnly project(':core')
 
     compileOnly libraries.springContext
     compileOnly libraries.springWebflux

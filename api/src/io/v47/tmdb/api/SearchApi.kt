@@ -105,7 +105,6 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
         }
     )
 
-    @Suppress("UNCHECKED_CAST")
     fun forVarious(
         query: String,
         page: Int? = null,
