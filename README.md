@@ -45,6 +45,11 @@ class MyClass {
 }
 ```
 
+### Other HTTP clients
+
+If you don't want to use the `standalone` module, just add the `api` module and the `http-client-*`
+module of your choice to your project.
+
 ## Features
 
 This library provides access to the entire read-only API of TheMovieDb, authenticated

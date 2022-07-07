@@ -73,14 +73,14 @@ subprojects {
         kotlinOptions {
             freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
 
-            jvmTarget = '11'
+            jvmTarget = "${JavaVersion.VERSION_11}"
             javaParameters = true
         }
     }
 
     compileTestKotlin {
         kotlinOptions {
-            jvmTarget = '11'
+            jvmTarget = "${JavaVersion.VERSION_11}"
             javaParameters = true
         }
     }
@@ -101,7 +101,6 @@ subprojects {
 
     detekt {
         input = files('src')
-        config = files('../detekt.yml')
 
         reports {
             xml.required.set(true)

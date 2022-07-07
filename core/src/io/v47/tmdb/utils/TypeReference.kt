@@ -45,8 +45,7 @@ abstract class TmdbTypeReference<T : Any> protected constructor() :
 
     init {
         val superClass = javaClass.genericSuperclass
-        if (superClass is Class<*>)
-            throw IllegalArgumentException("Internal error: TypeReference constructed without actual type information")
+        require(superClass !is Class<*>) { "Internal error: TypeReference constructed without actual type information" }
 
         type = (superClass as ParameterizedType).actualTypeArguments[0]
     }
