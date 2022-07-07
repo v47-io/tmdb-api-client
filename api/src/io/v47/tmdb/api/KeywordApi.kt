@@ -38,8 +38,8 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Keyword
 import io.v47.tmdb.model.KeywordMovies
 
-class KeywordApi internal constructor(private val httpExecutor: HttpExecutor) {
-    fun details(keywordId: Int) = httpExecutor.execute(get<Keyword>("/keyword/$keywordId"))
+class KeywordApi internal constructor(private val http: HttpExecutor) {
+    fun details(keywordId: Int) = http.get<Keyword>("/keyword/$keywordId")
 
     /**
      * Get the movies that belong to a keyword.
@@ -50,11 +50,15 @@ class KeywordApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      * @param includeAdult Choose whether to include adult (pornography) content in the results
      */
-    fun movies(keywordId: Int, page: Int? = null, language: LocaleCode? = null, includeAdult: Boolean? = null) =
-        httpExecutor.execute(
-            getWithPageAndLanguage<KeywordMovies>("/keyword/{keywordId}/movies", page, language) {
-                pathVar("keywordId", keywordId)
-                includeAdult?.let { queryArg("include_adult", it) }
-            }
-        )
+    fun movies(
+        keywordId: Int,
+        page: Int? = null,
+        language: LocaleCode? = null,
+        includeAdult: Boolean? = null
+    ) =
+        http.getWithPageAndLanguage<KeywordMovies>("/keyword/{keywordId}/movies", page, language) {
+            pathVar("keywordId", keywordId)
+            includeAdult?.let { queryArg("include_adult", it) }
+        }
+
 }

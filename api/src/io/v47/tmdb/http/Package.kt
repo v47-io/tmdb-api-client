@@ -33,15 +33,17 @@ package io.v47.tmdb.http
 
 import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.impl.ApiVersion
+import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.TmdbRequest
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
+import org.reactivestreams.Publisher
 
-internal inline fun <T : Any> request(block: TmdbRequestBuilder<T>.() -> Unit): TmdbRequest<T> =
-    TmdbRequestBuilderImpl<T>().apply(block).build()
+internal inline fun <T : Any> HttpExecutor.request(block: TmdbRequestBuilder<T>.() -> Unit): Publisher<T> =
+    execute(TmdbRequestBuilderImpl<T>().apply(block).build())
 
-internal inline fun <reified T : Any> request(
+internal inline fun <reified T : Any> HttpExecutor.request(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
@@ -52,7 +54,7 @@ internal inline fun <reified T : Any> request(
         block()
     }
 
-internal inline fun <reified T : Any> get(
+internal inline fun <reified T : Any> HttpExecutor.get(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
@@ -61,7 +63,7 @@ internal inline fun <reified T : Any> get(
         method(HttpMethod.Get)
     }
 
-internal inline fun <reified T : Any> getWithLanguage(
+internal inline fun <reified T : Any> HttpExecutor.getWithLanguage(
     path: String,
     language: LocaleCode? = null,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
@@ -72,7 +74,7 @@ internal inline fun <reified T : Any> getWithLanguage(
         language?.let { queryArg("language", it.toString(), replace = true) }
     }
 
-internal inline fun <reified T : Any> getWithPage(
+internal inline fun <reified T : Any> HttpExecutor.getWithPage(
     path: String,
     page: Int? = null,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
@@ -86,7 +88,7 @@ internal inline fun <reified T : Any> getWithPage(
         }
     }
 
-internal inline fun <reified T : Any> getWithPageAndLanguage(
+internal inline fun <reified T : Any> HttpExecutor.getWithPageAndLanguage(
     path: String,
     page: Int? = null,
     language: LocaleCode? = null,
@@ -104,7 +106,7 @@ internal inline fun <reified T : Any> getWithPageAndLanguage(
     }
 
 @Suppress("MagicNumber")
-internal inline fun <reified T : Any> requestV4(
+internal inline fun <reified T : Any> HttpExecutor.requestV4(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
@@ -116,7 +118,7 @@ internal inline fun <reified T : Any> requestV4(
         block()
     }
 
-internal inline fun <reified T : Any> getV4(
+internal inline fun <reified T : Any> HttpExecutor.getV4(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
@@ -125,7 +127,7 @@ internal inline fun <reified T : Any> getV4(
         method(HttpMethod.Get)
     }
 
-internal inline fun <reified T : Any> post(
+internal inline fun <reified T : Any> HttpExecutor.post(
     path: String,
     requestEntity: Any,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
@@ -140,7 +142,7 @@ internal inline fun <reified T : Any> post(
     }
 
 @Suppress("MagicNumber")
-internal inline fun <reified T : Any> postV4(
+internal inline fun <reified T : Any> HttpExecutor.postV4(
     path: String,
     requestEntity: Any,
     block: TmdbRequestBuilder<T>.() -> Unit = {}

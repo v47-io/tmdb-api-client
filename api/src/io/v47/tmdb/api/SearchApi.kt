@@ -39,7 +39,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.*
 import org.reactivestreams.Publisher
 
-class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
+class SearchApi internal constructor(private val http: HttpExecutor) {
     /**
      * Search for companies
      *
@@ -47,11 +47,10 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param page Specify which page to query
      */
     fun forCompanies(query: String, page: Int? = null) =
-        httpExecutor.execute(
-            getWithPage<PaginatedListResults<CompanyInfo>>("/search/company", page) {
-                queryArg("query", query)
-            }
-        )
+        http.getWithPage<PaginatedListResults<CompanyInfo>>("/search/company", page) {
+            queryArg("query", query)
+        }
+
 
     /**
      * Search for collections
@@ -61,11 +60,14 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param page Specify which page to query
      */
     fun forCollections(query: String, page: Int? = null, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithPageAndLanguage<PaginatedListResults<CollectionInfo>>("/search/collection", page, language) {
-                queryArg("query", query)
-            }
-        )
+        http.getWithPageAndLanguage<PaginatedListResults<CollectionInfo>>(
+            "/search/collection",
+            page,
+            language
+        ) {
+            queryArg("query", query)
+        }
+
 
     /**
      * Search for keywords
@@ -74,11 +76,10 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param page Specify which page to query
      */
     fun forKeywords(query: String, page: Int? = null) =
-        httpExecutor.execute(
-            getWithPage<PaginatedListResults<Keyword>>("/search/keyword", page) {
-                queryArg("query", query)
-            }
-        )
+        http.getWithPage<PaginatedListResults<Keyword>>("/search/keyword", page) {
+            queryArg("query", query)
+        }
+
 
     /**
      * Search for movies
@@ -94,16 +95,19 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
         includeAdult: Boolean? = null,
         year: Int? = null,
         primaryReleaseYear: Int? = null
-    ) = httpExecutor.execute(
-        getWithPageAndLanguage<PaginatedListResults<MovieListResult>>("/search/movie", page, language) {
-            queryArg("query", query)
+    ) = http.getWithPageAndLanguage<PaginatedListResults<MovieListResult>>(
+        "/search/movie",
+        page,
+        language
+    ) {
+        queryArg("query", query)
 
-            region?.let { queryArg("region", it.toString()) }
-            includeAdult?.let { queryArg("include_adult", it) }
-            year?.let { queryArg("year", it) }
-            primaryReleaseYear?.let { queryArg("primary_release_year", it) }
-        }
-    )
+        region?.let { queryArg("region", it.toString()) }
+        includeAdult?.let { queryArg("include_adult", it) }
+        year?.let { queryArg("year", it) }
+        primaryReleaseYear?.let { queryArg("primary_release_year", it) }
+    }
+
 
     fun forVarious(
         query: String,
@@ -112,14 +116,17 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
         region: CountryCode? = null,
         includeAdult: Boolean? = null
     ): Publisher<out Paginated<MovieTvPersonListResult>> =
-        httpExecutor.execute(
-            getWithPageAndLanguage<PaginatedMovieTvPersonListResults>("/search/multi", page, language) {
-                queryArg("query", query)
+        http.getWithPageAndLanguage<PaginatedMovieTvPersonListResults>(
+            "/search/multi",
+            page,
+            language
+        ) {
+            queryArg("query", query)
 
-                region?.let { queryArg("region", it.toString()) }
-                includeAdult?.let { queryArg("include_adult", it) }
-            }
-        )
+            region?.let { queryArg("region", it.toString()) }
+            includeAdult?.let { queryArg("include_adult", it) }
+        }
+
 
     fun forPeople(
         query: String,
@@ -127,25 +134,31 @@ class SearchApi internal constructor(private val httpExecutor: HttpExecutor) {
         language: LocaleCode? = null,
         region: CountryCode? = null,
         includeAdult: Boolean? = null
-    ) = httpExecutor.execute(
-        getWithPageAndLanguage<PaginatedListResults<PersonListResult>>("/search/person", page, language) {
-            queryArg("query", query)
+    ) = http.getWithPageAndLanguage<PaginatedListResults<PersonListResult>>(
+        "/search/person",
+        page,
+        language
+    ) {
+        queryArg("query", query)
 
-            region?.let { queryArg("region", it.toString()) }
-            includeAdult?.let { queryArg("include_adult", it) }
-        }
-    )
+        region?.let { queryArg("region", it.toString()) }
+        includeAdult?.let { queryArg("include_adult", it) }
+    }
+
 
     fun forTvShows(
         query: String,
         page: Int? = null,
         language: LocaleCode? = null,
         firstAirDateYear: Int? = null
-    ) = httpExecutor.execute(
-        getWithPageAndLanguage<PaginatedListResults<TvListResult>>("/search/tv", page, language) {
-            queryArg("query", query)
+    ) = http.getWithPageAndLanguage<PaginatedListResults<TvListResult>>(
+        "/search/tv",
+        page,
+        language
+    ) {
+        queryArg("query", query)
 
-            firstAirDateYear?.let { queryArg("first_air_date_year", it) }
-        }
-    )
+        firstAirDateYear?.let { queryArg("first_air_date_year", it) }
+    }
+
 }

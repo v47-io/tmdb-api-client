@@ -37,7 +37,7 @@ import io.v47.tmdb.model.Change
 import io.v47.tmdb.model.PaginatedListResults
 import java.time.LocalDate
 
-class ChangesApi internal constructor(private val httpExecutor: HttpExecutor) {
+class ChangesApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get a list of all of the movie ids that have been changed in the past 24 hours.
      *
@@ -83,10 +83,9 @@ class ChangesApi internal constructor(private val httpExecutor: HttpExecutor) {
         startDate: LocalDate? = null,
         page: Int? = null
     ) =
-        httpExecutor.execute(
-            getWithPage<PaginatedListResults<Change>>("/$type/changes", page) {
-                endDate?.let { queryArg("end_date", it) }
-                startDate?.let { queryArg("start_date", it) }
-            }
-        )
+        http.getWithPage<PaginatedListResults<Change>>("/$type/changes", page) {
+            endDate?.let { queryArg("end_date", it) }
+            startDate?.let { queryArg("start_date", it) }
+        }
+
 }

@@ -36,14 +36,14 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.GenreList
 
-class GenresApi internal constructor(private val httpExecutor: HttpExecutor) {
+class GenresApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the list of official genres for movies
      *
      * @param language A language code
      */
     fun forMovies(language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<GenreList>("/genre/movie/list", language))
+        http.getWithLanguage<GenreList>("/genre/movie/list", language)
 
     /**
      * Get the list of official genres for TV shows
@@ -51,5 +51,5 @@ class GenresApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun forTv(language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<GenreList>("/genre/tv/list", language))
+        http.getWithLanguage<GenreList>("/genre/tv/list", language)
 }

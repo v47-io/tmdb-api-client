@@ -35,16 +35,15 @@ import io.v47.tmdb.http.get
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Credits
 
-class CreditApi internal constructor(private val httpExecutor: HttpExecutor) {
+class CreditApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get a movie or TV credit details by id
      *
      * @param creditId The credit id for a specific credit
      */
     fun details(creditId: String) =
-        httpExecutor.execute(
-            get<Credits>("/credit/{creditId}") {
-                pathVar("creditId", creditId)
-            }
-        )
+        http.get<Credits>("/credit/{creditId}") {
+            pathVar("creditId", creditId)
+        }
+
 }

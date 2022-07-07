@@ -38,7 +38,7 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.ItemStatus
 import io.v47.tmdb.model.ListDetails
 
-class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
+class ListApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the details of a list
      *
@@ -46,11 +46,10 @@ class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun details(listId: String, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<ListDetails>("/list/{listId}", language) {
-                pathVar("listId", listId)
-            }
-        )
+        http.getWithLanguage<ListDetails>("/list/{listId}", language) {
+            pathVar("listId", listId)
+        }
+
 
     /**
      * Check if a movie has already been added to the list
@@ -59,10 +58,9 @@ class ListApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param movieId The id of the movie
      */
     fun checkItemStatus(listId: String, movieId: Int) =
-        httpExecutor.execute(
-            get<ItemStatus>("/list/{listId}/item_status") {
-                pathVar("listId", listId)
-                queryArg("movie_id", movieId)
-            }
-        )
+        http.get<ItemStatus>("/list/{listId}/item_status") {
+            pathVar("listId", listId)
+            queryArg("movie_id", movieId)
+        }
+
 }

@@ -37,18 +37,17 @@ import io.v47.tmdb.model.Company
 import io.v47.tmdb.model.CompanyAlternativeNames
 import io.v47.tmdb.model.CompanyImages
 
-class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
+class CompanyApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get a companies details by id
      *
      * @param companyId The id of the company
      */
     fun details(companyId: Int) =
-        httpExecutor.execute(
-            get<Company>("/company/{companyId}") {
-                pathVar("companyId", companyId)
-            }
-        )
+        http.get<Company>("/company/{companyId}") {
+            pathVar("companyId", companyId)
+        }
+
 
     /**
      * Get the alternative names of a company
@@ -56,11 +55,10 @@ class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param companyId The id of the company
      */
     fun alternativeNames(companyId: Int) =
-        httpExecutor.execute(
-            get<CompanyAlternativeNames>("/company/{companyId}/alternative_names") {
-                pathVar("companyId", companyId)
-            }
-        )
+        http.get<CompanyAlternativeNames>("/company/{companyId}/alternative_names") {
+            pathVar("companyId", companyId)
+        }
+
 
     /**
      * Get a companies logos by id.
@@ -77,9 +75,8 @@ class CompanyApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param companyId The id of the company
      */
     fun images(companyId: Int) =
-        httpExecutor.execute(
-            get<CompanyImages>("/company/{companyId}/images") {
-                pathVar("companyId", companyId)
-            }
-        )
+        http.get<CompanyImages>("/company/{companyId}/images") {
+            pathVar("companyId", companyId)
+        }
+
 }

@@ -40,7 +40,7 @@ import io.v47.tmdb.model.*
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
-class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) {
+class TvSeasonsApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the TV season details by id.
      *
@@ -58,19 +58,17 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         language: LocaleCode? = null,
         vararg append: TvSeasonRequest
     ) =
-        httpExecutor.execute(
-            getWithLanguage<TvSeasonDetails>(
-                "/tv/{tvId}/season/{seasonNumber}",
-                language
-            ) {
-                pathVar("tvId", tvId)
-                pathVar("seasonNumber", seasonNumber)
+        http.getWithLanguage<TvSeasonDetails>(
+            "/tv/{tvId}/season/{seasonNumber}",
+            language
+        ) {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
 
-                append.forEach { req ->
-                    queryArg("append_to_response", req.value)
-                }
+            append.forEach { req ->
+                queryArg("append_to_response", req.value)
             }
-        )
+        }
 
     /**
      * Get the changes for a TV season. By default only the last 24 hours are returned.
@@ -88,14 +86,13 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         endDate: LocalDate? = null,
         page: Int? = null
     ) =
-        httpExecutor.execute(
-            getWithPage<TvSeasonChanges>("/tv/season/{seasonId}/changes", page) {
-                pathVar("seasonId", seasonId)
+        http.getWithPage<TvSeasonChanges>("/tv/season/{seasonId}/changes", page) {
+            pathVar("seasonId", seasonId)
 
-                startDate?.let { queryArg("start_date", it.format(dateFormat)) }
-                endDate?.let { queryArg("end_date", it.format(dateFormat)) }
-            }
-        )
+            startDate?.let { queryArg("start_date", it.format(dateFormat)) }
+            endDate?.let { queryArg("end_date", it.format(dateFormat)) }
+        }
+
 
     /**
      * Get the credits for TV season
@@ -109,15 +106,13 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         seasonNumber: Int,
         language: LocaleCode? = null
     ) =
-        httpExecutor.execute(
-            getWithLanguage<TvSeasonCredits>(
-                "/tv/{tvId}/season/{seasonNumber}/credits",
-                language
-            ) {
-                pathVar("tvId", tvId)
-                pathVar("seasonNumber", seasonNumber)
-            }
-        )
+        http.getWithLanguage<TvSeasonCredits>(
+            "/tv/{tvId}/season/{seasonNumber}/credits",
+            language
+        ) {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
+        }
 
     /**
      * Get the external ids for a TV season.
@@ -132,12 +127,11 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         tvId: Int,
         seasonNumber: Int
     ) =
-        httpExecutor.execute(
-            get<TvSeasonExternalIds>("/tv/{tvId}/season/{seasonNumber}/external_ids") {
-                pathVar("tvId", tvId)
-                pathVar("seasonNumber", seasonNumber)
-            }
-        )
+        http.get<TvSeasonExternalIds>("/tv/{tvId}/season/{seasonNumber}/external_ids") {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
+        }
+
 
     /**
      * Get the images that belong to a TV season.
@@ -158,16 +152,15 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         language: LocaleCode? = null,
         vararg includeLanguage: LocaleCode?
     ) =
-        httpExecutor.execute(
-            getWithLanguage<TvSeasonImages>("/tv/{tvId}/season/{seasonNumber}/images", language) {
-                pathVar("tvId", tvId)
-                pathVar("seasonNumber", seasonNumber)
+        http.getWithLanguage<TvSeasonImages>("/tv/{tvId}/season/{seasonNumber}/images", language) {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
 
-                includeLanguage.toSet().forEach { lang ->
-                    queryArg("include_image_language", lang?.toString() ?: "null")
-                }
+            includeLanguage.toSet().forEach { lang ->
+                queryArg("include_image_language", lang?.toString() ?: "null")
             }
-        )
+        }
+
 
     /**
      * Get the videos that have been added to a TV season
@@ -181,12 +174,11 @@ class TvSeasonsApi internal constructor(private val httpExecutor: HttpExecutor) 
         seasonNumber: Int,
         language: LocaleCode? = null
     ) =
-        httpExecutor.execute(
-            getWithLanguage<TvSeasonVideos>("/tv/{tvId}/season/{seasonNumber}/videos", language) {
-                pathVar("tvId", tvId)
-                pathVar("seasonNumber", seasonNumber)
-            }
-        )
+        http.getWithLanguage<TvSeasonVideos>("/tv/{tvId}/season/{seasonNumber}/videos", language) {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
+        }
+
 }
 
 enum class TvSeasonRequest(internal val value: String) {

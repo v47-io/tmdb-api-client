@@ -36,7 +36,7 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Find
 
-class FindApi internal constructor(private val httpExecutor: HttpExecutor) {
+class FindApi internal constructor(private val http: HttpExecutor) {
     /**
      * The find method makes it easy to search for objects in our database by an external id.
      * For example, an IMDb ID.
@@ -51,12 +51,11 @@ class FindApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun byId(externalId: Any, source: ExternalSource, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<Find>("/find/{externalId}", language) {
-                pathVar("externalId", externalId)
-                queryArg("external_source", source.value)
-            }
-        )
+        http.getWithLanguage<Find>("/find/{externalId}", language) {
+            pathVar("externalId", externalId)
+            queryArg("external_source", source.value)
+        }
+
 
     enum class ExternalSource(internal val value: String) {
         IMDb("imdb_id"),

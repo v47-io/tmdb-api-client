@@ -31,13 +31,14 @@
  */
 package io.v47.tmdb.api
 
+import io.v47.tmdb.http.get
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.MovieTvPersonListResult
 import io.v47.tmdb.model.Paginated
 import io.v47.tmdb.model.PaginatedMovieTvPersonListResults
 import org.reactivestreams.Publisher
 
-class TrendingApi internal constructor(private val httpExecutor: HttpExecutor) {
+class TrendingApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the daily or weekly trending items. The daily trending list tracks items over the
      * period of a day while items have a 24 hour half life. The weekly list tracks items over
@@ -50,14 +51,12 @@ class TrendingApi internal constructor(private val httpExecutor: HttpExecutor) {
         mediaType: TrendingMediaType = TrendingMediaType.All,
         timeWindow: TrendingTimeWindow = TrendingTimeWindow.Day
     ): Publisher<out Paginated<MovieTvPersonListResult>> =
-        httpExecutor.execute(
-            io.v47.tmdb.http.get<PaginatedMovieTvPersonListResults>(
-                "/trending/{mediaType}/{timeWindow}"
-            ) {
-                pathVar("mediaType", mediaType.name.lowercase())
-                pathVar("timeWindow", timeWindow.name.lowercase())
-            }
-        )
+        http.get<PaginatedMovieTvPersonListResults>(
+            "/trending/{mediaType}/{timeWindow}"
+        ) {
+            pathVar("mediaType", mediaType.name.lowercase())
+            pathVar("timeWindow", timeWindow.name.lowercase())
+        }
 }
 
 enum class TrendingMediaType {

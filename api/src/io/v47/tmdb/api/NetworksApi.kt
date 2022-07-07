@@ -37,18 +37,17 @@ import io.v47.tmdb.model.Network
 import io.v47.tmdb.model.NetworkAlternativeNames
 import io.v47.tmdb.model.NetworkImages
 
-class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
+class NetworksApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the details of a network
      *
      * @param networkId The id of the network
      */
     fun details(networkId: Int) =
-        httpExecutor.execute(
-            get<Network>("/network/{networkId}") {
-                pathVar("networkId", networkId)
-            }
-        )
+        http.get<Network>("/network/{networkId}") {
+            pathVar("networkId", networkId)
+        }
+
 
     /**
      * Get the alternative names of a network
@@ -56,11 +55,10 @@ class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param networkId The id of the network
      */
     fun alternativeNames(networkId: Int) =
-        httpExecutor.execute(
-            get<NetworkAlternativeNames>("/network/{networkId}/alternative_names") {
-                pathVar("networkId", networkId)
-            }
-        )
+        http.get<NetworkAlternativeNames>("/network/{networkId}/alternative_names") {
+            pathVar("networkId", networkId)
+        }
+
 
     /**
      * Get a networks logos by id.
@@ -77,9 +75,8 @@ class NetworksApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param networkId The id of the network
      */
     fun images(networkId: Int) =
-        httpExecutor.execute(
-            get<NetworkImages>("/network/{networkId}/images") {
-                pathVar("networkId", networkId)
-            }
-        )
+        http.get<NetworkImages>("/network/{networkId}/images") {
+            pathVar("networkId", networkId)
+        }
+
 }

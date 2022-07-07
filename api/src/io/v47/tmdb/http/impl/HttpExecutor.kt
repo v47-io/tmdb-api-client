@@ -52,7 +52,7 @@ internal class HttpExecutor(
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
-        val httpRequest = createHttpRequest(request)
+        val httpRequest = request.toHttpRequest()
 
         return Flowable
             .fromPublisher(
@@ -75,16 +75,16 @@ internal class HttpExecutor(
             }
     }
 
-    private fun createHttpRequest(tmdbRequest: TmdbRequest<*>): HttpRequest {
-        val url = "/${tmdbRequest.apiVersion.value}/${tmdbRequest.path.trim(' ', '/')}"
-        val query = tmdbRequest.queryArgs + ("api_key" to listOf(apiKey))
+    private fun TmdbRequest<*>.toHttpRequest(): HttpRequest {
+        val url = "/${apiVersion.value}/${path.trim(' ', '/')}"
+        val query = queryArgs + ("api_key" to listOf(apiKey))
 
         return DefaultHttpRequest(
-            tmdbRequest.method,
+            method,
             url,
-            tmdbRequest.pathVariables,
+            pathVariables,
             query,
-            tmdbRequest.requestEntity
+            requestEntity
         )
     }
 }

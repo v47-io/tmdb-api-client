@@ -38,7 +38,7 @@ import io.v47.tmdb.model.CollectionDetails
 import io.v47.tmdb.model.CollectionImages
 import io.v47.tmdb.model.CollectionTranslations
 
-class CollectionApi internal constructor(private val httpExecutor: HttpExecutor) {
+class CollectionApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get collection details by id
      *
@@ -46,11 +46,10 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      * @param language A language code
      */
     fun details(collectionId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<CollectionDetails>("/collection/{collectionId}", language) {
-                pathVar("collectionId", collectionId)
-            }
-        )
+        http.getWithLanguage<CollectionDetails>("/collection/{collectionId}", language) {
+            pathVar("collectionId", collectionId)
+        }
+
 
     /**
      * Get the images for a collection by id
@@ -59,11 +58,10 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      * @param language A language code
      */
     fun images(collectionId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<CollectionImages>("/collection/{collectionId}/images", language) {
-                pathVar("collectionId", collectionId)
-            }
-        )
+        http.getWithLanguage<CollectionImages>("/collection/{collectionId}/images", language) {
+            pathVar("collectionId", collectionId)
+        }
+
 
     /**
      * Get the list translations for a collection by id
@@ -71,9 +69,11 @@ class CollectionApi internal constructor(private val httpExecutor: HttpExecutor)
      * @param collectionId The id of the collection
      */
     fun translations(collectionId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<CollectionTranslations>("/collection/{collectionId}/translations", language) {
-                pathVar("collectionId", collectionId)
-            }
-        )
+        http.getWithLanguage<CollectionTranslations>(
+            "/collection/{collectionId}/translations",
+            language
+        ) {
+            pathVar("collectionId", collectionId)
+        }
+
 }

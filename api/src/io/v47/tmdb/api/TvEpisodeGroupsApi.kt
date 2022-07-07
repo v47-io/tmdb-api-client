@@ -36,7 +36,7 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.TvEpisodeGroupDetails
 
-class TvEpisodeGroupsApi internal constructor(private val httpExecutor: HttpExecutor) {
+class TvEpisodeGroupsApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the details of a TV episode group
      *
@@ -44,9 +44,8 @@ class TvEpisodeGroupsApi internal constructor(private val httpExecutor: HttpExec
      * @param language A language code
      */
     fun details(id: String, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<TvEpisodeGroupDetails>("/tv/episode_group/{id}", language) {
-                pathVar("id", id)
-            }
-        )
+        http.getWithLanguage<TvEpisodeGroupDetails>("/tv/episode_group/{id}", language) {
+            pathVar("id", id)
+        }
+
 }

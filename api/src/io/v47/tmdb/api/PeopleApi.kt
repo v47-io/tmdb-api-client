@@ -42,7 +42,7 @@ import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
-class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
+class PeopleApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the primary person details by id.
      *
@@ -54,15 +54,14 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param append Other requests to append to this call
      */
     fun details(personId: Int, language: LocaleCode? = null, vararg append: PeopleRequest) =
-        httpExecutor.execute(
-            getWithLanguage<PersonDetails>("/person/{personId}", language) {
-                pathVar("personId", personId)
+        http.getWithLanguage<PersonDetails>("/person/{personId}", language) {
+            pathVar("personId", personId)
 
-                append.forEach { req ->
-                    queryArg("append_to_response", req.value)
-                }
+            append.forEach { req ->
+                queryArg("append_to_response", req.value)
             }
-        )
+        }
+
 
     /**
      * Get the changes for a person. By default only the last 24 hours are returned.
@@ -80,14 +79,13 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
         endDate: LocalDate? = null,
         page: Int? = null
     ) =
-        httpExecutor.execute(
-            getWithPage<PersonChanges>("/person/{personId}/changes", page) {
-                pathVar("personId", personId)
+        http.getWithPage<PersonChanges>("/person/{personId}/changes", page) {
+            pathVar("personId", personId)
 
-                startDate?.let { queryArg("start_date", it.format(dateFormat)) }
-                endDate?.let { queryArg("end_date", it.format(dateFormat)) }
-            }
-        )
+            startDate?.let { queryArg("start_date", it.format(dateFormat)) }
+            endDate?.let { queryArg("end_date", it.format(dateFormat)) }
+        }
+
 
     /**
      * Get the movie credits for a person.
@@ -123,11 +121,10 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
         credits("combined", personId, language)
 
     private fun credits(type: String, personId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<PersonCredits>("/person/{personId}/${type}_credits", language) {
-                pathVar("personId", personId)
-            }
-        )
+        http.getWithLanguage<PersonCredits>("/person/{personId}/${type}_credits", language) {
+            pathVar("personId", personId)
+        }
+
 
     /**
      * Get the external ids for a person. We currently support the following external sources.
@@ -143,11 +140,10 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param personId The id of the person
      */
     fun externalIds(personId: Int) =
-        httpExecutor.execute(
-            get<PersonExternalIds>("/person/{personId}/external_ids") {
-                pathVar("personId", personId)
-            }
-        )
+        http.get<PersonExternalIds>("/person/{personId}/external_ids") {
+            pathVar("personId", personId)
+        }
+
 
     /**
      * Get the images for a person
@@ -155,11 +151,10 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param personId The id of the person
      */
     fun images(personId: Int) =
-        httpExecutor.execute(
-            get<PersonImages>("/person/{personId}/images") {
-                pathVar("personId", personId)
-            }
-        )
+        http.get<PersonImages>("/person/{personId}/images") {
+            pathVar("personId", personId)
+        }
+
 
     /**
      * Get the images that this person has been tagged in
@@ -169,15 +164,13 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param page Specify which page to query
      */
     fun taggedImages(personId: Int, page: Int? = null, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithPageAndLanguage<PersonTaggedImages>(
-                "/person/{personId}/tagged_images",
-                page,
-                language
-            ) {
-                pathVar("personId", personId)
-            }
-        )
+        http.getWithPageAndLanguage<PersonTaggedImages>(
+            "/person/{personId}/tagged_images",
+            page,
+            language
+        ) {
+            pathVar("personId", personId)
+        }
 
     /**
      * Get a list of translations that have been created for a person
@@ -186,11 +179,10 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun translations(personId: Int, language: LocaleCode? = null) =
-        httpExecutor.execute(
-            getWithLanguage<PersonTranslations>("/person/{personId}/translations", language) {
-                pathVar("personId", personId)
-            }
-        )
+        http.getWithLanguage<PersonTranslations>("/person/{personId}/translations", language) {
+            pathVar("personId", personId)
+        }
+
 
     /**
      * Get the most newly created person. This is a live response and will continuously change
@@ -198,7 +190,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param language A language code
      */
     fun latest(language: LocaleCode? = null) =
-        httpExecutor.execute(getWithLanguage<PersonDetails>("/person/latest", language))
+        http.getWithLanguage<PersonDetails>("/person/latest", language)
 
     /**
      * Get the list of popular people on TMDb. This list updates daily
@@ -207,7 +199,7 @@ class PeopleApi internal constructor(private val httpExecutor: HttpExecutor) {
      * @param page Specify which page to query
      */
     fun popular(page: Int? = null, language: LocaleCode? = null) =
-        httpExecutor.execute(getWithPageAndLanguage<PeoplePopular>("/person/popular", page, language))
+        http.getWithPageAndLanguage<PeoplePopular>("/person/popular", page, language)
 }
 
 enum class PeopleRequest(internal val value: String) {

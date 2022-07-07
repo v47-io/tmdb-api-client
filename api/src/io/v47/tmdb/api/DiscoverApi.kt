@@ -45,7 +45,7 @@ import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 import java.util.*
 
-class DiscoverApi internal constructor(private val httpExecutor: HttpExecutor) {
+class DiscoverApi internal constructor(private val http: HttpExecutor) {
     /**
      * Discover movies by different types of data like average rating, number of
      * votes, genres and certifications. You can get a valid list of certifications
@@ -72,11 +72,10 @@ class DiscoverApi internal constructor(private val httpExecutor: HttpExecutor) {
      * [here](https://www.themoviedb.org/documentation/api/discover).
      */
     fun movies(block: MovieQuery.() -> Unit = {}) =
-        httpExecutor.execute(
-            get<PaginatedListResults<MovieListResult>>("/discover/movie") {
-                DiscoveryApiMovieQuery(this).block()
-            }
-        )
+        http.get<PaginatedListResults<MovieListResult>>("/discover/movie") {
+            DiscoveryApiMovieQuery(this).block()
+        }
+
 
     /**
      * Discover TV shows by different types of data like average rating, number of votes,
@@ -92,11 +91,10 @@ class DiscoverApi internal constructor(private val httpExecutor: HttpExecutor) {
      * [here](https://www.themoviedb.org/documentation/api/discover).
      */
     fun tv(block: TvQuery.() -> Unit = {}) =
-        httpExecutor.execute(
-            get<PaginatedListResults<TvListResult>>("/discover/tv") {
-                DiscoveryApiTvQuery(this).block()
-            }
-        )
+        http.get<PaginatedListResults<TvListResult>>("/discover/tv") {
+            DiscoveryApiTvQuery(this).block()
+        }
+
 
     @Suppress("TooManyFunctions")
     interface MovieQuery {
@@ -188,7 +186,11 @@ private class DiscoveryApiMovieQuery(
     }
 
     override fun certification(certification: String, upperBound: Boolean) {
-        target.queryArg("certification${if (upperBound) ".lte" else ""}", certification, replace = true)
+        target.queryArg(
+            "certification${if (upperBound) ".lte" else ""}",
+            certification,
+            replace = true
+        )
     }
 
     override fun includeAdult() {
@@ -210,10 +212,18 @@ private class DiscoveryApiMovieQuery(
 
     override fun primaryReleaseDate(range: ClosedRange<LocalDate>) {
         if (range.start != LocalDate.MIN)
-            target.queryArg("primary_release_date.gte", range.start.format(dateFormat), replace = true)
+            target.queryArg(
+                "primary_release_date.gte",
+                range.start.format(dateFormat),
+                replace = true
+            )
 
         if (range.endInclusive != LocalDate.MAX)
-            target.queryArg("primary_release_date.lte", range.endInclusive.format(dateFormat), replace = true)
+            target.queryArg(
+                "primary_release_date.lte",
+                range.endInclusive.format(dateFormat),
+                replace = true
+            )
     }
 
     override fun releaseDate(range: ClosedRange<LocalDate>) {
@@ -221,7 +231,11 @@ private class DiscoveryApiMovieQuery(
             target.queryArg("release_date.gte", range.start.format(dateFormat), replace = true)
 
         if (range.endInclusive != LocalDate.MAX)
-            target.queryArg("release_date.lte", range.endInclusive.format(dateFormat), replace = true)
+            target.queryArg(
+                "release_date.lte",
+                range.endInclusive.format(dateFormat),
+                replace = true
+            )
     }
 
     override fun voteCount(range: IntRange) {
@@ -319,7 +333,11 @@ private class DiscoveryApiTvQuery(
             target.queryArg("first_air_date.gte", range.start.format(dateFormat), replace = true)
 
         if (range.endInclusive != LocalDate.MAX)
-            target.queryArg("first_air_date.lte", range.endInclusive.format(dateFormat), replace = true)
+            target.queryArg(
+                "first_air_date.lte",
+                range.endInclusive.format(dateFormat),
+                replace = true
+            )
     }
 
     override fun firstAirDateYear(year: Int) {
@@ -336,7 +354,11 @@ private class DiscoveryApiTvQuery(
     }
 
     override fun timezone(tz: TimeZone) {
-        target.queryArg("timezone", tz.getDisplayName(false, TimeZone.LONG, Locale.US), replace = true)
+        target.queryArg(
+            "timezone",
+            tz.getDisplayName(false, TimeZone.LONG, Locale.US),
+            replace = true
+        )
     }
 
     override fun voteCount(range: IntRange) {

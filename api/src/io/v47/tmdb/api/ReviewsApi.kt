@@ -35,16 +35,14 @@ import io.v47.tmdb.http.get
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.ReviewDetails
 
-class ReviewsApi internal constructor(private val httpExecutor: HttpExecutor) {
+class ReviewsApi internal constructor(private val http: HttpExecutor) {
     /**
      * Get the full details of a review by ID
      *
      * @param reviewId The id of the review
      */
     fun details(reviewId: String) =
-        httpExecutor.execute(
-            get<ReviewDetails>("/review/{reviewId}") {
-                pathVar("reviewId", reviewId)
-            }
-        )
+        http.get<ReviewDetails>("/review/{reviewId}") {
+            pathVar("reviewId", reviewId)
+        }
 }
