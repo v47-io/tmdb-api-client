@@ -33,7 +33,7 @@ jobs:
         env:
           GRADLE_OPTS: -Xmx4096m -XX:MaxPermSize=768m
       - name: Deploy 🚀
-        # if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
+        if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/dokka/htmlMultiModule

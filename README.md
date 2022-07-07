@@ -67,6 +67,10 @@ verify compatibility of the HTTP client adapter with the actual TMDb client.
 Even though this library is implemented using Kotlin it remains fully compatible with
 Java and exposes a Java-friendly reactive API.
 
+## Documentation
+
+Automatically generated Kotlin docs are available [here](https://v47-io.github.io/tmdb-api-client/).
+
 ## Building
 
 Requirements:
