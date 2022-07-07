@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":core:dokkaHtmlPartial/main":[],":spring-boot-starter:dokkaHtmlPartial/main":[],":http-client-java11:dokkaHtmlPartial/main":[],":http-client-spring-webflux:dokkaHtmlPartial/main":[],":http-client-micronaut:dokkaHtmlPartial/main":[],":standalone:dokkaHtmlPartial/main":[],":api:dokkaHtmlPartial/main":[],":http-client-tck:dokkaHtmlPartial/main":[]}'
