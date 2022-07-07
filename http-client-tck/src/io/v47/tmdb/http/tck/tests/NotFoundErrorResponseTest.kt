@@ -35,7 +35,7 @@ import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.api.ErrorResponse
-import io.v47.tmdb.http.impl.HttpRequestImpl
+import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
@@ -45,7 +45,7 @@ internal class NotFoundErrorResponseTest : AbstractTckTest("https://api.themovie
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkResponse = ErrorResponse("The resource you requested could not be found.", 34)
 
-        val request = HttpRequestImpl(
+        val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/3/company/{companyId}",
             mapOf("companyId" to 0),

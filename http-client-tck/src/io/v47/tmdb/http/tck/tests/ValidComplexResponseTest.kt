@@ -34,14 +34,14 @@ package io.v47.tmdb.http.tck.tests
 import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.impl.HttpRequestImpl
+import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 
 internal class ValidComplexResponseTest : AbstractTckTest("https://api.themoviedb.org") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
-        val request = HttpRequestImpl(
+        val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/3/company/{companyId}/alternative_names",
             mapOf("companyId" to 2),

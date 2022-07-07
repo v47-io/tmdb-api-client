@@ -36,7 +36,7 @@ import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
-import io.v47.tmdb.http.impl.HttpRequestImpl
+import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 
 @Suppress("MagicNumber")
@@ -44,7 +44,7 @@ internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.o
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkError = ErrorResponse("File Not Found", 404)
 
-        val request = HttpRequestImpl(
+        val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/{imageSize}/{imageFile}",
             mapOf(

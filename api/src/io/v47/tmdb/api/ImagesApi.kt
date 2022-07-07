@@ -38,7 +38,7 @@ import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
-import io.v47.tmdb.http.impl.HttpRequestImpl
+import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.model.*
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -75,7 +75,7 @@ class ImagesApi internal constructor(
         else
             size
 
-        val request = HttpRequestImpl(
+        val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/{actualSize}/{imagePath}",
             mapOf(

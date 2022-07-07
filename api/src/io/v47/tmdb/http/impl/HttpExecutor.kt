@@ -42,7 +42,7 @@ import org.reactivestreams.Publisher
 private const val BASE_URL = "https://api.themoviedb.org"
 
 @Suppress("MagicNumber")
-class HttpExecutor(
+internal class HttpExecutor(
     private val httpClientFactory: HttpClientFactory,
     private val apiKey: String
 ) {
@@ -79,7 +79,7 @@ class HttpExecutor(
         val url = "/${tmdbRequest.apiVersion.value}/${tmdbRequest.path.trim(' ', '/')}"
         val query = tmdbRequest.queryArgs + ("api_key" to listOf(apiKey))
 
-        return HttpRequestImpl(
+        return DefaultHttpRequest(
             tmdbRequest.method,
             url,
             tmdbRequest.pathVariables,

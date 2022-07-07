@@ -29,24 +29,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MagicNumber")
-
 package io.v47.tmdb.http.impl
 
 import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
+import io.v47.tmdb.http.HttpRequest
 
-data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo
-)
-
-enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
-}
+data class DefaultHttpRequest(
+    override val method: HttpMethod,
+    override val url: String,
+    override val uriVariables: Map<String, Any> = emptyMap(),
+    override val query: Map<String, List<Any>> = emptyMap(),
+    override val body: Any? = null
+) : HttpRequest

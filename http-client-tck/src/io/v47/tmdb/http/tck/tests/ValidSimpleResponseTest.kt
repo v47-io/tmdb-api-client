@@ -34,7 +34,7 @@ package io.v47.tmdb.http.tck.tests
 import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.impl.HttpRequestImpl
+import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
@@ -44,7 +44,7 @@ internal class ValidSimpleResponseTest : AbstractTckTest("https://api.themoviedb
         val companyName = "Walt Disney Pictures"
         val companyHeadquarters = "Burbank, California"
 
-        val request = HttpRequestImpl(
+        val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/3/company/{companyId}",
             mapOf("companyId" to 2),
