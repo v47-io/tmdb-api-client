@@ -6,12 +6,12 @@ Add the following dependency to your project:
 
 ```groovy
 // Gradle
-implementation 'io.v47.tmdb-api-client:standalone:3.0.0-SNAPSHOT'
+implementation 'io.v47.tmdb-api-client:standalone:3.0.1'
 ```
 
 ```kotlin
 // Gradle Kotlin DSL
-implementation("io.v47.tmdb-api-client:standalone:3.0.0-SNAPSHOT")
+implementation("io.v47.tmdb-api-client:standalone:3.0.1")
 ```
 
 ```xml
@@ -20,7 +20,7 @@ implementation("io.v47.tmdb-api-client:standalone:3.0.0-SNAPSHOT")
     <dependency>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>standalone</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.1</version>
     </dependency>
 </dependencies>
 ```
