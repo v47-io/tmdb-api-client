@@ -43,7 +43,7 @@ internal abstract class MediaTypeBasedDeserializer<T : Any>(
 ) : StdNodeBasedDeserializer<T>(clazz) {
 
     override fun convert(root: JsonNode, ctxt: DeserializationContext): T {
-        val targetType = if (root.hasNonNull("media_type")) {
+        val targetType = if (mapping.isNotEmpty() && root.hasNonNull("media_type")) {
             val mediaType = root.get("media_type").textValue().lowercase()
             mapping[mediaType]
                 ?: throw JsonParseException(

@@ -63,9 +63,9 @@ data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType()
         override val id: String?,
         val action: String?,
         val time: String?,
-        val value: ChangeValue?,
+        val value: Any?,
         val language: LanguageCode?,
-        val originalValue: String?
+        val originalValue: Any?
     ) : TmdbType(), TmdbStringId
 
     data class ChangeValue(
