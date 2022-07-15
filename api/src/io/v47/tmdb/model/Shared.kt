@@ -35,10 +35,11 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import java.io.Serializable
 import java.time.Instant
 import java.time.LocalDate
 
-interface MovieTvPersonListResult : TmdbIntId {
+interface MovieTvPersonListResult : TmdbIntId, Serializable {
     override val id: Int?
     val mediaType: MediaType?
 }

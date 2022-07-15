@@ -33,6 +33,7 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import java.io.Serializable
 import java.time.LocalDate
 
 data class Credits(
@@ -45,7 +46,7 @@ data class Credits(
     val person: CreditPerson?
 ) : TmdbType(), TmdbStringId
 
-interface CreditMedia : TmdbIntId {
+interface CreditMedia : TmdbIntId, Serializable {
     val adult: Boolean?
     val backdropPath: String?
     val character: String?
@@ -133,7 +134,7 @@ data class CreditPerson(
     val popularity: Double?
 ) : TmdbType(), TmdbIntId
 
-interface CreditPersonKnownFor : TmdbIntId {
+interface CreditPersonKnownFor : TmdbIntId, Serializable {
     val adult: Boolean?
     val backdropPath: String?
     val genreIds: List<Int>

@@ -33,6 +33,7 @@ package io.v47.tmdb.model
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import java.io.Serializable
 
 data class Configuration(
     val images: Images = Images(null, null),
@@ -49,7 +50,8 @@ data class Configuration(
     ) : TmdbType()
 }
 
-sealed class ImageSize {
+@Suppress("SerialVersionUIDInSerializableClass")
+sealed class ImageSize : Serializable {
     abstract val value: Int
 }
 
