@@ -1,0 +1,27 @@
+plugins {
+    id 'io.quarkus'
+}
+
+dependencies {
+    implementation platform('io.quarkus:quarkus-bom:2.10.2.Final')
+
+    implementation project(':http-client-quarkus')
+
+    implementation 'io.quarkus:quarkus-kotlin'
+    implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+
+    testRuntimeOnly project(':http-client-quarkus-deployment')
+}
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'TMDb HttpClient integration tests for Quarkus'
+            }
+        }
+    }
+}

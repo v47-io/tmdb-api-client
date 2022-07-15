@@ -7,4 +7,7 @@ include 'core',
         'spring-boot-starter',
         'api',
         'standalone',
-        'http-client-java11'
+        'http-client-java11',
+        'http-client-quarkus',
+        'http-client-quarkus-deployment',
+        'http-client-quarkus-integration-tests'

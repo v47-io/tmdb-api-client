@@ -1,0 +1,21 @@
+dependencies {
+    implementation platform('io.quarkus:quarkus-bom:2.10.2.Final')
+
+    // implementation project(':api')
+    implementation project(':http-client-quarkus')
+
+    implementation 'io.quarkus:quarkus-core-deployment'
+    implementation 'io.quarkus:quarkus-arc-deployment'
+
+    testImplementation 'io.quarkus:quarkus-junit5-internal'
+}
+
+publishing {
+    publications {
+        tmdbApiClient(MavenPublication) {
+            pom {
+                description = 'TMDb HttpClient deployment module for Quarkus'
+            }
+        }
+    }
+}
