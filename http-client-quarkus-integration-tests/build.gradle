@@ -7,12 +7,12 @@ dependencies {
 
     implementation project(':http-client-quarkus')
 
-    implementation 'io.quarkus:quarkus-kotlin'
     implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 
+    // This is here to ensure correct order during build
     testRuntimeOnly project(':http-client-quarkus-deployment')
 }
 

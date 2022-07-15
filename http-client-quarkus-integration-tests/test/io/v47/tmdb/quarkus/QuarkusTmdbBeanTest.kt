@@ -33,7 +33,6 @@ package io.v47.tmdb.quarkus
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured
-import io.v47.tmdb.model.Configuration
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.Test
 
@@ -41,13 +40,9 @@ import org.junit.jupiter.api.Test
 open class QuarkusTmdbBeanTest {
     @Test
     fun testTmdbClient() {
-        val config =
-            RestAssured.`when`().get("/tmdb-config")
-                .then()
-                .statusCode(200)
-                .body(CoreMatchers.notNullValue())
-                .extract().body().`as`(Configuration::class.java)
-
-        println(config)
+        RestAssured.`when`().get("/tmdb-config")
+            .then()
+            .statusCode(200)
+            .body(CoreMatchers.notNullValue())
     }
 }
