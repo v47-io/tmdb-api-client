@@ -103,10 +103,12 @@ class TmdbClient private constructor(
         Single
             .fromPublisher(configuration.system())
             .doOnSuccess { systemConfig ->
-                _cachedSystemConfiguration = systemConfig
+                synchronized(this) {
+                    _cachedSystemConfiguration = systemConfig
 
-                _images?.close()
-                _images = ImagesApi(httpClientFactory, systemConfig)
+                    _images?.close()
+                    _images = ImagesApi(httpClientFactory, systemConfig)
+                }
             }
-            .map { Unit }
+            .map {}
 }
