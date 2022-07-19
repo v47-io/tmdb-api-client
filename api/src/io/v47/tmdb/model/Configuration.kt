@@ -55,19 +55,22 @@ sealed class ImageSize : Serializable {
     abstract val value: Int
 }
 
-data class Width(override val value: Int) : ImageSize(), Comparable<Width> {
+@Suppress("SerialVersionUIDInSerializableClass")
+data class Width(override val value: Int) : ImageSize(), Comparable<Width>, Serializable {
     override fun compareTo(other: Width) = value.compareTo(other.value)
 
     override fun toString() = "w$value"
 }
 
-data class Height(override val value: Int) : ImageSize(), Comparable<Height> {
+@Suppress("SerialVersionUIDInSerializableClass")
+data class Height(override val value: Int) : ImageSize(), Comparable<Height>, Serializable {
     override fun compareTo(other: Height) = value.compareTo(other.value)
 
     override fun toString() = "h$value"
 }
 
-object Original : ImageSize() {
+@Suppress("SerialVersionUIDInSerializableClass")
+object Original : ImageSize(), Serializable {
     override val value = Int.MAX_VALUE
 
     override fun toString() = "original"

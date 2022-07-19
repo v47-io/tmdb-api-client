@@ -38,6 +38,7 @@ import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
+import java.io.Serializable
 
 internal class ValidComplexResponseTest : AbstractTckTest("https://api.themoviedb.org") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
@@ -71,10 +72,11 @@ internal class ValidComplexResponseTest : AbstractTckTest("https://api.themovied
             TckTestResult.Success
     }
 
+    @Suppress("SerialVersionUIDInSerializableClass")
     data class CompanyAlternativeNames(
         val id: Int,
         val results: List<AlternativeName>
-    ) {
-        data class AlternativeName(val name: String, val type: String)
+    ) : Serializable {
+        data class AlternativeName(val name: String, val type: String) : Serializable
     }
 }

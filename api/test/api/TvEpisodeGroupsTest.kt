@@ -44,7 +44,8 @@ class TvEpisodeGroupsTest : AbstractTmdbTest() {
 
     @Test
     fun testGetEpisodeGroups() {
-        val episodeGroups = client.tvEpisodeGroup.details(SUPERGIRL_EPISODE_GROUPS_ID).blockingFirst()
+        val episodeGroups =
+            client.tvEpisodeGroup.details(SUPERGIRL_EPISODE_GROUPS_ID).blockingFirst()
 
         assertEquals(TvEpisodeGroupType.Production, episodeGroups.type)
         assertTrue(episodeGroups.groups.isNotEmpty())

@@ -62,8 +62,10 @@ class StandaloneWebClientFactory : HttpClientFactory {
     private val exchangeStrategies = ExchangeStrategies
         .builder()
         .codecs { config ->
-            config.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
-            config.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
+            config.defaultCodecs()
+                .jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
+            config.defaultCodecs()
+                .jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
         }
         .build()
 

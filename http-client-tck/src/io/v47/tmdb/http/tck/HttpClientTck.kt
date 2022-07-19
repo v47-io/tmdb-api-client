@@ -33,6 +33,7 @@ package io.v47.tmdb.http.tck
 
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.tck.tests.*
+import java.io.Serializable
 
 /**
  * The TMDb API HttpClient TCK runner.
@@ -70,13 +71,14 @@ class HttpClientTck {
     }
 }
 
-sealed class TckResult {
-    object Success : TckResult()
-    data class Failure(val failedTests: List<FailedTest>) : TckResult() {
+@Suppress("SerialVersionUIDInSerializableClass")
+sealed class TckResult : Serializable {
+    object Success : TckResult(), Serializable
+    data class Failure(val failedTests: List<FailedTest>) : TckResult(), Serializable {
         data class FailedTest(
             val name: String,
             val expectedValue: Any,
             val actualValue: Any?
-        )
+        ) : Serializable
     }
 }

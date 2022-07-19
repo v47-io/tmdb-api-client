@@ -36,18 +36,19 @@ import io.v47.tmdb.model.MovieTvPersonListResult
 import io.v47.tmdb.model.PersonListResult
 import io.v47.tmdb.model.TvListResult
 
-internal class MovieTvPersonListResultDeserializer : MediaTypeBasedDeserializer<MovieTvPersonListResult>(
-    mapOf(
-        "movie" to MovieListResult::class.java,
-        "tv" to TvListResult::class.java,
-        "person" to PersonListResult::class.java
-    ),
-    MovieTvPersonListResult::class.java,
-    { jsonNode ->
-        when {
-            jsonNode.hasNonNull("first_air_date") -> TvListResult::class.java
-            jsonNode.hasNonNull("profile_path") || jsonNode.hasNonNull("known_for") -> PersonListResult::class.java
-            else -> MovieListResult::class.java
+internal class MovieTvPersonListResultDeserializer :
+    MediaTypeBasedDeserializer<MovieTvPersonListResult>(
+        mapOf(
+            "movie" to MovieListResult::class.java,
+            "tv" to TvListResult::class.java,
+            "person" to PersonListResult::class.java
+        ),
+        MovieTvPersonListResult::class.java,
+        { jsonNode ->
+            when {
+                jsonNode.hasNonNull("first_air_date") -> TvListResult::class.java
+                jsonNode.hasNonNull("profile_path") || jsonNode.hasNonNull("known_for") -> PersonListResult::class.java
+                else -> MovieListResult::class.java
+            }
         }
-    }
-)
+    )
