@@ -9,8 +9,8 @@
         <artifactId>quarkus-ext-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-ext</artifactId>
-    <name>TMDb API Client - Runtime</name>
+    <artifactId>quarkus</artifactId>
+    <name>TMDb API Client - Quarkus Runtime Module</name>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>

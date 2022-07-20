@@ -27,6 +27,7 @@
 package io.v47.tmdb.http.quarkus;
 
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
+import io.quarkus.arc.deployment.IgnoreSplitPackageBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
@@ -44,9 +45,9 @@ import org.jboss.jandex.DotName;
 import org.jboss.jandex.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BooleanSupplier;
-import java.util.function.Predicate;
 
 class QuarkusTmdbProcessor {
     private static final DotName TMDB_TYPE = DotName.createSimple(TmdbType.class.getName());
@@ -84,7 +85,6 @@ class QuarkusTmdbProcessor {
         Type tmdbType = Type.create(TMDB_TYPE, Type.Kind.CLASS);
         reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(tmdbType)
                                                                                    .serialization(true)
-                                                                                   .ignoreTypePredicate(new IgnoreKotlinTypes())
                                                                                    .build());
 
         combinedIndex.getIndex().getAllKnownSubclasses(TMDB_TYPE).forEach(classInfo -> {
@@ -95,6 +95,18 @@ class QuarkusTmdbProcessor {
         });
 
         additionalBeans.produce(new AdditionalBeanBuildItem(QuarkusHttpClientConfiguration.class));
+    }
+
+    @BuildStep
+    public void ignoreSplitTmdbPackages(BuildProducer<IgnoreSplitPackageBuildItem> ignoreSplitPackage) {
+        List<String> ignoredPackages = Arrays.asList("io.v47.tmdb.http",
+                                                     "io.v47.tmdb.utils",
+                                                     "io.v47.tmdb.jackson",
+                                                     "io.v47.tmdb.http.impl",
+                                                     "io.v47.tmdb.jackson.mixins",
+                                                     "io.v47.tmdb");
+
+        ignoreSplitPackage.produce(new IgnoreSplitPackageBuildItem(ignoredPackages));
     }
 
     @BuildStep(onlyIf = IsTckActive.class)
@@ -130,15 +142,9 @@ class QuarkusTmdbProcessor {
         });
     }
 
-    static class IgnoreKotlinTypes implements Predicate<DotName> {
-        private static final List<DotName> ignoredNames = Arrays.asList(DotName.createSimple("kotlin.Lazy"),
-                                                                        DotName.createSimple(
-                                                                                "kotlin.jvm.functions.Function0"));
-
-        @Override
-        public boolean test(DotName dotName) {
-            return !ignoredNames.contains(dotName);
-        }
+    @BuildStep(onlyIf = IsTckActive.class)
+    public void ignoreSplitTckPackages(BuildProducer<IgnoreSplitPackageBuildItem> ignoreSplitPackage) {
+        ignoreSplitPackage.produce(new IgnoreSplitPackageBuildItem(Collections.singleton("io.v47.tmdb.http.tck")));
     }
 
     static class IsTckActive implements BooleanSupplier {
@@ -149,7 +155,6 @@ class QuarkusTmdbProcessor {
             try {
                 Class.forName("io.v47.tmdb.http.tck.HttpClientTck");
             } catch (ClassNotFoundException x) {
-                System.out.println("io.v47.tmdb.http.tck.HttpClientTck not in classpath");
                 classNotFoundException = x;
             }
 

@@ -9,8 +9,8 @@
         <artifactId>quarkus-ext-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-ext-deployment</artifactId>
-    <name>TMDb API Client - Deployment</name>
+    <artifactId>quarkus-deployment</artifactId>
+    <name>TMDb API Client - Quarkus Deployment Module</name>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -30,13 +30,8 @@
         </dependency>
         <dependency>
             <groupId>io.v47.tmdb-api-client</groupId>
-            <artifactId>quarkus-ext</artifactId>
+            <artifactId>quarkus</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.v47.tmdb-api-client</groupId>
-            <artifactId>http-client-tck</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
