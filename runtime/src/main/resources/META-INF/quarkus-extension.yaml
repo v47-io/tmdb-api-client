@@ -1,5 +1,5 @@
 name: TMDb API Client
-#description: Do something useful.
+description: Adds support for the TMDb API Client library
 metadata:
 #  keywords:
 #    - quarkus-ext
