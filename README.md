@@ -1,5 +1,9 @@
 # Client for The Movie Database (version 2)
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/v47-io/tmdb-api-client/Build)
+![Maven Central](https://img.shields.io/maven-central/v/io.v47.tmdb-api-client/api)
+![GitHub](https://img.shields.io/github/license/v47-io/tmdb-api-client)
+
 ## Usage
 
 Add the following dependency to your project:
