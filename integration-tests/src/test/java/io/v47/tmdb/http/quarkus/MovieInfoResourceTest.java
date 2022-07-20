@@ -45,6 +45,6 @@ public class MovieInfoResourceTest {
                                                        .body()
                                                        .as(MovieInfoResource.MovieInfo.class);
 
-        Assertions.assertEquals(new MovieInfoResource.MovieInfo("tt3501632", "Thor: Ragnarok", 2017), movieInfo);
+        Assertions.assertEquals(new MovieInfoResource.MovieInfo("tt3501632", "Thor: Tag der Entscheidung", 2017), movieInfo);
     }
 }

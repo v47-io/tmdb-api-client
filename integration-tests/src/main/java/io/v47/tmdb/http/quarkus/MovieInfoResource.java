@@ -26,6 +26,7 @@
  */
 package io.v47.tmdb.http.quarkus;
 
+import com.neovisionaries.i18n.LocaleCode;
 import io.smallrye.mutiny.Uni;
 import io.v47.tmdb.TmdbClient;
 import io.v47.tmdb.api.MovieRequest;
@@ -56,10 +57,11 @@ public class MovieInfoResource {
         return Uni.createFrom()
                   .publisher(tmdbClient.getMovie()
                                        .details(id,
-                                                null,
+                                                LocaleCode.de_DE,
                                                 MovieRequest.Changes,
                                                 MovieRequest.Credits,
-                                                MovieRequest.Lists))
+                                                MovieRequest.Lists,
+                                                MovieRequest.ReleaseDates))
                   .map(movieDetails -> new MovieInfo(movieDetails.getImdbId(),
                                                      movieDetails.getTitle(),
                                                      Objects.requireNonNull(movieDetails.getReleaseDate()).getYear()));
