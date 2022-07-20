@@ -36,10 +36,10 @@ import java.io.Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
 abstract class TmdbType(private vararg val ignoredProperties: String) : Serializable {
-    private val logger by lazy { LoggerFactory.getLogger(javaClass)!! }
-
     @Suppress("unused")
     fun handleUnknownProperty(key: String, value: Any?) {
+        val logger = LoggerFactory.getLogger(javaClass)!!
+
         if (key != "@class" && key !in ignoredProperties)
             logger.trace("Unknown property: '$key' -> '$value'")
     }
