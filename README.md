@@ -6,12 +6,12 @@ Add the following dependency to your project:
 
 ```groovy
 // Gradle
-implementation 'io.v47.tmdb-api-client:standalone:3.0.2'
+implementation 'io.v47.tmdb-api-client:standalone:3.0.3'
 ```
 
 ```kotlin
 // Gradle Kotlin DSL
-implementation("io.v47.tmdb-api-client:standalone:3.0.2")
+implementation("io.v47.tmdb-api-client:standalone:3.0.3")
 ```
 
 ```xml
@@ -20,7 +20,7 @@ implementation("io.v47.tmdb-api-client:standalone:3.0.2")
     <dependency>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>standalone</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
     </dependency>
 </dependencies>
 ```
@@ -55,10 +55,13 @@ module of your choice to your project.
 This library provides access to the entire read-only API of TheMovieDb, authenticated
 using an API-Key, including pictures.
 
-Various integrations with application frameworks are also available:
+Various integrations with application frameworks are also available (`artifactId`):
 
-- Micronaut
-- Spring Boot Webflux (Starter provided)
+- Micronaut (`http-client-micronaut`)
+- Spring Boot Webflux (`spring-boot-starter`)
+- [Quarkus][tmdb-api-client-quarkus] (`quarkus`)
+
+[tmdb-api-client-quarkus]: https://github.com/v47-io/tmdb-api-client-quarkus-ext
 
 Adding support for more frameworks is fairly trivial, only a small adapter needs to be
 implemented for the actual HTTP client. To make development easier a TCK is provided to
