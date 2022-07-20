@@ -1,3 +1,9 @@
+apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
+
+allOpen {
+    annotation("io.v47.tmdb.utils.OpenTmdbClient")
+}
+
 dependencies {
     api project(':core')
 

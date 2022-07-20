@@ -36,8 +36,10 @@ import io.v47.tmdb.api.*
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Configuration
+import io.v47.tmdb.utils.OpenTmdbClient
 
 @Suppress("ConstructorParameterNaming")
+@OpenTmdbClient
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,
     httpExecutor: HttpExecutor

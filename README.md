@@ -1,4 +1,4 @@
-# Client for The Movie Database (version 2)
+# TMDb API Client (for the JVM)
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/v47-io/tmdb-api-client/Build)
 ![Maven Central](https://img.shields.io/maven-central/v/io.v47.tmdb-api-client/api)
@@ -10,12 +10,12 @@ Add the following dependency to your project:
 
 ```groovy
 // Gradle
-implementation 'io.v47.tmdb-api-client:standalone:3.0.3'
+implementation 'io.v47.tmdb-api-client:standalone:3.0.4'
 ```
 
 ```kotlin
 // Gradle Kotlin DSL
-implementation("io.v47.tmdb-api-client:standalone:3.0.3")
+implementation("io.v47.tmdb-api-client:standalone:3.0.4")
 ```
 
 ```xml
@@ -24,7 +24,7 @@ implementation("io.v47.tmdb-api-client:standalone:3.0.3")
     <dependency>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>standalone</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.4</version>
     </dependency>
 </dependencies>
 ```
