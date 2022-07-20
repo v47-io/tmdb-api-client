@@ -30,8 +30,8 @@ import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
-@ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED, prefix = "tmdb")
-public class ClientBuildTimeConfig {
+@ConfigRoot(phase = ConfigPhase.RUN_TIME, prefix = "tmdb")
+public class ClientConfig {
     /**
      * Specify the TMDb API Key used to authenticate requests.
      */

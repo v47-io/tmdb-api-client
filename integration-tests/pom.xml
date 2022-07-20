@@ -6,10 +6,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.v47.tmdb-api-client</groupId>
-        <artifactId>quarkus-ext-parent</artifactId>
+        <artifactId>quarkus-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-ext-integration-tests</artifactId>
+    <artifactId>quarkus-integration-tests</artifactId>
     <name>TMDb API Client - Integration Tests</name>
     <properties>
         <skipITs>true</skipITs>

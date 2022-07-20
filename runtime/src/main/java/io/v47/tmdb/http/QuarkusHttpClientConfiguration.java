@@ -28,7 +28,7 @@ package io.v47.tmdb.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.v47.tmdb.TmdbClient;
-import io.v47.tmdb.http.impl.ClientBuildTimeConfig;
+import io.v47.tmdb.http.impl.ClientConfig;
 import io.v47.tmdb.http.impl.HttpClientFactoryImpl;
 import io.vertx.mutiny.core.Vertx;
 
@@ -39,12 +39,12 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 public class QuarkusHttpClientConfiguration {
-    private final ClientBuildTimeConfig config;
+    private final ClientConfig config;
     private final Vertx vertx;
     private final ObjectMapper objectMapper;
 
     @Inject
-    public QuarkusHttpClientConfiguration(ClientBuildTimeConfig config, Vertx vertx, ObjectMapper objectMapper) {
+    public QuarkusHttpClientConfiguration(ClientConfig config, Vertx vertx, ObjectMapper objectMapper) {
         this.config = config;
         this.vertx = vertx;
         this.objectMapper = objectMapper;
