@@ -75,7 +75,6 @@ class QuarkusTmdbProcessor {
         indexDependency.produce(new IndexDependencyBuildItem("com.neovisionaries", "nv-i18n"));
         indexDependency.produce(new IndexDependencyBuildItem("io.v47.tmdb-api-client", "api"));
         indexDependency.produce(new IndexDependencyBuildItem("io.v47.tmdb-api-client", "core"));
-        indexDependency.produce(new IndexDependencyBuildItem("org.jetbrains.kotlin", "kotlin-stdlib"));
     }
 
     @BuildStep
