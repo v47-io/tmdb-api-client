@@ -1,0 +1,212 @@
+package io.v47.tmdb.http.impl;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+import io.v47.tmdb.http.HttpClient;
+import io.v47.tmdb.http.HttpRequest;
+import io.v47.tmdb.http.HttpResponse;
+import io.v47.tmdb.http.TypeInfo;
+import io.v47.tmdb.http.api.ErrorResponse;
+import io.v47.tmdb.http.api.ErrorResponseKt;
+import io.v47.tmdb.http.api.RawErrorResponse;
+import io.v47.tmdb.http.utils.ExceptionUtil;
+import io.v47.tmdb.http.utils.MultiMapUtil;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.RequestOptions;
+import io.vertx.mutiny.core.buffer.Buffer;
+import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.mutiny.ext.web.codec.BodyCodec;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.reactivestreams.Publisher;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class HttpClientImpl implements HttpClient {
+    private static final Pattern uriVariablePattern = Pattern.compile("\\{(\\w+)}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern imageErrorPattern = Pattern.compile("<h\\d>(.+?)</h\\d>", Pattern.CASE_INSENSITIVE);
+
+    private final String baseUrl;
+    private final WebClient client;
+    private final ObjectMapper objectMapper;
+
+    public HttpClientImpl(String baseUrl, WebClient client, ObjectMapper objectMapper) {
+        this.baseUrl = baseUrl;
+        this.client = client;
+        this.objectMapper = objectMapper;
+    }
+
+    @NotNull
+    @Override
+    public Publisher<HttpResponse<?>> execute(@NotNull HttpRequest request, @NotNull TypeInfo responseType) {
+        Boolean jsonBody = isNotByteArray(responseType);
+
+        io.vertx.mutiny.ext.web.client.HttpRequest<Buffer> vxRequest = createHttpRequest(request, jsonBody);
+        vxRequest.as(BodyCodec.buffer());
+
+        Buffer body = null;
+        if (request.getBody() != null) {
+            if (request.getBody() instanceof byte[])
+                body = Buffer.buffer((byte[]) request.getBody());
+            else {
+                try {
+                    body = Buffer.buffer(this.objectMapper.writeValueAsBytes(request.getBody()));
+                } catch (JsonProcessingException e) {
+                    ExceptionUtil.sneakyThrow(e);
+                }
+            }
+        }
+
+        Uni<io.vertx.mutiny.ext.web.client.HttpResponse<Buffer>> vxResponse = body != null ? vxRequest.sendBuffer(body) : vxRequest.send();
+
+        return Multi.createFrom().uni(vxResponse).map(bufferHttpResponse -> {
+            if (bufferHttpResponse.statusCode() == 200)
+                return mapHttpResponse(bufferHttpResponse, jsonBody ? responseType : null);
+            else
+                return new HttpResponseImpl<>(bufferHttpResponse.statusCode(),
+                                              MultiMapUtil.convertToMap(bufferHttpResponse.headers()),
+                                              createErrorResponse(bufferHttpResponse));
+        });
+    }
+
+    private Boolean isNotByteArray(TypeInfo typeInfo) {
+        if (typeInfo instanceof TypeInfo.Simple) {
+            return ((TypeInfo.Simple) typeInfo).getType() != byte[].class;
+        } else {
+            return true;
+        }
+    }
+
+    private io.vertx.mutiny.ext.web.client.HttpRequest<Buffer> createHttpRequest(HttpRequest request, Boolean json) {
+        HttpMethod httpMethod = extractHttpMethod(request);
+
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.setMethod(httpMethod);
+        requestOptions.setAbsoluteURI(createUri(request));
+        requestOptions.addHeader("Accept", json ? "application/json" : "*/*");
+        requestOptions.addHeader("Content-Type",
+                                 request.getBody() != null && request.getBody() instanceof byte[] ? "application/octet-stream" : "application/json");
+
+        return this.client.request(httpMethod, requestOptions);
+    }
+
+    private static HttpMethod extractHttpMethod(HttpRequest request) {
+        HttpMethod method = null;
+        switch (request.getMethod()) {
+            case Get:
+                method = HttpMethod.GET;
+                break;
+            case Post:
+                method = HttpMethod.POST;
+                break;
+            case Put:
+                method = HttpMethod.PUT;
+                break;
+            case Delete:
+                method = HttpMethod.DELETE;
+                break;
+        }
+
+        return method;
+    }
+
+    private URL createUri(HttpRequest request) {
+        StringBuilder uriSB = new StringBuilder(this.baseUrl);
+
+        if (request.getUrl().startsWith("/"))
+            uriSB.append('/');
+
+        uriSB.append(uriVariablePattern.matcher(request.getUrl()).replaceAll(mr -> {
+            String name = mr.group(1);
+            Object value = request.getUriVariables().get(name);
+            if (value == null)
+                throw new IllegalArgumentException("No value specified for URI variable " + name);
+
+            return value.toString();
+        }));
+
+        if (!request.getQuery().isEmpty()) {
+            uriSB.append('?');
+
+            boolean first = true;
+            for (Map.Entry<String, List<Object>> entry : request.getQuery().entrySet()) {
+                String name = entry.getKey();
+                List<Object> values = entry.getValue();
+
+                if (first)
+                    first = false;
+                else
+                    uriSB.append('&');
+
+                uriSB.append(URLEncoder.encode(name, StandardCharsets.UTF_8));
+                uriSB.append('=');
+
+                boolean valueFirst = true;
+                for (Object value : values) {
+                    if (valueFirst)
+                        valueFirst = false;
+                    else
+                        uriSB.append(',');
+
+                    uriSB.append(URLEncoder.encode(value.toString(), StandardCharsets.UTF_8));
+                }
+            }
+        }
+
+        URL result = null;
+        try {
+            result = new URL(uriSB.toString());
+        } catch (MalformedURLException e) {
+            ExceptionUtil.sneakyThrow(e);
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private HttpResponseImpl<?> mapHttpResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse, @Nullable TypeInfo typeInfo) {
+        try {
+            return new HttpResponseImpl<>(vxResponse.statusCode(),
+                                          MultiMapUtil.convertToMap(vxResponse.headers()),
+                                          typeInfo != null ? this.objectMapper.readValue(vxResponse.body().getBytes(),
+                                                                                         (Class<?>) typeInfo.getFullType()) : vxResponse.body()
+                                                                                                                                        .getBytes());
+        } catch (IOException e) {
+            ExceptionUtil.sneakyThrow(e);
+        }
+
+        return null; // Unreachable
+    }
+
+    private ErrorResponse createErrorResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse) {
+        try {
+            return ErrorResponseKt.toErrorResponse(this.objectMapper.readValue(vxResponse.body().getBytes(),
+                                                                               RawErrorResponse.class));
+        } catch (IOException e) {
+            String str = vxResponse.bodyAsString();
+            Matcher imageErrorMatcher = imageErrorPattern.matcher(str);
+
+            String msg = str;
+            if (imageErrorMatcher.find()) {
+                msg = imageErrorMatcher.group(1);
+            }
+
+            return new ErrorResponse(msg, vxResponse.statusCode());
+        }
+    }
+
+    @Override
+    public void close() {
+        this.client.close();
+    }
+}

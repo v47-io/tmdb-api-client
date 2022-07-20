@@ -1,19 +1,18 @@
-package io.v47.tmdb.api.client.quarkus.ext.test;
+package io.v47.tmdb.http.quarkus;
 
+import io.quarkus.test.QuarkusUnitTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.quarkus.test.QuarkusUnitTest;
-
 public class QuarkusExtTest {
 
     // Start unit test with your extension loaded
     @RegisterExtension
-    static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
-        .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
+    static final QuarkusUnitTest unitTest = new QuarkusUnitTest().withConfigurationResource("application.properties")
+                                                                 .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
     @Test
     public void writeYourOwnUnitTest() {
