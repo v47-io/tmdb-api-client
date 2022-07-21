@@ -4,11 +4,12 @@
     <parent>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>quarkus-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>quarkus</artifactId>
     <name>TMDb API Client :: quarkus</name>
     <description>Runtime module of the TMDb API Client Quarkus extension</description>
+    <url>https://github.com/v47-io/tmdb-api-client-quarkus</url>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
