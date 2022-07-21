@@ -213,8 +213,8 @@ subprojects {
                     }
 
                     scm {
-                        connection = 'scm:git:git://github.com/v47-io/tmdb-api-client.git'
-                        developerConnection = 'scm:git:git://github.com/v47-io/tmdb-api-client.git'
+                        connection = 'scm:git:https://github.com/v47-io/tmdb-api-client.git'
+                        developerConnection = 'scm:git:ssh://git@github.com/v47-io/tmdb-api-client.git'
                         url = 'https://github.com/v47-io/tmdb-api-client'
                     }
                 }
