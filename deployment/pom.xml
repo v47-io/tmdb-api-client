@@ -9,7 +9,6 @@
     <artifactId>quarkus-deployment</artifactId>
     <name>TMDb API Client :: quarkus-deployment</name>
     <description>Deployment module of the TMDb API Client Quarkus extension</description>
-    <url>https://github.com/v47-io/tmdb-api-client-quarkus</url>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
