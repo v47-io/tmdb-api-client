@@ -78,9 +78,10 @@ class QuarkusTmdbProcessor {
     }
 
     @BuildStep
-    public void registerTmdbModelClasses(CombinedIndexBuildItem combinedIndex,
-                                         BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass,
-                                         BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+    public void registerTmdbTypes(CombinedIndexBuildItem combinedIndex,
+                                  BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass,
+                                  BuildProducer<ReflectiveClassBuildItem> reflectiveClass,
+                                  BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         Type tmdbType = Type.create(TMDB_TYPE, Type.Kind.CLASS);
         reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(tmdbType)
                                                                                    .serialization(true)
@@ -92,6 +93,14 @@ class QuarkusTmdbProcessor {
                                                                                        .serialization(true)
                                                                                        .build());
         });
+
+        combinedIndex.getIndex()
+                     .getKnownClasses()
+                     .stream()
+                     .filter(cI -> cI.name().packagePrefix().equals("io.v47.tmdb.jackson.mixins"))
+                     .forEach(cI -> reflectiveClass.produce(ReflectiveClassBuildItem.builder(cI.name().toString())
+                                                                                    .methods(true)
+                                                                                    .build()));
 
         additionalBeans.produce(new AdditionalBeanBuildItem(QuarkusHttpClientConfiguration.class));
     }
