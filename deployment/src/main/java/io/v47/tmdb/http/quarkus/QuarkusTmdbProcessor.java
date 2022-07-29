@@ -38,6 +38,7 @@ import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveHierarchyBuildItem;
 import io.quarkus.jackson.spi.ClassPathJacksonModuleBuildItem;
 import io.v47.tmdb.http.QuarkusHttpClientConfiguration;
+import io.v47.tmdb.http.impl.ConfigApiKeyProvider;
 import io.v47.tmdb.jackson.TmdbApiModule;
 import io.v47.tmdb.jackson.TmdbCoreModule;
 import io.v47.tmdb.model.TmdbType;
@@ -101,7 +102,11 @@ class QuarkusTmdbProcessor {
                      .forEach(cI -> reflectiveClass.produce(ReflectiveClassBuildItem.builder(cI.name().toString())
                                                                                     .methods(true)
                                                                                     .build()));
+    }
 
+    @BuildStep
+    public void registerBeans(BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+        additionalBeans.produce(new AdditionalBeanBuildItem(ConfigApiKeyProvider.class));
         additionalBeans.produce(new AdditionalBeanBuildItem(QuarkusHttpClientConfiguration.class));
     }
 
