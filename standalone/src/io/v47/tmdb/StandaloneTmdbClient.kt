@@ -31,6 +31,7 @@
  */
 package io.v47.tmdb
 
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.Java11HttpClientFactory
 
 /**
@@ -38,7 +39,7 @@ import io.v47.tmdb.http.Java11HttpClientFactory
  */
 object StandaloneTmdbClient {
     /**
-     * Creates a new [TmdbClient] that authenticates all request using the provided API key.
+     * Creates a new [TmdbClient] that authenticates all requests using the provided API key.
      *
      * @param apiKey TMDb API key
      */
@@ -46,5 +47,17 @@ object StandaloneTmdbClient {
     @JvmName("WithApiKey")
     operator fun invoke(apiKey: String): TmdbClient {
         return TmdbClient(Java11HttpClientFactory(), apiKey)
+    }
+
+    /**
+     * Creates a new [TmdbClient] that authenticates all requests using the API key provided by the
+     * specified [TmdbApiKeyProvider].
+     *
+     * @param apiKeyProvider providing an API key
+     */
+    @JvmStatic
+    @JvmName("WithApiKeyProvider")
+    operator fun invoke(apiKeyProvider: TmdbApiKeyProvider): TmdbClient {
+        return TmdbClient(Java11HttpClientFactory(), apiKeyProvider)
     }
 }

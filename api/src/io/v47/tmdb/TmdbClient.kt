@@ -60,19 +60,45 @@ import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Configuration
 import io.v47.tmdb.utils.OpenTmdbClient
 
+/**
+ * The main entry point for the TMDb API Client. Here all supported resources of the TMDb API can be
+ * accessed.
+ */
 @Suppress("ConstructorParameterNaming")
 @OpenTmdbClient
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,
     httpExecutor: HttpExecutor
 ) {
+    /**
+     * Creates a [TmdbClient] using the specified [HttpClientFactory] and authenticating all
+     * requests using the specified API-Key.
+     *
+     * @param httpClientFactory
+     * @param apiKey
+     */
     constructor (httpClientFactory: HttpClientFactory, apiKey: String) :
             this(httpClientFactory, TmdbApiKeyProvider { apiKey })
 
+    /**
+     * Creates a [TmdbClient] using the specified [HttpClientFactory] and authenticating all
+     * requests using an API-Key provided by the specified [TmdbApiKeyProvider].
+     *
+     * The returned API-Key will not be cached, this is left to the actual provider implementation
+     * to enable scenarios where the API-Key may change dynamically.
+     *
+     * @param httpClientFactory
+     * @param apiKeyProvider
+     */
     constructor (httpClientFactory: HttpClientFactory, apiKeyProvider: TmdbApiKeyProvider) :
             this(httpClientFactory, HttpExecutor(httpClientFactory, apiKeyProvider))
 
     private var _cachedSystemConfiguration: Configuration? = null
+
+    /**
+     * Provides a variant of [ConfigurationApi.system] which is cached as runtime to reduce network
+     * requests for a resource that won't often change.
+     */
     val cachedSystemConfiguration: Configuration
         get() {
             if (_cachedSystemConfiguration == null)

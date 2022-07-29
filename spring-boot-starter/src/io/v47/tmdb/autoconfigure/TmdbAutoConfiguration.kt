@@ -32,14 +32,18 @@
 package io.v47.tmdb.autoconfigure
 
 import io.v47.tmdb.TmdbClient
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.ContextWebClientFactory
 import io.v47.tmdb.http.HttpClientFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Configuration
+
+private const val PROPERTY_EXPR = "\${tmdb-client.api-key:#{systemEnvironment['TMDB_API_KEY']}}"
 
 /**
  * Autoconfigures a [TmdbClient] bean if it doesn't already exist.
@@ -53,11 +57,19 @@ class TmdbAutoConfiguration {
         ContextWebClientFactory(applicationContext)
 
     @Bean
+    @ConditionalOnMissingBean(TmdbApiKeyProvider::class)
+    @ConditionalOnExpression("'$PROPERTY_EXPR'!=''")
+    fun apiKeyProvider(
+        @Value(PROPERTY_EXPR)
+        apiKey: String
+    ): TmdbApiKeyProvider =
+        TmdbApiKeyProvider { apiKey }
+
+    @Bean
     @ConditionalOnMissingBean(TmdbClient::class)
     fun tmdbClient(
         httpClientFactory: HttpClientFactory,
-        @Value("\${tmdb-client.api-key:#{systemEnvironment['TMDB_API_KEY']}}")
-        apiKey: String
+        apiKeyProvider: TmdbApiKeyProvider
     ) =
-        TmdbClient(httpClientFactory, apiKey)
+        TmdbClient(httpClientFactory, apiKeyProvider)
 }

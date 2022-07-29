@@ -31,6 +31,7 @@
  */
 package io.v47.tmdb.autoconfigure
 
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import org.springframework.context.annotation.Condition
 import org.springframework.context.annotation.ConditionContext
 import org.springframework.core.type.AnnotatedTypeMetadata
@@ -39,7 +40,10 @@ internal class TmdbAutoConfigurationCondition : Condition {
     override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean {
         val apiKeyProp = context.environment.getProperty("tmdb-client.api-key")
         val envVar = context.environment.getProperty("TMDB_API_KEY")
+        val apiKeyProvider = runCatching {
+            context.beanFactory?.getBean(TmdbApiKeyProvider::class.java)
+        }.getOrNull()
 
-        return !apiKeyProp.isNullOrBlank() || !envVar.isNullOrBlank()
+        return !apiKeyProp.isNullOrBlank() || !envVar.isNullOrBlank() || apiKeyProvider != null
     }
 }
