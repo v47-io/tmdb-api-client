@@ -100,7 +100,7 @@ data class Title(
 ) : TmdbType()
 
 enum class MediaType {
-    Movie, Tv, Person
+    Movie, Tv, TvEpisode, TvSeason, Person
 }
 
 interface IPerson : TmdbIntId {
@@ -111,6 +111,7 @@ interface IPerson : TmdbIntId {
     val profilePath: String?
     val knownForDepartment: String?
     val popularity: Double?
+    val originalName: String?
 }
 
 enum class Gender {
@@ -139,7 +140,8 @@ data class PersonListResult(
     override val knownForDepartment: String?,
     val creditId: String?,
     override val name: String?,
-    override val popularity: Double?
+    override val popularity: Double?,
+    override val originalName: String?
 ) : TmdbType(), IPerson, MovieTvPersonListResult
 
 data class Genre(
@@ -177,7 +179,7 @@ data class CreditListResult(
     override val id: Int?,
     override val job: String?,
     override val name: String?,
-    val originalName: String?,
+    override val originalName: String?,
     val order: Int?,
     override val profilePath: String?
 ) : TmdbType(), ICastMember, ICrewMember

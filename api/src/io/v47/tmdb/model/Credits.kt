@@ -52,6 +52,7 @@ interface CreditMedia : TmdbIntId, Serializable {
     val character: String?
     val genreIds: List<Int>
     override val id: Int?
+    val mediaType: MediaType?
     val originalLanguage: LanguageCode?
     val overview: String?
     val popularity: Double?
@@ -66,6 +67,7 @@ data class CreditMediaMovie(
     override val character: String?,
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
+    override val mediaType: MediaType?,
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -86,6 +88,7 @@ data class CreditMediaTv(
     val firstAirDate: LocalDate?,
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
+    override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
     override val originalLanguage: LanguageCode?,
@@ -105,6 +108,7 @@ data class CreditMediaTvEpisode(
     val name: String?,
     val overview: String?,
     val productionCode: String?,
+    val runtime: Int?,
     val seasonNumber: Int?,
     val showId: Int?,
     val stillPath: String?,
@@ -130,6 +134,8 @@ data class CreditPerson(
     override val id: Int?,
     val knownFor: List<CreditPersonKnownFor> = emptyList(),
     val knownForDepartment: String?,
+    val mediaType: MediaType?,
+    val originalName: String?,
     val profilePath: String?,
     val popularity: Double?
 ) : TmdbType(), TmdbIntId

@@ -40,6 +40,7 @@ data class TvSeasonDetails(
     val name: String?,
     val overview: String?,
     override val id: Int?,
+    val mediaType: MediaType?,
     val posterPath: String?,
     val seasonNumber: Int?,
     val showId: Int?,

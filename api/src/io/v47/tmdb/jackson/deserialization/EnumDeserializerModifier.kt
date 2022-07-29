@@ -64,7 +64,15 @@ internal class EnumDeserializerModifier : BeanDeserializerModifier() {
             if (isString) {
                 val lc = strVal.lowercase()
                 val found = enumConstants.find { it.name == lc }
-                if (found != null) return found
+                if (found != null)
+                    return found
+
+                if ('_' in lc) {
+                    val pc = convertToPascalCase(lc)
+                    val foundPc = enumConstants.find { it.name == pc }
+                    if (foundPc != null)
+                        return foundPc
+                }
 
                 val uc = strVal.uppercase()
                 return enumConstants.find { it.name.uppercase() == uc } ?: when (rawClass) {
@@ -75,6 +83,9 @@ internal class EnumDeserializerModifier : BeanDeserializerModifier() {
             } else return enumConstants.find { it.ordinal == intVal }
                 ?: throw invalidFormatException(p, rawClass, strVal)
         }
+
+        private fun convertToPascalCase(value: String) =
+            value.split('_').joinToString("") { it[0].uppercase() + it.substring(1) }
 
         private fun invalidFormatException(p: JsonParser, rawClass: Class<*>, value: Any) =
             InvalidFormatException(

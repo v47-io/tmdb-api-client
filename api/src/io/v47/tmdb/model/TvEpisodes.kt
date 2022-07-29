@@ -42,6 +42,7 @@ data class TvEpisodeDetails(
     val name: String?,
     val overview: String?,
     override val id: Int?,
+    val mediaType: MediaType?,
     val productionCode: String?,
     val runtime: Int?,
     val seasonNumber: String?,
