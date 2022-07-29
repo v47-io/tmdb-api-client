@@ -4,6 +4,7 @@ $dokka.linkExtension:html
 module:api
 io.v47.tmdb
 io.v47.tmdb.api
+io.v47.tmdb.api.key
 io.v47.tmdb.jackson
 io.v47.tmdb.model
 module:core
