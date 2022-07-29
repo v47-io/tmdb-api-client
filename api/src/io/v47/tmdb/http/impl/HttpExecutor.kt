@@ -32,6 +32,7 @@
 package io.v47.tmdb.http.impl
 
 import io.reactivex.rxjava3.core.Flowable
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
@@ -44,7 +45,7 @@ private const val BASE_URL = "https://api.themoviedb.org"
 @Suppress("MagicNumber")
 internal class HttpExecutor(
     private val httpClientFactory: HttpClientFactory,
-    private val apiKey: String
+    private val apiKeyProvider: TmdbApiKeyProvider
 ) {
     private val httpClient: HttpClient by lazy {
         httpClientFactory.createHttpClient(BASE_URL)
@@ -77,7 +78,7 @@ internal class HttpExecutor(
 
     private fun TmdbRequest<*>.toHttpRequest(): HttpRequest {
         val url = "/${apiVersion.value}/${path.trim(' ', '/')}"
-        val query = queryArgs + ("api_key" to listOf(apiKey))
+        val query = queryArgs + ("api_key" to listOf(apiKeyProvider.getApiKey()))
 
         return DefaultHttpRequest(
             method,

@@ -33,6 +33,7 @@ package io.v47.tmdb
 
 import io.reactivex.rxjava3.core.Single
 import io.v47.tmdb.api.*
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Configuration
@@ -45,7 +46,10 @@ class TmdbClient private constructor(
     httpExecutor: HttpExecutor
 ) {
     constructor (httpClientFactory: HttpClientFactory, apiKey: String) :
-            this(httpClientFactory, HttpExecutor(httpClientFactory, apiKey))
+            this(httpClientFactory, TmdbApiKeyProvider { apiKey })
+
+    constructor (httpClientFactory: HttpClientFactory, apiKeyProvider: TmdbApiKeyProvider) :
+            this(httpClientFactory, HttpExecutor(httpClientFactory, apiKeyProvider))
 
     private var _cachedSystemConfiguration: Configuration? = null
     val cachedSystemConfiguration: Configuration
