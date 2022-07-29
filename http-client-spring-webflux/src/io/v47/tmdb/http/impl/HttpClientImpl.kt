@@ -32,7 +32,11 @@
 package io.v47.tmdb.http.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.v47.tmdb.http.*
+import io.v47.tmdb.http.HttpClient
+import io.v47.tmdb.http.HttpMethod
+import io.v47.tmdb.http.HttpRequest
+import io.v47.tmdb.http.HttpResponse
+import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse

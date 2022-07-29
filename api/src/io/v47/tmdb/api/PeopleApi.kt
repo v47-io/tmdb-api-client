@@ -37,7 +37,14 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.*
+import io.v47.tmdb.model.PeoplePopular
+import io.v47.tmdb.model.PersonChanges
+import io.v47.tmdb.model.PersonCredits
+import io.v47.tmdb.model.PersonDetails
+import io.v47.tmdb.model.PersonExternalIds
+import io.v47.tmdb.model.PersonImages
+import io.v47.tmdb.model.PersonTaggedImages
+import io.v47.tmdb.model.PersonTranslations
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 

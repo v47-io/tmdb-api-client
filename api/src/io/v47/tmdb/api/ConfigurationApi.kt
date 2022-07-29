@@ -33,7 +33,11 @@ package io.v47.tmdb.api
 
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.*
+import io.v47.tmdb.model.Configuration
+import io.v47.tmdb.model.Country
+import io.v47.tmdb.model.Jobs
+import io.v47.tmdb.model.Language
+import io.v47.tmdb.model.Timezones
 
 class ConfigurationApi internal constructor(private val http: HttpExecutor) {
     /**

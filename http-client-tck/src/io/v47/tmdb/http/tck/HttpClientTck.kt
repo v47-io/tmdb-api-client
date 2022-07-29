@@ -32,7 +32,13 @@
 package io.v47.tmdb.http.tck
 
 import io.v47.tmdb.http.HttpClientFactory
-import io.v47.tmdb.http.tck.tests.*
+import io.v47.tmdb.http.tck.tests.AuthErrorResponseTest
+import io.v47.tmdb.http.tck.tests.ImageNotFoundResponseTest
+import io.v47.tmdb.http.tck.tests.InvalidImageSizeResponseTest
+import io.v47.tmdb.http.tck.tests.NotFoundErrorResponseTest
+import io.v47.tmdb.http.tck.tests.ValidComplexResponseTest
+import io.v47.tmdb.http.tck.tests.ValidImageResponseTest
+import io.v47.tmdb.http.tck.tests.ValidSimpleResponseTest
 import java.io.Serializable
 
 /**

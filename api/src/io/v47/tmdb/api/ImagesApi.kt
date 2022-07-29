@@ -39,7 +39,11 @@ import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
 import io.v47.tmdb.http.impl.DefaultHttpRequest
-import io.v47.tmdb.model.*
+import io.v47.tmdb.model.Configuration
+import io.v47.tmdb.model.Height
+import io.v47.tmdb.model.ImageSize
+import io.v47.tmdb.model.Original
+import io.v47.tmdb.model.Width
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 

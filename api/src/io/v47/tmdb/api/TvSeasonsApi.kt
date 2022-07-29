@@ -36,7 +36,12 @@ import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.*
+import io.v47.tmdb.model.TvSeasonChanges
+import io.v47.tmdb.model.TvSeasonCredits
+import io.v47.tmdb.model.TvSeasonDetails
+import io.v47.tmdb.model.TvSeasonExternalIds
+import io.v47.tmdb.model.TvSeasonImages
+import io.v47.tmdb.model.TvSeasonVideos
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 

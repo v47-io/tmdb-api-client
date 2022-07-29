@@ -36,7 +36,16 @@ import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.*
+import io.v47.tmdb.model.CollectionInfo
+import io.v47.tmdb.model.CompanyInfo
+import io.v47.tmdb.model.Keyword
+import io.v47.tmdb.model.MovieListResult
+import io.v47.tmdb.model.MovieTvPersonListResult
+import io.v47.tmdb.model.Paginated
+import io.v47.tmdb.model.PaginatedListResults
+import io.v47.tmdb.model.PaginatedMovieTvPersonListResults
+import io.v47.tmdb.model.PersonListResult
+import io.v47.tmdb.model.TvListResult
 import org.reactivestreams.Publisher
 
 class SearchApi internal constructor(private val http: HttpExecutor) {
