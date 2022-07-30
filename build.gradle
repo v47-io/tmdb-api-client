@@ -199,8 +199,8 @@ subprojects {
 
                     licenses {
                         license {
-                            name = 'BSD 3-Clause License'
-                            url = 'https://opensource.org/licenses/BSD-3-Clause'
+                            name = 'BSD 3-Clause Clear License'
+                            url = 'https://spdx.org/licenses/BSD-3-Clause-Clear.html'
                         }
                     }
 
