@@ -3,16 +3,16 @@ ext {
     slf4jVersion = '1.7.36'
 
     // Implementation Libraries
-    jacksonVersion = '2.13.3'
-    micronautVersion = '3.5.0'
+    jacksonVersion = '2.13.4'
+    micronautVersion = '3.6.2'
     nvI18nVersion = '1.29'
     reactiveStreamsVersion = '1.0.4'
-    rxJavaVersion = '3.1.4'
-    springBootVersion = '2.7.0'
-    springVersion = '5.3.20'
+    rxJavaVersion = '3.1.5'
+    springBootVersion = '2.7.3'
+    springVersion = '5.3.22'
 
     // Testing Libraries
-    junitJupiterVersion = '5.8.2'
+    junitJupiterVersion = '5.9.0'
     logbackVersion = '1.2.11'
 
     libraries = [
