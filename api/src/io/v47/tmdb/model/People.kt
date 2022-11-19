@@ -132,7 +132,10 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
             override val id: String?,
             val action: String?,
             val time: String?,
-            val originalValue: Map<String, Any> = emptyMap()
+            val language: LanguageCode?,
+            val country: CountryCode?,
+            val value: Any?,
+            val originalValue: Any?
         ) : TmdbType(), TmdbStringId
     }
 }

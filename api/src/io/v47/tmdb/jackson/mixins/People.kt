@@ -71,7 +71,13 @@ internal interface PersonTranslationsPersonTranslationMixin {
 }
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface PersonChangesPersonChangePersonChangeItemMixin
+internal interface PersonChangesPersonChangePersonChangeItemMixin {
+    @get:JsonProperty("iso_639_1")
+    val language: LanguageCode?
+
+    @get:JsonProperty("iso_3166_1")
+    val country: CountryCode?
+}
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface PeoplePopularMixin
