@@ -208,18 +208,25 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @NotNull
-    private HttpResponseImpl<?> mapHttpResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse, @Nullable TypeInfo typeInfo) {
+    private HttpResponseImpl<?> mapHttpResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse,
+                                                @Nullable TypeInfo typeInfo) {
         try {
             return new HttpResponseImpl<>(vxResponse.statusCode(),
                                           MultiMapUtil.convertToMap(vxResponse.headers()),
-                                          typeInfo != null ? this.objectMapper.readValue(vxResponse.body().getBytes(),
-                                                                                         (Class<?>) typeInfo.getFullType()) : vxResponse.body()
-                                                                                                                                        .getBytes());
+                                          readResponseBody(vxResponse, typeInfo));
         } catch (IOException e) {
             ExceptionUtil.sneakyThrow(e);
         }
 
         return null; // Unreachable
+    }
+
+    private Object readResponseBody(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse,
+                                    @Nullable TypeInfo typeInfo) throws IOException {
+        if (typeInfo != null)
+            return this.objectMapper.readValue(vxResponse.body().getBytes(), new TmdbTypeReference<>(typeInfo));
+        else
+            return vxResponse.body().getBytes();
     }
 
     private ErrorResponse createErrorResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse) {
