@@ -37,5 +37,5 @@ package io.v47.tmdb.utils
 import io.reactivex.rxjava3.core.Flowable
 import org.reactivestreams.Publisher
 
-fun <T> Publisher<T>.blockingFirst(): T =
+fun <T : Any> Publisher<T>.blockingFirst(): T =
     Flowable.fromPublisher(this).blockingFirst()
