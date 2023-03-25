@@ -41,14 +41,15 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
-import io.reactivex.rxjava3.core.Flowable
+import io.smallrye.mutiny.Multi
 import io.v47.tmdb.http.*
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
 import io.v47.tmdb.http.utils.toArgument
-import org.reactivestreams.Publisher
+import mutiny.zero.flow.adapters.AdaptersToFlow
 import java.net.URLEncoder
+import java.util.concurrent.Flow
 import io.micronaut.http.HttpRequest as MnHttpRequest
 import io.micronaut.http.HttpResponse as MnHttpResponse
 import io.micronaut.http.client.HttpClient as MnHttpClient
@@ -63,32 +64,41 @@ internal class HttpClientImpl(
     override fun execute(
         request: HttpRequest,
         responseType: TypeInfo
-    ): Publisher<HttpResponse<out Any>> {
+    ): Flow.Publisher<HttpResponse<out Any>> {
         val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
         val argument = if (jsonBody) responseType.toArgument() else null
 
-        return Flowable.fromPublisher(
-            rawClient.exchange(
-                request.toMnHttpRequest(jsonBody),
-                byteBufferArgument,
-                byteBufferArgument
-            )
-        ).onErrorReturn { t ->
-            @Suppress("UNCHECKED_CAST")
-            if (t is HttpClientResponseException)
-                t.response as MnHttpResponse<ByteBuffer<*>>
-            else
-                throw IllegalArgumentException("Not a HttpClientResponseException", t)
-        }.map { resp ->
-            if (resp.code() == HttpStatus.OK.code)
-                resp.toHttpResponse(argument)
-            else
-                HttpResponseImpl(
-                    resp.code(),
-                    resp.headers.associate { (key, value) -> key to value },
-                    createErrorResponse(resp)
+        return Multi
+            .createFrom()
+            .publisher(
+                AdaptersToFlow.publisher(
+                    rawClient.exchange(
+                        request.toMnHttpRequest(jsonBody),
+                        byteBufferArgument,
+                        byteBufferArgument
+                    )
                 )
-        }
+            )
+            .onFailure()
+            .recoverWithMulti { t ->
+                @Suppress("UNCHECKED_CAST")
+                if (t is HttpClientResponseException)
+                    Multi.createFrom().item(t.response as MnHttpResponse<ByteBuffer<*>>)
+                else
+                    Multi
+                        .createFrom()
+                        .failure(IllegalArgumentException("Not a HttpClientResponseException", t))
+            }
+            .map { resp ->
+                if (resp.code() == HttpStatus.OK.code)
+                    resp.toHttpResponse(argument)
+                else
+                    HttpResponseImpl(
+                        resp.code(),
+                        resp.headers.associate { (key, value) -> key to value },
+                        createErrorResponse(resp)
+                    )
+            }
     }
 
     private fun createErrorResponse(mnResponse: MnHttpResponse<ByteBuffer<*>>): ErrorResponse =

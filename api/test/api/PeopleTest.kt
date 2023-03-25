@@ -34,9 +34,10 @@
  */
 package io.v47.tmdb.api
 
-import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.utils.blockingFirst
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class PeopleTest : AbstractTmdbTest() {
@@ -50,12 +51,11 @@ class PeopleTest : AbstractTmdbTest() {
 
     @Test
     fun testGetDetailsWithCombinedCredits() {
-        val details = Flowable.fromPublisher(
+        val details =
             person.details(
                 CHRIS_HEMSWORTH_ID,
                 append = PeopleRequest.values()
-            )
-        ).blockingFirst()
+            ).blockingFirst()
 
         assertEquals(CHRIS_HEMSWORTH_ID, details.id)
 
@@ -96,8 +96,7 @@ class PeopleTest : AbstractTmdbTest() {
     @Test
     fun testGetTaggedImages() {
         assertTrue(
-            Flowable
-                .fromPublisher(person.taggedImages(CHRIS_HEMSWORTH_ID))
+            person.taggedImages(CHRIS_HEMSWORTH_ID)
                 .blockingFirst()
                 .results
                 .isNotEmpty()
@@ -107,8 +106,7 @@ class PeopleTest : AbstractTmdbTest() {
     @Test
     fun testGetTranslations() {
         assertTrue(
-            Flowable
-                .fromPublisher(person.translations(CHRIS_HEMSWORTH_ID))
+            person.translations(CHRIS_HEMSWORTH_ID)
                 .blockingFirst()
                 .translations
                 .isNotEmpty()

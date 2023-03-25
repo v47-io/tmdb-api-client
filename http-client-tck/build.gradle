@@ -1,7 +1,7 @@
 dependencies {
     api project(':core')
 
-    implementation libraries.rxJava
+    implementation libraries.mutiny
 }
 
 publishing {

@@ -35,14 +35,14 @@
 package io.v47.tmdb.http.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.reactivex.rxjava3.core.Flowable
+import io.smallrye.mutiny.Multi
 import io.v47.tmdb.http.*
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
-import org.reactivestreams.Publisher
 import java.net.URI
 import java.net.URLEncoder
+import java.util.concurrent.Flow
 import java.net.http.HttpClient as JHttpClient
 import java.net.http.HttpRequest as JHttpRequest
 import java.net.http.HttpResponse as JHttpResponse
@@ -66,24 +66,27 @@ internal class HttpClientImpl(
     override fun execute(
         request: HttpRequest,
         responseType: TypeInfo
-    ): Publisher<HttpResponse<out Any>> {
+    ): Flow.Publisher<HttpResponse<out Any>> {
         val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
 
-        return Flowable.fromFuture(
-            rawClient.sendAsync(
-                request.toJHttpRequest(jsonBody),
-                JHttpResponse.BodyHandlers.ofByteArray()
-            )
-        ).map { resp ->
-            if (resp.statusCode() == OK)
-                resp.toHttpResponse(if (jsonBody) responseType else null)
-            else
-                HttpResponseImpl(
-                    resp.statusCode(),
-                    resp.headers().map(),
-                    createErrorResponse(resp)
+        return Multi
+            .createFrom()
+            .completionStage(
+                rawClient.sendAsync(
+                    request.toJHttpRequest(jsonBody),
+                    JHttpResponse.BodyHandlers.ofByteArray()
                 )
-        }
+            )
+            .map { resp ->
+                if (resp.statusCode() == OK)
+                    resp.toHttpResponse(if (jsonBody) responseType else null)
+                else
+                    HttpResponseImpl(
+                        resp.statusCode(),
+                        resp.headers().map(),
+                        createErrorResponse(resp)
+                    )
+            }
     }
 
     private fun createErrorResponse(jResponse: JHttpResponse<ByteArray>) =

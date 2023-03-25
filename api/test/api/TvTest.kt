@@ -36,7 +36,9 @@ package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.utils.blockingFirst
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class TvTest : AbstractTmdbTest() {

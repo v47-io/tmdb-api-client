@@ -35,6 +35,8 @@
 package io.v47.tmdb.http.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.smallrye.mutiny.Multi
+import io.smallrye.mutiny.converters.multi.FromMono
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpRequest
@@ -43,7 +45,6 @@ import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
-import org.reactivestreams.Publisher
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -52,6 +53,7 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
+import java.util.concurrent.Flow
 
 internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
     private val om = ObjectMapper().apply {
@@ -64,42 +66,47 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
     override fun execute(
         request: HttpRequest,
         responseType: TypeInfo
-    ): Publisher<HttpResponse<out Any>> {
+    ): Flow.Publisher<HttpResponse<out Any>> {
         val jsonBody = (responseType as? TypeInfo.Simple)?.type != ByteArray::class.java
 
         val requestSpec = request.toRequestSpec(jsonBody)
 
-        return requestSpec
-            .exchangeToMono { resp ->
-                if (resp.statusCode() == HttpStatus.OK) {
-                    val typeReference =
-                        ParameterizedTypeReference.forType<Any>(responseType.fullType)
+        return Multi
+            .createFrom()
+            .converter(
+                FromMono.INSTANCE as FromMono<HttpResponse<out Any>>,
+                requestSpec
+                    .exchangeToMono { resp ->
+                        if (resp.statusCode() == HttpStatus.OK) {
+                            val typeReference =
+                                ParameterizedTypeReference.forType<Any>(responseType.fullType)
 
-                    resp.bodyToMono(typeReference).map { resp to it }
-                } else {
-                    resp.bodyToMono(ByteArray::class.java)
-                        .map { resp to readErrorBody(it, resp.statusCode().value()) }
-                }
-            }
-            .map { (resp, body) ->
-                HttpResponseImpl(
-                    resp.statusCode().value(),
-                    resp.headers().asHttpHeaders().toMap(),
-                    body
-                )
-            }
-            .onErrorResume { t ->
-                if (t is HttpClientErrorException)
-                    Mono.just(
+                            resp.bodyToMono(typeReference).map { resp to it }
+                        } else {
+                            resp.bodyToMono(ByteArray::class.java)
+                                .map { resp to readErrorBody(it, resp.statusCode().value()) }
+                        }
+                    }
+                    .map { (resp, body) ->
                         HttpResponseImpl(
-                            t.statusCode.value(),
-                            t.responseHeaders?.toMap() ?: emptyMap(),
-                            createErrorResponse(t)
+                            resp.statusCode().value(),
+                            resp.headers().asHttpHeaders().toMap(),
+                            body
                         )
-                    )
-                else
-                    throw IllegalArgumentException("Not a HttpClientErrorException", t)
-            } as Publisher<HttpResponse<out Any>>
+                    }
+                    .onErrorResume { t ->
+                        if (t is HttpClientErrorException)
+                            Mono.just(
+                                HttpResponseImpl(
+                                    t.statusCode.value(),
+                                    t.responseHeaders?.toMap() ?: emptyMap(),
+                                    createErrorResponse(t)
+                                )
+                            )
+                        else
+                            throw IllegalArgumentException("Not a HttpClientErrorException", t)
+                    } as Mono<HttpResponse<out Any>>
+            )
     }
 
     @Suppress("ComplexMethod")

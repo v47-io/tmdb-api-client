@@ -34,13 +34,13 @@
  */
 package io.v47.tmdb.http.tck.tests
 
-import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
+import io.v47.tmdb.http.tck.utils.blockingFirst
 
 @Suppress("MagicNumber")
 internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {
@@ -56,12 +56,11 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
             )
         )
 
-        val result = Flowable.fromPublisher(
+        val result =
             httpClient.execute(
                 request,
                 TypeInfo.Simple(ByteArray::class.java)
-            )
-        ).blockingFirst()
+            ).blockingFirst()
 
         return if (result.status != 400)
             TckTestResult.Failure(400, result.status)

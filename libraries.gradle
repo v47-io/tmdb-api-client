@@ -5,9 +5,9 @@ ext {
     // Implementation Libraries
     jacksonVersion = '2.14.2'
     micronautVersion = '4.0.0-M1'
+    mutinyVersion = '2.1.0'
+    mutinyZeroVersion = '1.0.0'
     nvI18nVersion = '1.29'
-    reactiveStreamsVersion = '1.0.4'
-    rxJavaVersion = '3.1.6'
     springBootVersion = '3.0.5'
     springVersion = '6.0.7'
 
@@ -17,37 +17,38 @@ ext {
 
     libraries = [
             // Core Libraries
-            stdlib             : 'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
-            slf4j              : "org.slf4j:slf4j-api:$slf4jVersion",
+            stdlib                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
+            slf4j                 : "org.slf4j:slf4j-api:$slf4jVersion",
 
             // Implementation Libraries
-            jacksonAnnotations : "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
-            jacksonDatabind    : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
-            jacksonModuleKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
+            jacksonAnnotations    : "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
+            jacksonDatabind       : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            jacksonModuleKotlin   : "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
 
-            mnGraal            : "io.micronaut:micronaut-graal:$micronautVersion",
-            mnInject           : "io.micronaut:micronaut-inject-java:$micronautVersion",
-            mnHttpClient       : "io.micronaut:micronaut-http-client:$micronautVersion",
-            mnJacksonDatabind  : "io.micronaut:micronaut-jackson-databind:$micronautVersion",
-            mnHttpServerNetty  : "io.micronaut:micronaut-http-server-netty:$micronautVersion",
-            mnRuntime          : "io.micronaut:micronaut-runtime:$micronautVersion",
+            mnGraal               : "io.micronaut:micronaut-graal:$micronautVersion",
+            mnInject              : "io.micronaut:micronaut-inject-java:$micronautVersion",
+            mnHttpClient          : "io.micronaut:micronaut-http-client:$micronautVersion",
+            mnJacksonDatabind     : "io.micronaut:micronaut-jackson-databind:$micronautVersion",
+            mnHttpServerNetty     : "io.micronaut:micronaut-http-server-netty:$micronautVersion",
+            mnRuntime             : "io.micronaut:micronaut-runtime:$micronautVersion",
 
-            nvI18n             : "com.neovisionaries:nv-i18n:$nvI18nVersion",
+            mutiny                : "io.smallrye.reactive:mutiny:$mutinyVersion",
+            mutinyReactor         : "io.smallrye.reactive:mutiny-reactor:$mutinyVersion",
+            mutinyZeroFlowAdapters: "io.smallrye.reactive:mutiny-zero-flow-adapters:$mutinyZeroVersion",
 
-            reactiveStreams    : "org.reactivestreams:reactive-streams:$reactiveStreamsVersion",
-            rxJava             : "io.reactivex.rxjava3:rxjava:$rxJavaVersion",
+            nvI18n                : "com.neovisionaries:nv-i18n:$nvI18nVersion",
 
-            springBootStarter  : "org.springframework.boot:spring-boot-starter:$springBootVersion",
-            springContext      : "org.springframework:spring-context:$springVersion",
-            springWebflux      : "org.springframework:spring-webflux:$springVersion",
+            springBootStarter     : "org.springframework.boot:spring-boot-starter:$springBootVersion",
+            springContext         : "org.springframework:spring-context:$springVersion",
+            springWebflux         : "org.springframework:spring-webflux:$springVersion",
 
             // Testing Libraries
-            junitApi           : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
-            junitEngine        : "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
+            junitApi              : "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
+            junitEngine           : "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
 
-            logback            : "ch.qos.logback:logback-classic:$logbackVersion",
+            logback               : "ch.qos.logback:logback-classic:$logbackVersion",
 
-            sbsTest            : "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
-            sbsWebflux         : "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
+            sbsTest               : "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
+            sbsWebflux            : "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
     ]
 }

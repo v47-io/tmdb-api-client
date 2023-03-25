@@ -34,11 +34,11 @@
  */
 package io.v47.tmdb.http.tck.tests
 
-import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
+import io.v47.tmdb.http.tck.utils.blockingFirst
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 import java.io.Serializable
@@ -55,12 +55,11 @@ internal class ValidSimpleResponseTest : AbstractTckTest("https://api.themoviedb
             mapOf("api_key" to listOf(apiKey))
         )
 
-        val result = Flowable.fromPublisher(
+        val result =
             httpClient.execute(
                 request,
                 tmdbTypeReference<Company>().toTypeInfo()
-            )
-        ).map { it.body!! }.blockingFirst()
+            ).blockingFirst().body
 
         val checkCompany = Company(companyHeadquarters, companyName)
 

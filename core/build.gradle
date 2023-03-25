@@ -1,9 +1,6 @@
 dependencies {
     compileOnly libraries.jacksonDatabind
 
-    implementation libraries.reactiveStreams
-    implementation libraries.rxJava
-
     testImplementation project(':api')
     testImplementation project(':http-client-micronaut')
 

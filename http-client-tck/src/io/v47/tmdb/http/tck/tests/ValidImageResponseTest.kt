@@ -34,7 +34,7 @@
  */
 package io.v47.tmdb.http.tck.tests
 
-import io.reactivex.rxjava3.core.Flowable
+import io.smallrye.mutiny.Multi
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.HttpResponse
@@ -55,18 +55,24 @@ internal class ValidImageResponseTest : AbstractTckTest("https://image.tmdb.org/
         )
 
         lateinit var response: HttpResponse<*>
-        val contentLength = Flowable
-            .fromPublisher(
-                httpClient.execute(
-                    request,
-                    TypeInfo.Simple(ByteArray::class.java)
+
+        val contentLength =
+            Multi
+                .createFrom()
+                .publisher(
+                    httpClient.execute(
+                        request,
+                        TypeInfo.Simple(ByteArray::class.java)
+                    )
                 )
-            )
-            .reduce(0) { acc, resp ->
-                response = resp
-                acc + (resp.body as ByteArray).size
-            }
-            .blockingGet()
+                .onItem()
+                .invoke { resp ->
+                    response = resp
+                }
+                .subscribe()
+                .asIterable()
+                .map { it.body as ByteArray }
+                .sumOf { it.size }
 
         return when {
             response.status != 200 -> TckTestResult.Failure(200, response.status)

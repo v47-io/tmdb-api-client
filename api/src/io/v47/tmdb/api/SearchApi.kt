@@ -49,7 +49,7 @@ import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.PaginatedMovieTvPersonListResults
 import io.v47.tmdb.model.PersonListResult
 import io.v47.tmdb.model.TvListResult
-import org.reactivestreams.Publisher
+import java.util.concurrent.Flow
 
 class SearchApi internal constructor(private val http: HttpExecutor) {
     /**
@@ -127,7 +127,7 @@ class SearchApi internal constructor(private val http: HttpExecutor) {
         language: LocaleCode? = null,
         region: CountryCode? = null,
         includeAdult: Boolean? = null
-    ): Publisher<out Paginated<MovieTvPersonListResult>> =
+    ): Flow.Publisher<out Paginated<MovieTvPersonListResult>> =
         http.getWithPageAndLanguage<PaginatedMovieTvPersonListResults>(
             "/search/multi",
             page,

@@ -34,12 +34,12 @@
  */
 package io.v47.tmdb.http.tck.tests
 
-import io.reactivex.rxjava3.core.Flowable
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
+import io.v47.tmdb.http.tck.utils.blockingFirst
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 
@@ -54,12 +54,11 @@ internal class AuthErrorResponseTest : AbstractTckTest("https://api.themoviedb.o
             mapOf("companyId" to 2)
         )
 
-        val result = Flowable.fromPublisher(
+        val result =
             httpClient.execute(
                 request,
                 tmdbTypeReference<ValidSimpleResponseTest.Company>().toTypeInfo()
-            )
-        ).blockingFirst()
+            ).blockingFirst()
 
         return if (result.status != 401)
             TckTestResult.Failure(401, result.status)

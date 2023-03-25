@@ -21,8 +21,8 @@ dependencies {
     compileOnly libraries.jacksonDatabind
     runtimeOnly libraries.jacksonModuleKotlin
 
-    implementation libraries.reactiveStreams
-    implementation libraries.rxJava
+    implementation libraries.mutiny
+    implementation libraries.mutinyZeroFlowAdapters
 
     testImplementation project(':api')
     testImplementation project(':http-client-tck')

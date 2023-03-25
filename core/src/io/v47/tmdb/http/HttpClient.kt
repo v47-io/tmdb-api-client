@@ -34,8 +34,8 @@
  */
 package io.v47.tmdb.http
 
-import org.reactivestreams.Publisher
 import java.io.Closeable
+import java.util.concurrent.Flow
 
 interface HttpClientFactory {
     fun createHttpClient(baseUrl: String): HttpClient
@@ -45,7 +45,7 @@ interface HttpClient : Closeable {
     fun execute(
         request: HttpRequest,
         responseType: TypeInfo
-    ): Publisher<HttpResponse<out Any>>
+    ): Flow.Publisher<HttpResponse<out Any>>
 }
 
 interface HttpRequest {

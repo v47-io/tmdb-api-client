@@ -34,8 +34,7 @@
  */
 package io.v47.tmdb.api
 
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.smallrye.mutiny.Multi
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.TypeInfo
@@ -47,8 +46,8 @@ import io.v47.tmdb.model.Height
 import io.v47.tmdb.model.ImageSize
 import io.v47.tmdb.model.Original
 import io.v47.tmdb.model.Width
-import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import java.util.concurrent.Flow
 
 class ImagesApi internal constructor(
     private val httpClientFactory: HttpClientFactory,
@@ -68,7 +67,7 @@ class ImagesApi internal constructor(
     val available get() = imageDlClient != null
 
     @Suppress("ThrowsCount")
-    fun download(imagePath: String, size: ImageSize = Original): Publisher<ByteArray> {
+    fun download(imagePath: String, size: ImageSize = Original): Flow.Publisher<ByteArray> {
         if (!available)
             throw IllegalStateException(
                 "Cannot download image: The system " +
@@ -91,24 +90,36 @@ class ImagesApi internal constructor(
             )
         )
 
-        return Flowable
-            .fromPublisher(
+        return Multi
+            .createFrom()
+            .publisher(
                 imageDlClient!!.execute(
                     request,
                     byteArrayTypeInfo
                 )
             )
-            .subscribeOn(Schedulers.io())
-            .map { resp ->
+            .flatMap { resp ->
                 @Suppress("MagicNumber")
                 when {
-                    resp.status == 200 -> resp.body as ByteArray
-                    resp.body is ErrorResponse -> throw ErrorResponseException(
-                        resp.body as ErrorResponse,
-                        request
-                    )
+                    resp.status == 200 ->
+                        Multi
+                            .createFrom()
+                            .item(resp.body as ByteArray)
 
-                    else -> throw IllegalArgumentException("Invalid error response: $resp")
+                    resp.body is ErrorResponse ->
+                        Multi
+                            .createFrom()
+                            .failure(
+                                ErrorResponseException(
+                                    resp.body as ErrorResponse,
+                                    request
+                                )
+                            )
+
+                    else ->
+                        Multi
+                            .createFrom()
+                            .failure(IllegalArgumentException("Invalid error response: $resp"))
                 }
             }
     }

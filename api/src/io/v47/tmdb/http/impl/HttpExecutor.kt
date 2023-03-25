@@ -34,14 +34,14 @@
  */
 package io.v47.tmdb.http.impl
 
-import io.reactivex.rxjava3.core.Flowable
+import io.smallrye.mutiny.Multi
 import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpRequest
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
-import org.reactivestreams.Publisher
+import java.util.concurrent.Flow
 
 private const val BASE_URL = "https://api.themoviedb.org"
 
@@ -55,26 +55,39 @@ internal class HttpExecutor(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> execute(request: TmdbRequest<T>): Publisher<T> {
+    fun <T : Any> execute(request: TmdbRequest<T>): Flow.Publisher<T> {
         val httpRequest = request.toHttpRequest()
 
-        return Flowable
-            .fromPublisher(
+        return Multi
+            .createFrom()
+            .publisher(
                 httpClient.execute(
                     httpRequest,
                     request.responseType
                 )
             )
             .filter { it.body != null }
-            .map { resp ->
+            .flatMap { resp ->
                 when {
-                    resp.status == 200 -> resp.body as T
-                    resp.body is ErrorResponse -> throw ErrorResponseException(
-                        resp.body as ErrorResponse,
-                        httpRequest
-                    )
+                    resp.status == 200 ->
+                        Multi
+                            .createFrom()
+                            .item(resp.body as T)
 
-                    else -> throw IllegalArgumentException("Invalid error response: $resp")
+                    resp.body is ErrorResponse ->
+                        Multi
+                            .createFrom()
+                            .failure(
+                                ErrorResponseException(
+                                    resp.body as ErrorResponse,
+                                    httpRequest
+                                )
+                            )
+
+                    else ->
+                        Multi
+                            .createFrom()
+                            .failure(IllegalArgumentException("Invalid error response: $resp"))
                 }
             }
     }

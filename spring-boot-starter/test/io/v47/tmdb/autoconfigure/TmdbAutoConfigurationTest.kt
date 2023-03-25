@@ -34,7 +34,7 @@
  */
 package io.v47.tmdb.autoconfigure
 
-import io.reactivex.rxjava3.core.Flowable
+import io.smallrye.mutiny.Uni
 import io.v47.tmdb.TmdbClient
 import io.v47.tmdb.config.TmdbAutoConfigurationTestConfiguration
 import org.junit.jupiter.api.Test
@@ -44,6 +44,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.Duration
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -60,6 +61,9 @@ class TmdbAutoConfigurationTest {
 
     @Test
     fun `TMDB Client is available`() {
-        Flowable.fromPublisher(tmdbClient.configuration.system()).blockingFirst()
+        Uni
+            .createFrom()
+            .publisher(tmdbClient.configuration.system())
+            .await().atMost(Duration.ofSeconds(5))
     }
 }

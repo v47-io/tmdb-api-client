@@ -10,7 +10,7 @@ dependencies {
     compileOnly libraries.jacksonDatabind
     api libraries.nvI18n
 
-    implementation libraries.rxJava
+    implementation libraries.mutiny
 
     testImplementation project(':http-client-micronaut')
 

@@ -34,7 +34,7 @@
  */
 package io.v47.tmdb
 
-import io.reactivex.rxjava3.core.Single
+import io.smallrye.mutiny.Uni
 import io.v47.tmdb.api.CertificationsApi
 import io.v47.tmdb.api.ChangesApi
 import io.v47.tmdb.api.CollectionApi
@@ -145,20 +145,26 @@ class TmdbClient private constructor(
     private fun initialize() {
         synchronized(this) {
             if (_cachedSystemConfiguration == null) {
-                Single.fromPublisher(configuration.system())
-                    .map { config ->
+                Uni
+                    .createFrom()
+                    .publisher(configuration.system())
+                    .onItem()
+                    .invoke { config ->
                         _cachedSystemConfiguration = config
                         _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration!!)
                     }
-                    .blockingGet()
+                    .onFailure().recoverWithNull()
+                    .await().indefinitely()
             }
         }
     }
 
-    fun refreshCachedConfiguration(): Single<Unit> =
-        Single
-            .fromPublisher(configuration.system())
-            .doOnSuccess { systemConfig ->
+    fun refreshCachedConfiguration(): Uni<Unit> =
+        Uni
+            .createFrom()
+            .publisher(configuration.system())
+            .onItem()
+            .invoke { systemConfig ->
                 synchronized(this) {
                     _cachedSystemConfiguration = systemConfig
 
@@ -166,5 +172,6 @@ class TmdbClient private constructor(
                     _images = ImagesApi(httpClientFactory, systemConfig)
                 }
             }
-            .map {}
+            .onFailure().recoverWithNull()
+            .map { }
 }

@@ -41,9 +41,9 @@ import io.v47.tmdb.http.impl.TmdbRequest
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
-import org.reactivestreams.Publisher
+import java.util.concurrent.Flow
 
-internal inline fun <T : Any> HttpExecutor.request(block: TmdbRequestBuilder<T>.() -> Unit): Publisher<T> =
+internal inline fun <T : Any> HttpExecutor.request(block: TmdbRequestBuilder<T>.() -> Unit): Flow.Publisher<T> =
     execute(TmdbRequestBuilderImpl<T>().apply(block).build())
 
 internal inline fun <reified T : Any> HttpExecutor.request(
