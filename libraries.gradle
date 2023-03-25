@@ -1,19 +1,19 @@
 ext {
     // Core Libraries
-    slf4jVersion = '1.7.36'
+    slf4jVersion = '2.0.7'
 
     // Implementation Libraries
-    jacksonVersion = '2.14.1'
-    micronautVersion = '3.8.2'
+    jacksonVersion = '2.14.2'
+    micronautVersion = '4.0.0-M1'
     nvI18nVersion = '1.29'
     reactiveStreamsVersion = '1.0.4'
     rxJavaVersion = '3.1.6'
-    springBootVersion = '2.7.8'
-    springVersion = '5.3.25'
+    springBootVersion = '3.0.5'
+    springVersion = '6.0.7'
 
     // Testing Libraries
     junitJupiterVersion = '5.9.2'
-    logbackVersion = '1.2.11'
+    logbackVersion = '1.4.6'
 
     libraries = [
             // Core Libraries
@@ -28,6 +28,7 @@ ext {
             mnGraal            : "io.micronaut:micronaut-graal:$micronautVersion",
             mnInject           : "io.micronaut:micronaut-inject-java:$micronautVersion",
             mnHttpClient       : "io.micronaut:micronaut-http-client:$micronautVersion",
+            mnJacksonDatabind  : "io.micronaut:micronaut-jackson-databind:$micronautVersion",
             mnHttpServerNetty  : "io.micronaut:micronaut-http-server-netty:$micronautVersion",
             mnRuntime          : "io.micronaut:micronaut-runtime:$micronautVersion",
 

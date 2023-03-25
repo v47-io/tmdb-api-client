@@ -50,7 +50,7 @@ internal inline fun <reified T : Any> HttpExecutor.request(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
-    request<T> {
+    request {
         path(path)
         responseType(tmdbTypeReference<T>().toTypeInfo())
 
@@ -113,7 +113,7 @@ internal inline fun <reified T : Any> HttpExecutor.requestV4(
     path: String,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
-    request<T> {
+    request {
         apiVersion(ApiVersion.V4)
         path(path)
         responseType(tmdbTypeReference<T>().toTypeInfo())
@@ -135,7 +135,7 @@ internal inline fun <reified T : Any> HttpExecutor.post(
     requestEntity: Any,
     block: TmdbRequestBuilder<T>.() -> Unit = {}
 ) =
-    request<T> {
+    request {
         method(HttpMethod.Post)
         path(path)
         requestEntity(requestEntity)

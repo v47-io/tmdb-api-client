@@ -36,14 +36,18 @@ package io.v47.tmdb.http
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.micronaut.context.DefaultApplicationContextBuilder
+import io.micronaut.context.env.DefaultEnvironment
+import io.micronaut.core.annotation.AnnotationMetadataResolver
 import io.micronaut.core.io.ResourceResolver
 import io.micronaut.http.client.DefaultHttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
 import io.micronaut.http.client.netty.DefaultHttpClient
 import io.micronaut.http.client.netty.ssl.NettyClientSslBuilder
 import io.micronaut.http.codec.MediaTypeCodecRegistry
-import io.micronaut.jackson.codec.JsonMediaTypeCodec
-import io.micronaut.jackson.codec.JsonStreamMediaTypeCodec
+import io.micronaut.jackson.databind.JacksonDatabindMapper
+import io.micronaut.json.codec.JsonMediaTypeCodec
+import io.micronaut.json.codec.JsonStreamMediaTypeCodec
 import io.micronaut.runtime.ApplicationConfiguration
 import io.v47.tmdb.http.impl.HttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
@@ -64,19 +68,22 @@ class StandaloneMnClientFactory : HttpClientFactory {
 
     private val sslFactory = NettyClientSslBuilder(ResourceResolver())
 
-    private val objectMapper = ObjectMapper().apply {
-        findAndRegisterModules()
+    private val jsonMapper = JacksonDatabindMapper(
+        ObjectMapper().apply {
+            findAndRegisterModules()
 
-        // Don't need to be so strict for TCK, it's testing the implementation of the client, not the deserialization
-        if (isTckRunning)
-            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-    }
+            // Don't need to be so strict for TCK, it's testing the implementation of the client,
+            // not the deserialization
+            if (isTckRunning)
+                disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        }
+    )
 
     private val applicationConfiguration = ApplicationConfiguration()
 
     private val mediaTypeRegistry = MediaTypeCodecRegistry.of(
-        JsonMediaTypeCodec(objectMapper, applicationConfiguration, null),
-        JsonStreamMediaTypeCodec(objectMapper, applicationConfiguration, null)
+        JsonMediaTypeCodec(jsonMapper, applicationConfiguration, null),
+        JsonStreamMediaTypeCodec(jsonMapper, applicationConfiguration, null)
     )
 
     override fun createHttpClient(baseUrl: String): HttpClient =
@@ -88,8 +95,9 @@ class StandaloneMnClientFactory : HttpClientFactory {
                 null,
                 sslFactory,
                 mediaTypeRegistry,
-                null,
-                emptyList()
+                AnnotationMetadataResolver.DEFAULT,
+                emptyList(),
+                DefaultEnvironment(object : DefaultApplicationContextBuilder() {})
             ),
             getBasePath(baseUrl)
         )

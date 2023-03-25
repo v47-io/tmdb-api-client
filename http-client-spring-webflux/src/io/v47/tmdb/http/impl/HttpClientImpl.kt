@@ -78,12 +78,12 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                     resp.bodyToMono(typeReference).map { resp to it }
                 } else {
                     resp.bodyToMono(ByteArray::class.java)
-                        .map { resp to readErrorBody(it, resp.rawStatusCode()) }
+                        .map { resp to readErrorBody(it, resp.statusCode().value()) }
                 }
             }
             .map { (resp, body) ->
                 HttpResponseImpl(
-                    resp.rawStatusCode(),
+                    resp.statusCode().value(),
                     resp.headers().asHttpHeaders().toMap(),
                     body
                 )
@@ -92,7 +92,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                 if (t is HttpClientErrorException)
                     Mono.just(
                         HttpResponseImpl(
-                            t.rawStatusCode,
+                            t.statusCode.value(),
                             t.responseHeaders?.toMap() ?: emptyMap(),
                             createErrorResponse(t)
                         )
@@ -147,7 +147,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
     private fun createErrorResponse(t: HttpClientErrorException): ErrorResponse {
         val bodyByteArray = t.responseBodyAsByteArray
 
-        return readErrorBody(bodyByteArray, t.rawStatusCode)
+        return readErrorBody(bodyByteArray, t.statusCode.value())
     }
 
     private fun readErrorBody(bodyByteArray: ByteArray, status: Int) =

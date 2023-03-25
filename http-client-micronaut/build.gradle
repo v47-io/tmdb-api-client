@@ -17,6 +17,7 @@ dependencies {
     kapt libraries.mnGraal
     kapt libraries.mnInject
     implementation libraries.mnHttpClient
+    implementation libraries.mnJacksonDatabind
     compileOnly libraries.jacksonDatabind
     runtimeOnly libraries.jacksonModuleKotlin
 

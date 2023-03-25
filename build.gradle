@@ -3,17 +3,17 @@ import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.8.0' apply false
-    id 'org.jetbrains.kotlin.kapt' version '1.8.0' apply false
-    id 'org.jetbrains.kotlin.plugin.allopen' version '1.8.0' apply false
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.8.0' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10' apply false
+    id 'org.jetbrains.kotlin.kapt' version '1.8.10' apply false
+    id 'org.jetbrains.kotlin.plugin.allopen' version '1.8.10' apply false
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.8.10' apply false
 
     id 'com.github.hierynomus.license' version '0.16.1' apply false
     id 'com.github.jk1.dependency-license-report' version '2.1'
     id 'io.gitlab.arturbosch.detekt' version '1.22.0' apply false
     id 'name.remal.maven-publish-ossrh' version '1.5.0' apply false
     id 'net.researchgate.release' version '3.0.2'
-    id 'org.jetbrains.dokka' version '1.7.20'
+    id 'org.jetbrains.dokka' version '1.8.10'
 }
 
 task reportMerge(type: ReportMergeTask) {
@@ -65,21 +65,21 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
 
-            jvmTarget = "${JavaVersion.VERSION_11}"
+            jvmTarget = "${JavaVersion.VERSION_17}"
             javaParameters = true
         }
     }
 
     compileTestKotlin {
         kotlinOptions {
-            jvmTarget = "${JavaVersion.VERSION_11}"
+            jvmTarget = "${JavaVersion.VERSION_17}"
             javaParameters = true
         }
     }
