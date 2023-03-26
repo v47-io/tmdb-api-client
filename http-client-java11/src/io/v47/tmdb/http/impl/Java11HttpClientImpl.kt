@@ -118,7 +118,11 @@ internal class Java11HttpClientImpl(
                     HttpMethod.Get -> GET()
                     HttpMethod.Post -> POST(JHttpRequest.BodyPublishers.ofByteArray(actualBody))
                     HttpMethod.Put -> PUT(JHttpRequest.BodyPublishers.ofByteArray(actualBody))
-                    HttpMethod.Delete -> DELETE()
+                    HttpMethod.Delete ->
+                        if (actualBody != null)
+                            method("DELETE", JHttpRequest.BodyPublishers.ofByteArray(actualBody))
+                        else
+                            DELETE()
                 }
 
                 header(
