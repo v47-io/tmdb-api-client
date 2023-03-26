@@ -1,8 +1,13 @@
 # TMDb API Client (for the JVM)
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/v47-io/tmdb-api-client/build.yml?branch=main)
-![Maven Central](https://img.shields.io/maven-central/v/io.v47.tmdb-api-client/api)
-![GitHub](https://img.shields.io/github/license/v47-io/tmdb-api-client)
+![GitHub Workflow Status][workflow-shield]
+[![Maven Central][maven-shield]][maven-central]
+![GitHub][license-shield]
+
+[workflow-shield]: https://img.shields.io/github/actions/workflow/status/v47-io/tmdb-api-client/build.yml?branch=main
+[maven-shield]: https://img.shields.io/maven-central/v/io.v47.tmdb-api-client/api
+[maven-central]: https://central.sonatype.com/namespace/io.v47.tmdb-api-client
+[license-shield]: https://img.shields.io/github/license/v47-io/tmdb-api-client
 
 ## Usage
 
