@@ -37,7 +37,7 @@ jobs:
           arguments: --console=plain publish releaseNexusRepositories
           execution-only-caches: true
         env:
-          GRADLE_OPTS: -Xmx4096m -XX:MaxPermSize=768m
+          GRADLE_OPTS: -Xmx4096m
           API_KEY: ${{ secrets.TMDB_API_KEY }}
           OSSRH_USER: ${{ secrets.OSSRH_USER }}
           OSSRH_PASS: ${{ secrets.OSSRH_PASS }}
