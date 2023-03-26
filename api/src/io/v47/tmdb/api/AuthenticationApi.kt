@@ -32,25 +32,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MagicNumber")
+package io.v47.tmdb.api
 
-package io.v47.tmdb.http.impl
+import io.v47.tmdb.http.get
+import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.model.GuestSession
 
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
-
-internal data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo,
-    val dropResponse: Boolean
-)
-
-internal enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
+class AuthenticationApi internal constructor(private val http: HttpExecutor) {
+    /**
+     * This method will let you create a new guest session. Guest sessions are a type of session
+     * that will let a user rate movies and TV shows but not require them to have a TMDB user
+     * account. More information about user authentication can be found
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     *
+     * Please note, you should only generate a single guest session per user (or device) as you
+     * will be able to attach the ratings to a TMDB user account in the future. There is also IP
+     * limits in place so you should always make sure it's the end user doing the guest session
+     * actions.
+     *
+     * If a guest session is not used for the first time within 24 hours, it will be automatically
+     * deleted.
+     */
+    fun createGuestSession() =
+        http.get<GuestSession>("/authentication/guest_session/new")
 }

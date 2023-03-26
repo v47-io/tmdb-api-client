@@ -35,10 +35,13 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.http.delete
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.http.post
+import io.v47.tmdb.model.Session
 import io.v47.tmdb.model.TvEpisodeChanges
 import io.v47.tmdb.model.TvEpisodeCredits
 import io.v47.tmdb.model.TvEpisodeDetails
@@ -46,6 +49,7 @@ import io.v47.tmdb.model.TvEpisodeExternalIds
 import io.v47.tmdb.model.TvEpisodeImages
 import io.v47.tmdb.model.TvEpisodeTranslations
 import io.v47.tmdb.model.TvEpisodeVideos
+import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
@@ -202,6 +206,54 @@ class TvEpisodesApi internal constructor(private val http: HttpExecutor) {
             pathVar("tvId", tvId)
             pathVar("seasonNumber", seasonNumber)
             pathVar("episodeNumber", episodeNumber)
+        }
+
+
+    /**
+     * Rate a TV episode.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun rate(
+        tvId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        value: Double,
+        session: Session
+    ) =
+        http.post<Unit>(
+            "/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/rating",
+            mapOf("value" to value)
+        ) {
+            checkRating(value)
+
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
+            pathVar("episodeNumber", episodeNumber)
+
+            queryArg(session.property, session.id)
+            dropResponse()
+        }
+
+    /**
+     * Remove your rating for a TV episode.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun removeRating(
+        tvId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int, session: Session
+    ) =
+        http.delete<Unit>("/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/rating") {
+            pathVar("tvId", tvId)
+            pathVar("seasonNumber", seasonNumber)
+            pathVar("episodeNumber", episodeNumber)
+
+            queryArg(session.property, session.id)
+            dropResponse()
         }
 
 

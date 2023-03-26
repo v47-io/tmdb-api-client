@@ -78,5 +78,4 @@ class CollectionApi internal constructor(private val http: HttpExecutor) {
         ) {
             pathVar("collectionId", collectionId)
         }
-
 }

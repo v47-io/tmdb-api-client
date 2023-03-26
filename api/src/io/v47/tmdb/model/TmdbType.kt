@@ -44,7 +44,12 @@ abstract class TmdbType(private vararg val ignoredProperties: String) : Serializ
         val logger = LoggerFactory.getLogger(javaClass)!!
 
         if (key != "@class" && key !in ignoredProperties)
-            logger.trace("Unknown property: '$key' -> '$value'")
+            logger.trace(
+                "Unknown property: '{}' -> '{}' ({})",
+                key,
+                value,
+                value?.javaClass?.simpleName
+            )
     }
 }
 

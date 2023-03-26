@@ -32,6 +32,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+@file:Suppress("TooManyFunctions")
+
 package io.v47.tmdb.http
 
 import com.neovisionaries.i18n.LocaleCode
@@ -64,6 +66,15 @@ internal inline fun <reified T : Any> HttpExecutor.get(
     request<T>(path) {
         block()
         method(HttpMethod.Get)
+    }
+
+internal inline fun <reified T : Any> HttpExecutor.delete(
+    path: String,
+    block: TmdbRequestBuilder<T>.() -> Unit = {}
+) =
+    request<T>(path) {
+        block()
+        method(HttpMethod.Delete)
     }
 
 internal inline fun <reified T : Any> HttpExecutor.getWithLanguage(
@@ -165,6 +176,7 @@ internal interface TmdbRequestBuilder<T : Any> {
     fun queryArg(name: String, value: Any, replace: Boolean = false)
     fun requestEntity(requestEntity: Any?)
     fun responseType(responseType: TypeInfo)
+    fun dropResponse()
 }
 
 @Suppress("MagicNumber")
@@ -176,6 +188,7 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     private var _queryArgs = mutableMapOf<String, MutableList<Any>>()
     private var _requestEntity: Any? = null
     private var _responseType: TypeInfo? = null
+    private var _dropResponse: Boolean = false
 
     override fun method(httpMethod: HttpMethod) {
         _method = httpMethod
@@ -208,6 +221,11 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
         _responseType = responseType
     }
 
+    override fun dropResponse() {
+        _dropResponse = true
+        _responseType = TypeInfo.Simple(java.lang.Object::class.java)
+    }
+
     fun build(): TmdbRequest<T> {
         require(!_path.isNullOrBlank()) { "This is not a valid request path: $_path" }
         requireNotNull(_responseType) { "You must set a response type!" }
@@ -219,7 +237,8 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
             _apiVersion,
             _queryArgs,
             _requestEntity,
-            _responseType!!
+            _responseType!!,
+            _dropResponse
         )
     }
 }

@@ -60,6 +60,7 @@ import io.v47.tmdb.jackson.mixins.CreditPersonMixin
 import io.v47.tmdb.jackson.mixins.CreditsMixin
 import io.v47.tmdb.jackson.mixins.CrewMemberMixin
 import io.v47.tmdb.jackson.mixins.FindMixin
+import io.v47.tmdb.jackson.mixins.GuestSessionMixin
 import io.v47.tmdb.jackson.mixins.ImageListResultMixin
 import io.v47.tmdb.jackson.mixins.ItemStatusMixin
 import io.v47.tmdb.jackson.mixins.KeywordMoviesMixin
@@ -98,6 +99,7 @@ import io.v47.tmdb.jackson.mixins.TvEpisodeCreditsMixin
 import io.v47.tmdb.jackson.mixins.TvEpisodeDetailsMixin
 import io.v47.tmdb.jackson.mixins.TvEpisodeExternalIdsMixin
 import io.v47.tmdb.jackson.mixins.TvEpisodeGroupDetailsMixin
+import io.v47.tmdb.jackson.mixins.TvEpisodeListResultMixin
 import io.v47.tmdb.jackson.mixins.TvListResultMixin
 import io.v47.tmdb.jackson.mixins.TvListResultTvListNetworkMixin
 import io.v47.tmdb.jackson.mixins.TvListResultTvListNetworkTvListNetworkLogoMixin
@@ -132,6 +134,7 @@ import io.v47.tmdb.model.CreditPersonKnownForTv
 import io.v47.tmdb.model.Credits
 import io.v47.tmdb.model.CrewMember
 import io.v47.tmdb.model.Find
+import io.v47.tmdb.model.GuestSession
 import io.v47.tmdb.model.ImageListResult
 import io.v47.tmdb.model.ItemStatus
 import io.v47.tmdb.model.KeywordMovies
@@ -166,6 +169,7 @@ import io.v47.tmdb.model.TvEpisodeCredits
 import io.v47.tmdb.model.TvEpisodeDetails
 import io.v47.tmdb.model.TvEpisodeExternalIds
 import io.v47.tmdb.model.TvEpisodeGroupDetails
+import io.v47.tmdb.model.TvEpisodeListResult
 import io.v47.tmdb.model.TvListResult
 import io.v47.tmdb.model.TvSeasonChanges
 import io.v47.tmdb.model.TvSeasonDetails
@@ -189,6 +193,8 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
         setDeserializerModifier(EnumDeserializerModifier())
 
         mapOf<Class<out TmdbType>, Class<*>>(
+            GuestSession::class.java to GuestSessionMixin::class.java,
+
             CollectionDetails::class.java to CollectionDetailsMixin::class.java,
             CollectionDetails.Part::class.java to CollectionDetailsPartMixin::class.java,
             CollectionTranslation::class.java to CollectionTranslationMixin::class.java,
@@ -275,6 +281,7 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
             TvEpisodeChanges.ChangeItem::class.java to TvEpisodeChangesChangeItemMixin::class.java,
             TvEpisodeCredits::class.java to TvEpisodeCreditsMixin::class.java,
             TvEpisodeExternalIds::class.java to TvEpisodeExternalIdsMixin::class.java,
+            TvEpisodeListResult::class.java to TvEpisodeListResultMixin::class.java,
 
             TvSeasonDetails::class.java to TvSeasonDetailsMixin::class.java,
             TvSeasonChanges.ChangeItem::class.java to TvSeasonChangesChangeItemMixin::class.java,

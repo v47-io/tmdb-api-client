@@ -36,10 +36,12 @@ package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.http.delete
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.http.post
 import io.v47.tmdb.model.MovieAlternativeTitles
 import io.v47.tmdb.model.MovieChanges
 import io.v47.tmdb.model.MovieCredits
@@ -55,7 +57,9 @@ import io.v47.tmdb.model.MovieTranslations
 import io.v47.tmdb.model.MovieVideos
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.PaginatedMovieListResultsWithDates
+import io.v47.tmdb.model.Session
 import io.v47.tmdb.utils.checkPage
+import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
@@ -300,6 +304,33 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
      */
     fun latest(language: LocaleCode? = null) =
         http.getWithLanguage<MovieDetails>("/movie/latest", language)
+
+    /**
+     * Rate a movie.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun rate(movieId: Int, value: Double, session: Session) =
+        http.post<Unit>("/movie/{movieId}/rating", mapOf("value" to value)) {
+            checkRating(value)
+            pathVar("movieId", movieId)
+            queryArg(session.property, session.id)
+            dropResponse()
+        }
+
+    /**
+     * Remove your rating for a movie.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun removeRating(movieId: Int, session: Session) =
+        http.delete<Unit>("/movie/{movieId}/rating") {
+            pathVar("movieId", movieId)
+            queryArg(session.property, session.id)
+            dropResponse()
+        }
 
     /**
      * Get a list of movies in theatres. This is a release type query that looks for all

@@ -35,12 +35,15 @@
 package io.v47.tmdb.api
 
 import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.http.delete
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.http.post
 import io.v47.tmdb.model.PaginatedListResults
+import io.v47.tmdb.model.Session
 import io.v47.tmdb.model.TvListResult
 import io.v47.tmdb.model.TvShowAlternativeTitles
 import io.v47.tmdb.model.TvShowChanges
@@ -55,6 +58,7 @@ import io.v47.tmdb.model.TvShowReview
 import io.v47.tmdb.model.TvShowScreenedTheatrically
 import io.v47.tmdb.model.TvShowTranslations
 import io.v47.tmdb.model.TvShowVideos
+import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 
@@ -208,6 +212,34 @@ class TvApi internal constructor(private val http: HttpExecutor) {
 
 
     /**
+     * Rate a TV show.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun rate(tvId: Int, value: Double, session: Session) =
+        http.post<Unit>("/tv/{tvId}/rating", mapOf("value" to value)) {
+            checkRating(value)
+            pathVar("tvId", tvId)
+            queryArg(session.property, session.id)
+            dropResponse()
+        }
+
+    /**
+     * Remove your rating for a TV show.
+     *
+     * A valid session or guest session ID is required. You can read more about how this works
+     * [here](https://developers.themoviedb.org/3/authentication/how-do-i-generate-a-session-id).
+     */
+    fun removeRating(tvId: Int, session: Session) =
+        http.delete<Unit>("/tv/{tvId}/rating") {
+            pathVar("tvId", tvId)
+            queryArg(session.property, session.id)
+            dropResponse()
+        }
+
+
+    /**
      * Get the list of TV show recommendations for this item
      *
      * @param tvId The id of the TV show
@@ -222,6 +254,7 @@ class TvApi internal constructor(private val http: HttpExecutor) {
         ) {
             pathVar("tvId", tvId)
         }
+
 
     /**
      * Get the reviews for a TV show

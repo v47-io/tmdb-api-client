@@ -62,6 +62,7 @@ data class MovieListResult(
     val voteCount: Int?,
     val video: Boolean?,
     val voteAverage: Double?,
+    val rating: Double?,
     override val mediaType: MediaType?
 ) : TmdbType(), TmdbIntId, MovieTvPersonListResult
 
@@ -78,6 +79,7 @@ data class TvListResult(
     val genreIds: List<Int> = emptyList(),
     val originalLanguage: LanguageCode?,
     val voteCount: Int?,
+    val rating: Double?,
     val name: String?,
     val originalName: String?,
     override val mediaType: MediaType?,
@@ -95,6 +97,22 @@ data class TvListResult(
         ) : TmdbType()
     }
 }
+
+data class TvEpisodeListResult(
+    val airDate: LocalDate?,
+    val episodeNumber: Int?,
+    val name: String?,
+    val overview: String?,
+    override val id: Int?,
+    val productionCode: String?,
+    val runtime: Int?,
+    val seasonNumber: String?,
+    val showId: Int?,
+    val stillPath: String?,
+    val voteAverage: Double?,
+    val voteCount: Int?,
+    val rating: Double?,
+) : TmdbType(), TmdbIntId
 
 data class Title(
     val title: String?,

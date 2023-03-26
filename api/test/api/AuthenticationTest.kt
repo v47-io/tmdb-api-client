@@ -32,25 +32,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MagicNumber")
+package io.v47.tmdb.api
 
-package io.v47.tmdb.http.impl
+import io.v47.tmdb.utils.blockingFirst
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
+// strictly rate limited API, only execute manually on local device
+class AuthenticationTest : AbstractTmdbTest() {
+    @Test
+    fun `create guest session`() {
+        val guestSession = client.authentication.createGuestSession().blockingFirst()
 
-internal data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo,
-    val dropResponse: Boolean
-)
-
-internal enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
+        assertTrue(guestSession.success ?: false)
+        println("Guest session id: ${guestSession.id}")
+    }
 }

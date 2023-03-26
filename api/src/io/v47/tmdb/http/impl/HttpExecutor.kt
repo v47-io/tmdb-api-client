@@ -69,10 +69,15 @@ internal class HttpExecutor(
             .filter { it.body != null }
             .flatMap { resp ->
                 when {
-                    resp.status == 200 ->
+                    resp.status in 200..299 ->
                         Multi
                             .createFrom()
-                            .item(resp.body as T)
+                            .item(
+                                if (request.dropResponse)
+                                    Unit as T
+                                else
+                                    resp.body as T
+                            )
 
                     resp.body is ErrorResponse ->
                         Multi

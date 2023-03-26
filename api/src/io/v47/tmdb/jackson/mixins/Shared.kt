@@ -57,6 +57,9 @@ internal interface TvListResultMixin {
 }
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+internal interface TvEpisodeListResultMixin
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface TvListResultTvListNetworkMixin
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)

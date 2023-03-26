@@ -32,25 +32,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MagicNumber")
+@file:Suppress("MatchingDeclarationName")
 
-package io.v47.tmdb.http.impl
+package io.v47.tmdb.model
 
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
+data class GuestSession(
+    val success: Boolean?,
+    override val id: String,
+    val expiresAt: String?
+) : TmdbType(), TmdbStringId
 
-internal data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo,
-    val dropResponse: Boolean
-)
+sealed interface Session {
+    val id: String
+    val property: String
 
-internal enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
+    data class Id(override val id: String) : TmdbType(), Session {
+        override val property
+            get() = "session_id"
+    }
+
+    data class Guest(override val id: String) : TmdbType(), Session {
+        override val property: String
+            get() = "guest_session_id"
+    }
 }

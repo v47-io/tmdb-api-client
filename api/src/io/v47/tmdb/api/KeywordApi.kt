@@ -42,7 +42,10 @@ import io.v47.tmdb.model.Keyword
 import io.v47.tmdb.model.KeywordMovies
 
 class KeywordApi internal constructor(private val http: HttpExecutor) {
-    fun details(keywordId: Int) = http.get<Keyword>("/keyword/$keywordId")
+    fun details(keywordId: Int) =
+        http.get<Keyword>("/keyword/{keyword_id}") {
+            pathVar("keyword_id", keywordId)
+        }
 
     /**
      * Get the movies that belong to a keyword.
@@ -59,9 +62,12 @@ class KeywordApi internal constructor(private val http: HttpExecutor) {
         language: LocaleCode? = null,
         includeAdult: Boolean? = null
     ) =
-        http.getWithPageAndLanguage<KeywordMovies>("/keyword/{keywordId}/movies", page, language) {
+        http.getWithPageAndLanguage<KeywordMovies>(
+            "/keyword/{keywordId}/movies",
+            page,
+            language
+        ) {
             pathVar("keywordId", keywordId)
             includeAdult?.let { queryArg("include_adult", it) }
         }
-
 }

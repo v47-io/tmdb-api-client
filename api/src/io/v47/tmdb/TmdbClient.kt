@@ -35,6 +35,7 @@
 package io.v47.tmdb
 
 import io.smallrye.mutiny.Uni
+import io.v47.tmdb.api.AuthenticationApi
 import io.v47.tmdb.api.CertificationsApi
 import io.v47.tmdb.api.ChangesApi
 import io.v47.tmdb.api.CollectionApi
@@ -44,6 +45,7 @@ import io.v47.tmdb.api.CreditApi
 import io.v47.tmdb.api.DiscoverApi
 import io.v47.tmdb.api.FindApi
 import io.v47.tmdb.api.GenresApi
+import io.v47.tmdb.api.GuestSessionApi
 import io.v47.tmdb.api.ImagesApi
 import io.v47.tmdb.api.KeywordApi
 import io.v47.tmdb.api.ListApi
@@ -110,6 +112,7 @@ class TmdbClient private constructor(
             return _cachedSystemConfiguration!!
         }
 
+    val authentication = AuthenticationApi(httpExecutor)
     val certifications = CertificationsApi(httpExecutor)
     val changes = ChangesApi(httpExecutor)
     val collection = CollectionApi(httpExecutor)
@@ -119,6 +122,7 @@ class TmdbClient private constructor(
     val discover = DiscoverApi(httpExecutor)
     val find = FindApi(httpExecutor)
     val genres = GenresApi(httpExecutor)
+    val guestSession = GuestSessionApi(httpExecutor)
 
     private var _images: ImagesApi? = null
     val images: ImagesApi

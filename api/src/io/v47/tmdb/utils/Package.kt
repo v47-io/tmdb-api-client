@@ -46,6 +46,9 @@ import java.util.*
 @Suppress("MagicNumber")
 private val pageRange = 1..1000
 
+@Suppress("MagicNumber")
+private val ratingRange = 0.5 .. 10.0
+
 /**
  * Checks if the specified page number is in the range of valid numbers,
  * as described by [pageRange].
@@ -54,6 +57,9 @@ private val pageRange = 1..1000
  */
 internal fun checkPage(page: Int) =
     require(page in pageRange) { "Invalid page: Pages start at 1 and end at 1000." }
+
+internal fun checkRating(rating: Double) =
+    require(rating in ratingRange) { "Invalid rating: Must be between 0.5 and 10.0 inclusive." }
 
 fun List<ImageSize>.findClosestWidth(width: Int, forceSelectHigher: Boolean = true): ImageSize {
     val widthList = asSequence().filterIsInstance<Width>().sortedBy { it.value }.toList()

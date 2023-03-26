@@ -32,25 +32,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MagicNumber")
+@file:Suppress("MatchingDeclarationName")
 
-package io.v47.tmdb.http.impl
+package io.v47.tmdb.jackson.mixins
 
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 
-internal data class TmdbRequest<T : Any>(
-    val method: HttpMethod,
-    val path: String,
-    val pathVariables: Map<String, Any>,
-    val apiVersion: ApiVersion,
-    val queryArgs: Map<String, List<Any>>,
-    val requestEntity: Any?,
-    val responseType: TypeInfo,
-    val dropResponse: Boolean
-)
-
-internal enum class ApiVersion(val value: Int) {
-    V3(3),
-    V4(4)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+internal interface GuestSessionMixin {
+    @get:JsonProperty(value = "guest_session_id")
+    val id: String?
 }

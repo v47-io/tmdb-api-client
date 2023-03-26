@@ -65,21 +65,19 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    kotlin {
+        jvmToolchain(17)
+    }
 
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
-
-            jvmTarget = "${JavaVersion.VERSION_17}"
             javaParameters = true
         }
     }
 
     compileTestKotlin {
         kotlinOptions {
-            jvmTarget = "${JavaVersion.VERSION_17}"
             javaParameters = true
         }
     }
