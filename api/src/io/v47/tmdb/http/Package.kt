@@ -184,8 +184,8 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
     private var _method = HttpMethod.Get
     private var _apiVersion = ApiVersion.V3
     private var _path: String? = null
-    private var _pathVariables = mutableMapOf<String, Any>()
-    private var _queryArgs = mutableMapOf<String, MutableList<Any>>()
+    private val _pathVariables = mutableMapOf<String, Any>()
+    private val _queryArgs = mutableMapOf<String, MutableList<Any>>()
     private var _requestEntity: Any? = null
     private var _responseType: TypeInfo? = null
     private var _dropResponse: Boolean = false
@@ -228,16 +228,15 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
 
     fun build(): TmdbRequest<T> {
         require(!_path.isNullOrBlank()) { "This is not a valid request path: $_path" }
-        requireNotNull(_responseType) { "You must set a response type!" }
 
         return TmdbRequest(
             _method,
-            _path!!,
+            _path ?: throw IllegalArgumentException("This is not a valid request path: null"),
             _pathVariables,
             _apiVersion,
             _queryArgs,
             _requestEntity,
-            _responseType!!,
+            _responseType ?: throw IllegalArgumentException("You must set a response type!"),
             _dropResponse
         )
     }

@@ -64,16 +64,11 @@ class ImagesApi internal constructor(
 
     private val byteArrayTypeInfo = TypeInfo.Simple(ByteArray::class.java)
 
-    val available get() = imageDlClient != null
+    val available
+        get() = imageDlClient != null
 
     @Suppress("ThrowsCount")
     fun download(imagePath: String, size: ImageSize = Original): Flow.Publisher<ByteArray> {
-        if (!available)
-            throw IllegalStateException(
-                "Cannot download image: The system " +
-                        "configuration doesn't provide a base URL!"
-            )
-
         require(size is Width || size is Height || size is Original) { "Invalid size: $size" }
 
         val actualSize = if (imagePath.endsWith(".svg", ignoreCase = true))
@@ -93,7 +88,7 @@ class ImagesApi internal constructor(
         return Multi
             .createFrom()
             .publisher(
-                imageDlClient!!.execute(
+                requireClient().execute(
                     request,
                     byteArrayTypeInfo
                 )
@@ -127,4 +122,11 @@ class ImagesApi internal constructor(
     internal fun close() {
         imageDlClient?.close()
     }
+
+    private fun requireClient() =
+        imageDlClient
+            ?: throw IllegalArgumentException(
+                "Cannot download image: The system " +
+                        "configuration doesn't provide a base URL!"
+            )
 }

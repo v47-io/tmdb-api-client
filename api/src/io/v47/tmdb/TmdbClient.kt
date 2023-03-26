@@ -109,7 +109,7 @@ class TmdbClient private constructor(
             if (_cachedSystemConfiguration == null)
                 initialize()
 
-            return _cachedSystemConfiguration!!
+            return requireCachedSystemConfiguration()
         }
 
     val authentication = AuthenticationApi(httpExecutor)
@@ -130,7 +130,7 @@ class TmdbClient private constructor(
             if (_images == null)
                 initialize()
 
-            return _images!!
+            return _images ?: error("_images not set")
         }
 
     val keyword = KeywordApi(httpExecutor)
@@ -155,13 +155,20 @@ class TmdbClient private constructor(
                     .onItem()
                     .invoke { config ->
                         _cachedSystemConfiguration = config
-                        _images = ImagesApi(httpClientFactory, _cachedSystemConfiguration!!)
+                        _images = ImagesApi(
+                            httpClientFactory,
+                            requireCachedSystemConfiguration()
+                        )
                     }
                     .onFailure().recoverWithNull()
                     .await().indefinitely()
             }
         }
     }
+
+    private fun requireCachedSystemConfiguration() =
+        _cachedSystemConfiguration
+            ?: error("_cachedSystemConfiguration not set")
 
     fun refreshCachedConfiguration(): Uni<Unit> =
         Uni

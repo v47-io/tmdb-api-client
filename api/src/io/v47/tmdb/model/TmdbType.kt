@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory
 import java.io.Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-abstract class TmdbType(private vararg val ignoredProperties: String) : Serializable {
+sealed class TmdbType(private vararg val ignoredProperties: String) : Serializable {
     @Suppress("unused")
     fun handleUnknownProperty(key: String, value: Any?) {
         val logger = LoggerFactory.getLogger(javaClass)!!

@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.deser.std.StdNodeBasedDeserializer
 
-internal abstract class MediaTypeBasedDeserializer<T : Any>(
+internal sealed class MediaTypeBasedDeserializer<T : Any>(
     private val mapping: Map<String, Class<*>>,
     private val clazz: Class<T>,
     private val customDetector: ((JsonNode) -> Class<out T>?)? = null

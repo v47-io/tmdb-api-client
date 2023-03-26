@@ -99,7 +99,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                             Mono.just(
                                 HttpResponseImpl(
                                     t.statusCode.value(),
-                                    t.responseHeaders?.toMap() ?: emptyMap(),
+                                    t.responseHeaders?.toMap().orEmpty(),
                                     createErrorResponse(t)
                                 )
                             )
