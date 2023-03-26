@@ -34,29 +34,28 @@
  */
 package io.v47.tmdb.http.quarkus;
 
-import io.quarkus.arc.Priority;
 import io.v47.tmdb.api.key.TmdbApiKeyProvider;
-import io.v47.tmdb.http.impl.ClientConfig;
+import io.v47.tmdb.http.impl.TmdbClientConfig;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
+import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
 
 @Alternative
 @Priority(1)
 @ApplicationScoped
 public class StaticApiKeyProvider implements TmdbApiKeyProvider {
-    private final ClientConfig config;
+    private final TmdbClientConfig config;
 
     @Inject
-    public StaticApiKeyProvider(ClientConfig config) {
+    public StaticApiKeyProvider(TmdbClientConfig config) {
         this.config = config;
     }
 
     @NotNull
     @Override
     public String getApiKey() {
-        return config.apiKey;
+        return config.apiKey();
     }
 }

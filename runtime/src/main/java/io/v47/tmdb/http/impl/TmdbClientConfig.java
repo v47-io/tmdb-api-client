@@ -34,15 +34,15 @@
  */
 package io.v47.tmdb.http.impl;
 
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
 
-@ConfigRoot(phase = ConfigPhase.RUN_TIME, prefix = "tmdb")
-public class ClientConfig {
+@ConfigMapping(prefix = "tmdb-client")
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
+public interface TmdbClientConfig {
     /**
      * Specify the TMDb API Key used to authenticate requests.
      */
-    @ConfigItem
-    public String apiKey;
+    String apiKey();
 }

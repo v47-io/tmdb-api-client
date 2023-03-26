@@ -54,7 +54,6 @@ import io.vertx.mutiny.ext.web.client.WebClient;
 import io.vertx.mutiny.ext.web.codec.BodyCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reactivestreams.Publisher;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -63,10 +62,11 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Flow;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HttpClientImpl implements HttpClient {
+public class QuarkusHttpClientImpl implements HttpClient {
     private static final Pattern uriVariablePattern = Pattern.compile("\\{(\\w+)}", Pattern.CASE_INSENSITIVE);
     private static final Pattern imageErrorPattern = Pattern.compile("<h\\d>(.+?)</h\\d>", Pattern.CASE_INSENSITIVE);
 
@@ -74,7 +74,7 @@ public class HttpClientImpl implements HttpClient {
     private final WebClient client;
     private final ObjectMapper objectMapper;
 
-    public HttpClientImpl(String baseUrl, WebClient client, ObjectMapper objectMapper) {
+    public QuarkusHttpClientImpl(String baseUrl, WebClient client, ObjectMapper objectMapper) {
         this.baseUrl = baseUrl;
         this.client = client;
         this.objectMapper = objectMapper;
@@ -82,7 +82,7 @@ public class HttpClientImpl implements HttpClient {
 
     @NotNull
     @Override
-    public Publisher<HttpResponse<?>> execute(@NotNull HttpRequest request, @NotNull TypeInfo responseType) {
+    public Flow.Publisher<HttpResponse<?>> execute(@NotNull HttpRequest request, @NotNull TypeInfo responseType) {
         Boolean jsonBody = isNotByteArray(responseType);
 
         io.vertx.mutiny.ext.web.client.HttpRequest<Buffer> vxRequest = createHttpRequest(request, jsonBody);
@@ -107,9 +107,9 @@ public class HttpClientImpl implements HttpClient {
             if (bufferHttpResponse.statusCode() == 200)
                 return mapHttpResponse(bufferHttpResponse, jsonBody ? responseType : null);
             else
-                return new HttpResponseImpl<>(bufferHttpResponse.statusCode(),
-                                              MultiMapUtil.convertToMap(bufferHttpResponse.headers()),
-                                              createErrorResponse(bufferHttpResponse));
+                return new DefaultHttpResponse<>(bufferHttpResponse.statusCode(),
+                                                 MultiMapUtil.convertToMap(bufferHttpResponse.headers()),
+                                                 createErrorResponse(bufferHttpResponse));
         });
     }
 
@@ -208,12 +208,12 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @NotNull
-    private HttpResponseImpl<?> mapHttpResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse,
-                                                @Nullable TypeInfo typeInfo) {
+    private HttpResponse<?> mapHttpResponse(io.vertx.mutiny.ext.web.client.HttpResponse<Buffer> vxResponse,
+                                            @Nullable TypeInfo typeInfo) {
         try {
-            return new HttpResponseImpl<>(vxResponse.statusCode(),
-                                          MultiMapUtil.convertToMap(vxResponse.headers()),
-                                          readResponseBody(vxResponse, typeInfo));
+            return new DefaultHttpResponse<>(vxResponse.statusCode(),
+                                             MultiMapUtil.convertToMap(vxResponse.headers()),
+                                             readResponseBody(vxResponse, typeInfo));
         } catch (IOException e) {
             ExceptionUtil.sneakyThrow(e);
         }

@@ -53,6 +53,6 @@ public class HttpClientFactoryImpl implements HttpClientFactory {
     @NotNull
     @Override
     public HttpClient createHttpClient(@NotNull String baseUrl) {
-        return new HttpClientImpl(baseUrl, WebClient.create(this.vertx), this.objectMapper);
+        return new QuarkusHttpClientImpl(baseUrl, WebClient.create(this.vertx), this.objectMapper);
     }
 }

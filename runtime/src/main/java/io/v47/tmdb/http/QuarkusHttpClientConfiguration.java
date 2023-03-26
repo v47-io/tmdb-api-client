@@ -39,11 +39,10 @@ import io.v47.tmdb.TmdbClient;
 import io.v47.tmdb.api.key.TmdbApiKeyProvider;
 import io.v47.tmdb.http.impl.HttpClientFactoryImpl;
 import io.vertx.mutiny.core.Vertx;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class QuarkusHttpClientConfiguration {
