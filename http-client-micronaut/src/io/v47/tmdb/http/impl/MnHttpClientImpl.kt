@@ -54,7 +54,7 @@ import io.micronaut.http.HttpRequest as MnHttpRequest
 import io.micronaut.http.HttpResponse as MnHttpResponse
 import io.micronaut.http.client.HttpClient as MnHttpClient
 
-internal class HttpClientImpl(
+internal class MnHttpClientImpl(
     private val rawClient: MnHttpClient,
     private val basePath: String = ""
 ) : HttpClient {
@@ -93,7 +93,7 @@ internal class HttpClientImpl(
                 if (resp.code() == HttpStatus.OK.code)
                     resp.toHttpResponse(argument)
                 else
-                    HttpResponseImpl(
+                    DefaultHttpResponse(
                         resp.code(),
                         resp.headers.associate { (key, value) -> key to value },
                         createErrorResponse(resp)
@@ -187,7 +187,7 @@ internal class HttpClientImpl(
 
     private fun MnHttpResponse<*>.toHttpResponse(argument: Argument<*>?) =
         if (argument != null)
-            HttpResponseImpl(
+            DefaultHttpResponse(
                 code(),
                 headers.associate { (key, value) -> key to value },
                 getBody(argument).orElse(null)
@@ -205,7 +205,7 @@ internal class HttpClientImpl(
             } else
                 null
 
-            HttpResponseImpl(
+            DefaultHttpResponse(
                 code(),
                 headers.associate { (key, value) -> key to value },
                 ba

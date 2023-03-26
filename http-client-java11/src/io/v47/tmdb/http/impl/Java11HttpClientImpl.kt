@@ -47,7 +47,7 @@ import java.net.http.HttpClient as JHttpClient
 import java.net.http.HttpRequest as JHttpRequest
 import java.net.http.HttpResponse as JHttpResponse
 
-internal class HttpClientImpl(
+internal class Java11HttpClientImpl(
     private val objectMapper: ObjectMapper,
     private val baseUrl: String = ""
 ) : HttpClient {
@@ -81,7 +81,7 @@ internal class HttpClientImpl(
                 if (resp.statusCode() == OK)
                     resp.toHttpResponse(if (jsonBody) responseType else null)
                 else
-                    HttpResponseImpl(
+                    DefaultHttpResponse(
                         resp.statusCode(),
                         resp.headers().map(),
                         createErrorResponse(resp)
@@ -176,8 +176,8 @@ internal class HttpClientImpl(
         return uriSB.toString()
     }
 
-    private fun JHttpResponse<ByteArray>.toHttpResponse(typeInfo: TypeInfo?) =
-        HttpResponseImpl(
+    private fun JHttpResponse<ByteArray>.toHttpResponse(typeInfo: TypeInfo?): HttpResponse<out Any> =
+        DefaultHttpResponse(
             statusCode(),
             headers().map(),
             if (typeInfo != null)
@@ -187,7 +187,10 @@ internal class HttpClientImpl(
         )
 
     private fun JHttpResponse<ByteArray>.parseBody(typeInfo: TypeInfo) =
-        objectMapper.readValue(body(), typeInfo.fullType as Class<*>)
+        objectMapper.readValue<Any>(
+            body(),
+            objectMapper.typeFactory.constructType(typeInfo.fullType)
+        )
 
     override fun close() = Unit
 }

@@ -55,7 +55,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.util.concurrent.Flow
 
-internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
+internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpClient {
     private val om = ObjectMapper().apply {
         findAndRegisterModules()
     }
@@ -88,7 +88,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                         }
                     }
                     .map { (resp, body) ->
-                        HttpResponseImpl(
+                        DefaultHttpResponse(
                             resp.statusCode().value(),
                             resp.headers().asHttpHeaders().toMap(),
                             body
@@ -97,7 +97,7 @@ internal class HttpClientImpl(private val rawClient: WebClient) : HttpClient {
                     .onErrorResume { t ->
                         if (t is HttpClientErrorException)
                             Mono.just(
-                                HttpResponseImpl(
+                                DefaultHttpResponse(
                                     t.statusCode.value(),
                                     t.responseHeaders?.toMap().orEmpty(),
                                     createErrorResponse(t)

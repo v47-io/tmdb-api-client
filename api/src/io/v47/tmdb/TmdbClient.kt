@@ -69,7 +69,6 @@ import io.v47.tmdb.utils.OpenTmdbClient
  * The main entry point for the TMDb API Client. Here all supported resources of the TMDb API can be
  * accessed.
  */
-@Suppress("ConstructorParameterNaming")
 @OpenTmdbClient
 class TmdbClient private constructor(
     private val httpClientFactory: HttpClientFactory,

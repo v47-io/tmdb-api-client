@@ -36,7 +36,7 @@ package io.v47.tmdb.http
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.v47.tmdb.http.impl.HttpClientImpl
+import io.v47.tmdb.http.impl.Java11HttpClientImpl
 
 class Java11HttpClientFactory : HttpClientFactory {
     companion object {
@@ -52,6 +52,6 @@ class Java11HttpClientFactory : HttpClientFactory {
     }
 
     override fun createHttpClient(baseUrl: String): HttpClient {
-        return HttpClientImpl(objectMapper, baseUrl)
+        return Java11HttpClientImpl(objectMapper, baseUrl)
     }
 }

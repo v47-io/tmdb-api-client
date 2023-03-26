@@ -23,6 +23,7 @@ ext {
             // Implementation Libraries
             jacksonAnnotations    : "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
             jacksonDatabind       : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            jacksonModuleJsr310   : "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion",
             jacksonModuleKotlin   : "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
 
             mnGraal               : "io.micronaut:micronaut-graal:$micronautVersion",

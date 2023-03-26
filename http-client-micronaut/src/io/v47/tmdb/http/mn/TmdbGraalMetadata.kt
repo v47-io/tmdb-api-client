@@ -68,6 +68,7 @@ import io.v47.tmdb.model.CrewMember
 import io.v47.tmdb.model.Find
 import io.v47.tmdb.model.Genre
 import io.v47.tmdb.model.GenreList
+import io.v47.tmdb.model.GuestSession
 import io.v47.tmdb.model.ImageListResult
 import io.v47.tmdb.model.ItemStatus
 import io.v47.tmdb.model.Jobs
@@ -115,6 +116,7 @@ import io.v47.tmdb.model.TvEpisodeExternalIds
 import io.v47.tmdb.model.TvEpisodeGroupDetails
 import io.v47.tmdb.model.TvEpisodeGroupType
 import io.v47.tmdb.model.TvEpisodeImages
+import io.v47.tmdb.model.TvEpisodeListResult
 import io.v47.tmdb.model.TvEpisodeTranslations
 import io.v47.tmdb.model.TvEpisodeVideos
 import io.v47.tmdb.model.TvListResult
@@ -141,6 +143,7 @@ import io.v47.tmdb.model.VideoListResult
 
 @TypeHint(
     value = [
+        GuestSession::class,
         Certification::class,
         Change::class,
         CollectionDetails::class,
@@ -260,6 +263,7 @@ import io.v47.tmdb.model.VideoListResult
         TvEpisodeImages::class,
         TvEpisodeTranslations::class,
         TvEpisodeVideos::class,
+        TvEpisodeListResult::class,
         TvSeasonDetails::class,
         TvSeasonChanges::class,
         TvSeasonChanges.Change::class,

@@ -35,7 +35,7 @@
 package io.v47.tmdb.api
 
 import io.v47.tmdb.TmdbClient
-import io.v47.tmdb.http.StandaloneMnClientFactory
+import io.v47.tmdb.http.Java11HttpClientFactory
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 
@@ -53,6 +53,6 @@ abstract class AbstractTmdbTest {
                         "property called 'tmdb.apiKey' or as an environment variable called 'API_KEY'"
             )
 
-        client = TmdbClient(StandaloneMnClientFactory(), apiKey)
+        client = TmdbClient(Java11HttpClientFactory(), apiKey)
     }
 }

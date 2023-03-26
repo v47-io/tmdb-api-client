@@ -37,7 +37,7 @@ package io.v47.tmdb.http
 import io.micronaut.context.BeanContext
 import io.micronaut.http.client.HttpClientConfiguration
 import io.micronaut.http.client.LoadBalancer
-import io.v47.tmdb.http.impl.HttpClientImpl
+import io.v47.tmdb.http.impl.MnHttpClientImpl
 import io.v47.tmdb.http.utils.getBasePath
 import java.net.URI
 import java.net.URL
@@ -51,7 +51,7 @@ class ContextMnClientFactory(private val beanContext: BeanContext) : HttpClientF
         else
             ""
 
-        return HttpClientImpl(
+        return MnHttpClientImpl(
             beanContext.createBean(
                 MnHttpClient::class.java,
                 mapOf(

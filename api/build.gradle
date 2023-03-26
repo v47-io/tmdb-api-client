@@ -12,7 +12,7 @@ dependencies {
 
     implementation libraries.mutiny
 
-    testImplementation project(':http-client-micronaut')
+    testImplementation project(':http-client-java11')
 
     testRuntimeOnly libraries.mnHttpClient
     testRuntimeOnly libraries.jacksonModuleKotlin

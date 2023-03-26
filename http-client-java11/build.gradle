@@ -1,5 +1,6 @@
 dependencies {
     implementation libraries.jacksonDatabind
+    runtimeOnly libraries.jacksonModuleJsr310
     runtimeOnly libraries.jacksonModuleKotlin
 
     implementation libraries.mutiny
