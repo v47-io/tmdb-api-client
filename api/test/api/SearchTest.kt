@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test
 
 class SearchTest : AbstractTmdbTest() {
     companion object {
-        const val COMPANY_QUERY = "walt disney"
+        const val COMPANY_QUERY = "walt disney pictures"
         const val WALT_DISNEY_PICTURES_ID = 2
 
         const val COLLECTION_QUERY = "the avengers"
