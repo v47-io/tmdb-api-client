@@ -139,6 +139,8 @@ internal class Java11HttpClientImpl(
                     else
                         "application/octet-stream"
                 )
+
+                header("User-Agent", "curl/7.85.0")
             }.build()
 
     private fun HttpRequest.createUri(): String {

@@ -62,12 +62,9 @@ internal class AuthErrorResponseTest : AbstractTckTest("https://api.themoviedb.o
 
         return if (result.status != 401)
             TckTestResult.Failure(401, result.status)
-        else {
-            val errorResponse = result.body as? ErrorResponse
-            if (errorResponse !is ErrorResponse || errorResponse != checkResponse)
-                TckTestResult.Failure(checkResponse, errorResponse)
-            else
-                TckTestResult.Success
-        }
+        else if (result.body != checkResponse)
+            TckTestResult.Failure(checkResponse, result.body)
+        else
+            TckTestResult.Success
     }
 }

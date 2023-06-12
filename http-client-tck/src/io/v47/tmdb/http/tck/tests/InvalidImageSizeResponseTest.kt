@@ -64,7 +64,7 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
 
         return if (result.status != 400)
             TckTestResult.Failure(400, result.status)
-        else if (result.body !is ErrorResponse || result.body != checkError)
+        else if (result.body != checkError)
             TckTestResult.Failure(checkError, result.body)
         else
             TckTestResult.Success

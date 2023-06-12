@@ -39,7 +39,7 @@ import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.tck.TckTest
 import io.v47.tmdb.http.tck.TckTestResult
 
-internal abstract class AbstractTckTest(private val baseUrl: String) : TckTest {
+internal sealed class AbstractTckTest(private val baseUrl: String) : TckTest {
     protected val apiKey: String =
         (System.getProperty("tmdb.apiKey") ?: System.getenv("API_KEY")).let {
             require(!it.isNullOrBlank()) {

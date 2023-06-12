@@ -37,11 +37,7 @@ package io.v47.tmdb.http.impl
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.converters.multi.FromMono
-import io.v47.tmdb.http.HttpClient
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.HttpRequest
-import io.v47.tmdb.http.HttpResponse
-import io.v47.tmdb.http.TypeInfo
+import io.v47.tmdb.http.*
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
@@ -136,10 +132,11 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
 
         val body = body
 
-        val optBodyReqSpec = if (reqSpec is WebClient.RequestBodyUriSpec && body != null)
-            reqSpec.body(BodyInserters.fromValue(body))
-        else
-            reqSpec
+        val optBodyReqSpec =
+            if (reqSpec is WebClient.RequestBodyUriSpec && body != null)
+                reqSpec.body(BodyInserters.fromValue(body))
+            else
+                reqSpec
 
         return optBodyReqSpec
             .header(
@@ -149,6 +146,7 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
                 else
                     MediaType.APPLICATION_OCTET_STREAM_VALUE
             )
+            .header(HttpHeaders.USER_AGENT, "curl/7.85.0")
     }
 
     private fun createErrorResponse(t: HttpClientErrorException): ErrorResponse {

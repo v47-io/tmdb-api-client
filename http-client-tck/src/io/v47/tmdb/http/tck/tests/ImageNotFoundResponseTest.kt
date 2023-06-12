@@ -64,7 +64,7 @@ internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.o
 
         return if (result.status != 404)
             TckTestResult.Failure(404, result.status)
-        else if (result.body !is ErrorResponse || result.body != checkError)
+        else if (result.body != checkError)
             TckTestResult.Failure(checkError, result.body)
         else
             TckTestResult.Success

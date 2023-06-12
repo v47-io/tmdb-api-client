@@ -63,12 +63,9 @@ internal class NotFoundErrorResponseTest : AbstractTckTest("https://api.themovie
 
         return if (result.status != 404)
             TckTestResult.Failure(404, result.status)
-        else {
-            val errorResponse = result.body as? ErrorResponse
-            if (errorResponse !is ErrorResponse || errorResponse != checkResponse)
-                TckTestResult.Failure(checkResponse, errorResponse)
-            else
-                TckTestResult.Success
-        }
+        else if (result.body != checkResponse)
+            TckTestResult.Failure(checkResponse, result.body)
+        else
+            TckTestResult.Success
     }
 }
