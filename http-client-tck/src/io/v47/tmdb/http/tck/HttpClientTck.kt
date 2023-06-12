@@ -67,7 +67,7 @@ class HttpClientTck {
             val testResult = test.verify(httpClientFactory)
             if (testResult is TckTestResult.Failure)
                 failures += TckResult.Failure.FailedTest(
-                    test.javaClass.canonicalName,
+                    test.javaClass.simpleName,
                     testResult.expectedValue,
                     testResult.actualValue
                 )
