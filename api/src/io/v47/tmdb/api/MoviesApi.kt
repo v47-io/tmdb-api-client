@@ -61,6 +61,7 @@ import io.v47.tmdb.model.Session
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
+import io.v47.tmdb.utils.withSession
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
@@ -315,7 +316,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
         http.post<Unit>("/movie/{movieId}/rating", mapOf("value" to value)) {
             checkRating(value)
             pathVar("movieId", movieId)
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 
@@ -328,7 +329,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
     fun removeRating(movieId: Int, session: Session) =
         http.delete<Unit>("/movie/{movieId}/rating") {
             pathVar("movieId", movieId)
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 

@@ -51,6 +51,7 @@ import io.v47.tmdb.model.TvEpisodeTranslations
 import io.v47.tmdb.model.TvEpisodeVideos
 import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
+import io.v47.tmdb.utils.withSession
 import java.time.LocalDate
 
 class TvEpisodesApi internal constructor(private val http: HttpExecutor) {
@@ -232,7 +233,7 @@ class TvEpisodesApi internal constructor(private val http: HttpExecutor) {
             pathVar("seasonNumber", seasonNumber)
             pathVar("episodeNumber", episodeNumber)
 
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 
@@ -245,14 +246,15 @@ class TvEpisodesApi internal constructor(private val http: HttpExecutor) {
     fun removeRating(
         tvId: Int,
         seasonNumber: Int,
-        episodeNumber: Int, session: Session
+        episodeNumber: Int,
+        session: Session
     ) =
         http.delete<Unit>("/tv/{tvId}/season/{seasonNumber}/episode/{episodeNumber}/rating") {
             pathVar("tvId", tvId)
             pathVar("seasonNumber", seasonNumber)
             pathVar("episodeNumber", episodeNumber)
 
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 

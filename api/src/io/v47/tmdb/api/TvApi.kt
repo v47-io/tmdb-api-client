@@ -60,6 +60,7 @@ import io.v47.tmdb.model.TvShowTranslations
 import io.v47.tmdb.model.TvShowVideos
 import io.v47.tmdb.utils.checkRating
 import io.v47.tmdb.utils.dateFormat
+import io.v47.tmdb.utils.withSession
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
@@ -221,7 +222,7 @@ class TvApi internal constructor(private val http: HttpExecutor) {
         http.post<Unit>("/tv/{tvId}/rating", mapOf("value" to value)) {
             checkRating(value)
             pathVar("tvId", tvId)
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 
@@ -234,7 +235,7 @@ class TvApi internal constructor(private val http: HttpExecutor) {
     fun removeRating(tvId: Int, session: Session) =
         http.delete<Unit>("/tv/{tvId}/rating") {
             pathVar("tvId", tvId)
-            queryArg(session.property, session.id)
+            withSession(session)
             dropResponse()
         }
 

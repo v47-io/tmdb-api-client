@@ -51,7 +51,7 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
             HttpMethod.Get,
             "/{imageSize}/{imageFile}",
             mapOf(
-                "imageSize" to "123456h",
+                "imageSize" to "500",
                 "imageFile" to "wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
             )
         )

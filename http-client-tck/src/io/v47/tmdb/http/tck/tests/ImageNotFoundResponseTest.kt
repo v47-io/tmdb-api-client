@@ -52,7 +52,7 @@ internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.o
             "/{imageSize}/{imageFile}",
             mapOf(
                 "imageSize" to "original",
-                "imageFile" to "wwemzKWzjKYJ3r4cm.svg"
+                "imageFile" to "wzKWzjKYJFfCeiB57q3r4Bcm.png"
             )
         )
 
