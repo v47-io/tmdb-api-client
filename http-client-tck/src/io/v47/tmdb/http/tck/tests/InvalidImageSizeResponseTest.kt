@@ -52,7 +52,7 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
             "/{imageSize}/{imageFile}",
             mapOf(
                 "imageSize" to "500",
-                "imageFile" to "wwemzKWzjKYJFfCeiB57q3r4Bcm.svg"
+                "imageFile" to "wwemzKWzjKYJfCeiB57q3r4Bcm.png"
             )
         )
 
