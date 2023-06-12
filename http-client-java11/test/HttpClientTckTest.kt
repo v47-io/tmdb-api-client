@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 // for some reason this fucker only fails on GitHub but not locally
-@Disabled
+@Disabled("succeeds locally but fails on GitHub")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HttpClientTckTest {
     @Test

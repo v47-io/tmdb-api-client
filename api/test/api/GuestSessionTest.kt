@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 // only enable locally
-@Disabled
+@Disabled("only test locally when needed, otherwise rate limits apply")
 class GuestSessionTest : AbstractTmdbTest() {
     companion object {
         const val KUNG_FU_HUSTLE_ID = 9470
