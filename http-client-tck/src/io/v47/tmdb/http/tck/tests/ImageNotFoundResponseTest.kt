@@ -51,7 +51,7 @@ internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.o
             HttpMethod.Get,
             "/{imageSize}/{imageFile}",
             mapOf(
-                "imageSize" to "w500",
+                "imageSize" to "original",
                 "imageFile" to "wwemzKWzjKYJfCeiB57q3r4Bcm.png"
             )
         )

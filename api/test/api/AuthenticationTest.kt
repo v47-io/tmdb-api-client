@@ -36,9 +36,10 @@ package io.v47.tmdb.api
 
 import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-// strictly rate limited API, only execute manually on local device
+@Disabled("strictly rate limited API, only execute manually on local device when needed")
 class AuthenticationTest : AbstractTmdbTest() {
     @Test
     fun `create guest session`() {
