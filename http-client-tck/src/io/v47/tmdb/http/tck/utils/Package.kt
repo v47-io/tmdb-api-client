@@ -32,46 +32,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.http.tck.tests
+package io.v47.tmdb.http.tck.utils
 
-import io.v47.tmdb.http.HttpClient
-import io.v47.tmdb.http.HttpMethod
-import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
-import io.v47.tmdb.http.impl.DefaultHttpRequest
-import io.v47.tmdb.http.tck.TckTestResult
-import io.v47.tmdb.http.tck.utils.blockingFirst
-import io.v47.tmdb.http.tck.utils.checkErrorBadRequest
 
-@Suppress("MagicNumber")
-internal class ImageNotFoundResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {
-    override fun doVerify(httpClient: HttpClient): TckTestResult {
-        val checkError = ErrorResponse("File Not Found", 404)
-
-        val request = DefaultHttpRequest(
-            HttpMethod.Get,
-            "/{imageSize}/{imageFile}",
-            mapOf(
-                "imageSize" to "original",
-                "imageFile" to "wwemzKWzjKYJfCeiB57q3r4Bcm.png"
-            )
-        )
-
-        val result =
-            httpClient.execute(
-                request,
-                TypeInfo.Simple(ByteArray::class.java)
-            ).blockingFirst()
-
-        // need to accept both 400 and 404 because TMDB API is producing inconsistent results
-        // normally it should just be 404
-        return if (result.status != 404 && result.status != 400)
-            TckTestResult.Failure(404, result.status)
-        else if (result.status == 404 && result.body != checkError)
-            TckTestResult.Failure(checkError, result.body)
-        else if (result.status == 400 && result.body != checkErrorBadRequest)
-            TckTestResult.Failure(checkErrorBadRequest, result.body)
-        else
-            TckTestResult.Success
-    }
-}
+internal val checkErrorBadRequest = ErrorResponse("Bad Request", 400)
