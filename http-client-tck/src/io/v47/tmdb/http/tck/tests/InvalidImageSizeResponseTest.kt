@@ -46,6 +46,7 @@ import io.v47.tmdb.http.tck.utils.blockingFirst
 internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkError = ErrorResponse("Image size not supported", 400)
+        val altError = ErrorResponse("400 Bad Request", 400)
 
         val request = DefaultHttpRequest(
             HttpMethod.Get,
@@ -62,9 +63,10 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
                 TypeInfo.Simple(ByteArray::class.java)
             ).blockingFirst()
 
+        // also accepting alternate error response because TMDB error responses are inconsistent
         return if (result.status != 400)
             TckTestResult.Failure(400, result.status)
-        else if (result.body != checkError)
+        else if (result.body != checkError && result.body != altError)
             TckTestResult.Failure(checkError, result.body)
         else
             TckTestResult.Success

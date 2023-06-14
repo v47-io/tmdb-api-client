@@ -3,17 +3,17 @@ ext {
     slf4jVersion = '2.0.7'
 
     // Implementation Libraries
-    jacksonVersion = '2.15.0'
-    micronautVersion = '4.0.0-M2'
-    mutinyVersion = '2.1.0'
+    jacksonVersion = '2.15.2'
+    micronautVersion = '4.0.0-M7'
+    mutinyVersion = '2.2.0'
     mutinyZeroVersion = '1.0.0'
     nvI18nVersion = '1.29'
-    springBootVersion = '3.0.6'
-    springVersion = '6.0.8'
+    springBootVersion = '3.1.0'
+    springVersion = '6.0.9'
 
     // Testing Libraries
     junitJupiterVersion = '5.9.3'
-    logbackVersion = '1.4.7'
+    logbackVersion = '1.4.8'
 
     libraries = [
             // Core Libraries

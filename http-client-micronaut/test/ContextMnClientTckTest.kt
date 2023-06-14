@@ -54,8 +54,6 @@ class ContextMnClientTckTest {
 
     @Test
     fun executeTckTest() {
-        Thread.sleep(5000) // To prevent being rate-limited
-
         val result =
             HttpClientTck().verify(ContextMnClientFactory(embeddedServer.applicationContext))
 

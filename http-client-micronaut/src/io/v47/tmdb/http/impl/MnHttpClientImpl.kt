@@ -145,7 +145,6 @@ internal class MnHttpClientImpl(
                 else
                     MediaType.APPLICATION_OCTET_STREAM
             )
-            .header(HttpHeaders.USER_AGENT, "curl/7.85.0")
 
     private fun HttpRequest.createUri(): String {
         val uriSB = StringBuilder(basePath)

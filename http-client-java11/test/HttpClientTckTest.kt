@@ -45,8 +45,6 @@ import org.junit.jupiter.api.TestInstance
 class HttpClientTckTest {
     @Test
     fun executeTckTest() {
-        Thread.sleep(5000) // To prevent being rate-limited
-
         val result = HttpClientTck().verify(Java11HttpClientFactory())
 
         if (result is TckResult.Failure)

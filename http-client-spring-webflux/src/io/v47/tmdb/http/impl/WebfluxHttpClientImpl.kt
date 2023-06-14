@@ -146,7 +146,6 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
                 else
                     MediaType.APPLICATION_OCTET_STREAM_VALUE
             )
-            .header(HttpHeaders.USER_AGENT, "curl/7.85.0")
     }
 
     private fun createErrorResponse(t: HttpClientErrorException): ErrorResponse {
