@@ -41,12 +41,12 @@ import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.http.tck.TckTestResult
 import io.v47.tmdb.http.tck.utils.blockingFirst
+import io.v47.tmdb.http.tck.utils.checkErrorBadRequest
 
 @Suppress("MagicNumber")
 internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmdb.org/t/p") {
     override fun doVerify(httpClient: HttpClient): TckTestResult {
         val checkError = ErrorResponse("Image size not supported", 400)
-        val altError = ErrorResponse("400 Bad Request", 400)
 
         val request = DefaultHttpRequest(
             HttpMethod.Get,
@@ -66,7 +66,7 @@ internal class InvalidImageSizeResponseTest : AbstractTckTest("https://image.tmd
         // also accepting alternate error response because TMDB error responses are inconsistent
         return if (result.status != 400)
             TckTestResult.Failure(400, result.status)
-        else if (result.body != checkError && result.body != altError)
+        else if (result.body != checkError && result.body != checkErrorBadRequest)
             TckTestResult.Failure(checkError, result.body)
         else
             TckTestResult.Success
