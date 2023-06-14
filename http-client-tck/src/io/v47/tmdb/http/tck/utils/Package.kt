@@ -36,4 +36,5 @@ package io.v47.tmdb.http.tck.utils
 
 import io.v47.tmdb.http.api.ErrorResponse
 
+@Suppress("MagicNumber")
 internal val checkErrorBadRequest = ErrorResponse("Bad Request", 400)
