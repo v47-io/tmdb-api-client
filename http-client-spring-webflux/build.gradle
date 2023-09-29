@@ -3,21 +3,21 @@ apply plugin: 'org.jetbrains.kotlin.plugin.spring'
 dependencies {
     compileOnly project(':core')
 
-    compileOnly libraries.springContext
-    compileOnly libraries.springWebflux
-    implementation libraries.jacksonDatabind
-    runtimeOnly libraries.jacksonModuleKotlin
+    compileOnly libs.springContext
+    compileOnly libs.springWebflux
+    implementation libs.jacksonDatabind
+    runtimeOnly libs.jacksonModuleKotlin
 
-    implementation libraries.mutiny
-    implementation libraries.mutinyReactor
+    implementation libs.mutiny
+    implementation libs.mutinyReactor
 
     testImplementation project(':api')
     testImplementation project(':http-client-tck')
 
-    testImplementation libraries.sbsWebflux
-    testImplementation libraries.sbsTest
+    testImplementation libs.sbsWebflux
+    testImplementation libs.sbsTest
 
-    testRuntimeOnly libraries.logback
+    testRuntimeOnly libs.logback
 }
 
 publishing {

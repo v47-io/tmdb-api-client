@@ -2,18 +2,26 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.8.22' apply false
-    id 'org.jetbrains.kotlin.kapt' version '1.8.22' apply false
-    id 'org.jetbrains.kotlin.plugin.allopen' version '1.8.22' apply false
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.8.22' apply false
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 
-    id 'com.github.hierynomus.license' version '0.16.1' apply false
-    id 'com.github.jk1.dependency-license-report' version '2.4'
-    id 'io.gitlab.arturbosch.detekt' version '1.23.0' apply false
-    id 'name.remal.maven-publish-ossrh' version '1.5.0' apply false
-    id 'net.researchgate.release' version '3.0.2'
-    id 'org.jetbrains.dokka' version '1.8.20'
+    dependencies {
+        classpath(libs.remalGradlePlugins)
+    }
+}
+
+plugins {
+    alias(libs.plugins.kotlinJvm) apply false
+    alias(libs.plugins.kotlinKapt) apply false
+    alias(libs.plugins.kotlinPluginAllopen) apply false
+    alias(libs.plugins.kotlinPluginSpring) apply false
+
+    alias(libs.plugins.license) apply false
+    alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.release)
+    alias(libs.plugins.dokka)
 }
 
 task reportMerge(type: ReportMergeTask) {
@@ -21,16 +29,14 @@ task reportMerge(type: ReportMergeTask) {
 }
 
 subprojects {
-    apply plugin: 'org.jetbrains.kotlin.jvm'
-    apply plugin: 'io.gitlab.arturbosch.detekt'
-    apply plugin: 'com.github.hierynomus.license'
-    apply plugin: 'org.jetbrains.dokka'
+    apply plugin: libs.plugins.kotlinJvm.get().pluginId
+    apply plugin: libs.plugins.detekt.get().pluginId
+    apply plugin: libs.plugins.license.get().pluginId
+    apply plugin: libs.plugins.dokka.get().pluginId
 
     apply plugin: 'jacoco'
 
     apply plugin: 'maven-publish'
-
-    apply from: '../libraries.gradle'
 
     project.configurations.getByName('compileOnly').setCanBeResolved(true)
 
@@ -70,14 +76,14 @@ subprojects {
     }
 
     compileKotlin {
-        kotlinOptions {
+        compilerOptions {
             freeCompilerArgs = ['-Xno-param-assertions', '-Xno-call-assertions']
             javaParameters = true
         }
     }
 
     compileTestKotlin {
-        kotlinOptions {
+        compilerOptions {
             javaParameters = true
         }
     }
@@ -87,13 +93,12 @@ subprojects {
     }
 
     dependencies {
-        implementation libraries.stdlib
-        implementation libraries.slf4j
+        implementation libs.slf4j
 
-        testImplementation libraries.junitApi
-        testRuntimeOnly libraries.junitEngine
+        testImplementation libs.junitApi
+        testRuntimeOnly libs.junitEngine
 
-        testRuntimeOnly libraries.logback
+        testRuntimeOnly libs.logback
     }
 
     detekt {
@@ -161,12 +166,12 @@ subprojects {
     }
 
     task packageJavadoc(type: Jar, dependsOn: dokkaJavadoc) {
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from dokkaJavadoc.outputDirectory
     }
 
     task packageSources(type: Jar) {
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 

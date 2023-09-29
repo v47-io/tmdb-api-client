@@ -1,9 +1,9 @@
 dependencies {
-    implementation libraries.jacksonDatabind
-    runtimeOnly libraries.jacksonModuleJsr310
-    runtimeOnly libraries.jacksonModuleKotlin
+    implementation libs.jacksonDatabind
+    runtimeOnly libs.jacksonModuleJsr310
+    runtimeOnly libs.jacksonModuleKotlin
 
-    implementation libraries.mutiny
+    implementation libs.mutiny
 
     compileOnly project(':core')
 

@@ -1,7 +1,7 @@
 dependencies {
     api project(':core')
 
-    implementation libraries.mutiny
+    implementation libs.mutiny
 }
 
 publishing {

@@ -14,25 +14,25 @@ dependencies {
     compileOnly project(':api')
     compileOnly project(':core')
 
-    kapt libraries.mnGraal
-    kapt libraries.mnInject
-    implementation libraries.mnHttpClient
-    implementation libraries.mnJacksonDatabind
-    compileOnly libraries.jacksonDatabind
-    runtimeOnly libraries.jacksonModuleKotlin
+    kapt libs.mnGraal
+    kapt libs.mnInject
+    implementation libs.mnHttpClient
+    implementation libs.mnJacksonDatabind
+    compileOnly libs.jacksonDatabind
+    runtimeOnly libs.jacksonModuleKotlin
 
-    implementation libraries.mutiny
-    implementation libraries.mutinyZeroFlowAdapters
+    implementation libs.mutiny
+    implementation libs.mutinyZeroFlowAdapters
 
     testImplementation project(':api')
     testImplementation project(':http-client-tck')
 
-    kaptTest libraries.mnInject
-    testRuntimeOnly libraries.mnHttpClient
-    testRuntimeOnly libraries.mnHttpServerNetty
-    testImplementation libraries.mnRuntime
+    kaptTest libs.mnInject
+    testRuntimeOnly libs.mnHttpClient
+    testRuntimeOnly libs.mnHttpServerNetty
+    testImplementation libs.mnRuntime
 
-    testRuntimeOnly libraries.logback
+    testRuntimeOnly libs.logback
 }
 
 publishing {

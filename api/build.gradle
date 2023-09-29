@@ -7,16 +7,16 @@ allOpen {
 dependencies {
     api project(':core')
 
-    compileOnly libraries.jacksonDatabind
-    api libraries.nvI18n
+    compileOnly libs.jacksonDatabind
+    api libs.nvI18n
 
-    implementation libraries.mutiny
+    implementation libs.mutiny
 
     testImplementation project(':http-client-java11')
 
-    testRuntimeOnly libraries.mnHttpClient
-    testRuntimeOnly libraries.jacksonModuleKotlin
-    testRuntimeOnly libraries.logback
+    testRuntimeOnly libs.mnHttpClient
+    testRuntimeOnly libs.jacksonModuleKotlin
+    testRuntimeOnly libs.logback
 }
 
 publishing {

@@ -6,15 +6,15 @@ dependencies {
     implementation project(':core')
     implementation project(':http-client-spring-webflux')
 
-    implementation libraries.springBootStarter
-    implementation libraries.sbsWebflux
-    implementation libraries.jacksonDatabind
+    implementation libs.springBootStarter
+    implementation libs.sbsWebflux
+    implementation libs.jacksonDatabind
 
-    testImplementation libraries.sbsTest
-    testImplementation libraries.mutinyReactor
+    testImplementation libs.sbsTest
+    testImplementation libs.mutinyReactor
 
-    testRuntimeOnly libraries.jacksonModuleKotlin
-    testRuntimeOnly libraries.logback
+    testRuntimeOnly libs.jacksonModuleKotlin
+    testRuntimeOnly libs.logback
 }
 
 publishing {

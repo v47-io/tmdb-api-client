@@ -1,0 +1,60 @@
+[versions]
+detekt = "1.23.1"
+dokka = "1.9.0"
+jackson = "2.15.2"
+junit-jupiter = "5.10.0"
+kotlin = "1.9.0"
+license = "0.16.1"
+logback = "1.4.11"
+micronaut = "4.1.7"
+mutiny = "2.5.1"
+mutiny-zero = "1.0.0"
+nvi18n = "1.29"
+release = "3.0.2"
+remal-gradle-plugins = "1.9.2"
+slf4j = "2.0.9"
+spring-boot = "3.1.4"
+spring = "6.0.12"
+
+[libraries]
+jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jacksonModuleJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+
+junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+mnGraal = { module = "io.micronaut:micronaut-graal", version.ref = "micronaut" }
+mnInject = { module = "io.micronaut:micronaut-inject-java", version.ref = "micronaut" }
+mnHttpClient = { module = "io.micronaut:micronaut-http-client", version.ref = "micronaut" }
+mnJacksonDatabind = { module = "io.micronaut:micronaut-jackson-databind", version.ref = "micronaut" }
+mnHttpServerNetty = { module = "io.micronaut:micronaut-http-server-netty", version.ref = "micronaut" }
+mnRuntime = { module = "io.micronaut:micronaut-runtime", version.ref = "micronaut" }
+
+mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
+mutinyReactor = { module = "io.smallrye.reactive:mutiny-reactor", version.ref = "mutiny" }
+mutinyZeroFlowAdapters = { module = "io.smallrye.reactive:mutiny-zero-flow-adapters", version.ref = "mutiny-zero" }
+
+nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
+
+remalGradlePlugins = { module = "name.remal:gradle-plugins", version.ref = "remal-gradle-plugins" }
+
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
+sbsTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+sbsWebflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
+springBootStarter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+springContext = { module = "org.springframework:spring-context", version.ref = "spring" }
+springWebflux = { module = "org.springframework:spring-webflux", version.ref = "spring" }
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinPluginAllopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+license = { id = "com.github.hierynomus.license", version.ref = "license" }
+release = { id = "net.researchgate.release", version.ref = "release" }

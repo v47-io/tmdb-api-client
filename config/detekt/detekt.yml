@@ -43,7 +43,7 @@ console-reports:
 
 output-reports:
   active: true
-  exclude:
+  exclude: []
   # - 'TxtOutputReport'
   # - 'XmlOutputReport'
   # - 'HtmlOutputReport'
@@ -661,8 +661,6 @@ style:
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
-    active: false
-  OptionalWhenBraces:
     active: false
   PreferToOverPairSyntax:
     active: false
