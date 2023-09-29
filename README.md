@@ -87,7 +87,7 @@ Automatically generated Kotlin docs are available [here](https://v47-io.github.i
 
 Requirements:
 
-- JDK 11
+- JDK 17
 
 For local building and testing you need to configure a TMDb API-Key using
 the environment variable `API_KEY`.
