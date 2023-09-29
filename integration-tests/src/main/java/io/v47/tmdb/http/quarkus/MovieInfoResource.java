@@ -75,35 +75,5 @@ public class MovieInfoResource {
                                                      Objects.requireNonNull(movieDetails.getReleaseDate()).getYear()));
     }
 
-    static class MovieInfo {
-        public final String imdbId;
-        public final String title;
-        public final int releaseYear;
-
-        public MovieInfo(String imdbId, String title, int releaseYear) {
-            this.imdbId = imdbId;
-            this.title = title;
-            this.releaseYear = releaseYear;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-            MovieInfo movieInfo = (MovieInfo) o;
-            return releaseYear == movieInfo.releaseYear && imdbId.equals(movieInfo.imdbId) && title.equals(movieInfo.title);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(imdbId, title, releaseYear);
-        }
-
-        @Override
-        public String toString() {
-            return "MovieInfo{" + "imdbId='" + imdbId + '\'' + ", title='" + title + '\'' + ", releaseYear=" + releaseYear + '}';
-        }
-    }
+    public record MovieInfo(String imdbId, String title, int releaseYear) {}
 }

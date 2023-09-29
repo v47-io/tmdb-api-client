@@ -71,8 +71,7 @@ public class TckResourceTest {
                                   .body()
                                   .as(TckResult.class, objectMapper);
 
-        if (result instanceof TckResult.Failure) {
-            TckResult.Failure failureResult = (TckResult.Failure) result;
+        if (result instanceof TckResult.Failure failureResult) {
 
             failureResult.getFailedTests().forEach(failedTest -> {
                 Assertions.assertEquals(failedTest.getExpectedValue(),
