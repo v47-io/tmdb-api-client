@@ -38,6 +38,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 // Needed for SpringBootTest
+@Suppress("UtilityClassWithPublicConstructor")
 @SpringBootApplication
 class TmdbApplication {
     companion object {
