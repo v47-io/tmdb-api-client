@@ -89,6 +89,10 @@ subprojects {
         }
     }
 
+    jacoco {
+        toolVersion = '0.8.11'
+    }
+
     test {
         useJUnitPlatform()
         jacoco {
@@ -157,11 +161,11 @@ subprojects {
                 from components.java
 
                 artifact packageSources {
-                    classifier 'sources'
+                    archiveClassifier.set('sources')
                 }
 
                 artifact packageJavadoc {
-                    classifier 'javadoc'
+                    archiveClassifier.set('javadoc')
                 }
 
                 pom {
