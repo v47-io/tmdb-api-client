@@ -70,6 +70,10 @@ Various integrations with application frameworks are also available (`artifactId
 - Spring Boot Webflux (`spring-boot-starter`)
 - [Quarkus][tmdb-api-client-quarkus] (`quarkus`)
 
+__All integrations except the Java 11 HttpClient based implementation (also standalone) and the Quarkus 
+client are deprecated and won't get any major updates except critical fixes ensuring they are secure 
+and test ok.__
+
 [tmdb-api-client-quarkus]: https://github.com/v47-io/tmdb-api-client-quarkus-ext
 
 Adding support for more frameworks is fairly trivial, only a small adapter needs to be
