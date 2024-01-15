@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.kotlinPluginAllopen) apply false
     alias(libs.plugins.kotlinPluginSpring) apply false
 
+    alias(libs.plugins.gitProperties) apply false
     alias(libs.plugins.license) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.release)
@@ -31,6 +32,7 @@ task reportMerge(type: ReportMergeTask) {
 subprojects {
     apply plugin: libs.plugins.kotlinJvm.get().pluginId
     apply plugin: libs.plugins.detekt.get().pluginId
+    apply plugin: libs.plugins.gitProperties.get().pluginId
     apply plugin: libs.plugins.license.get().pluginId
     apply plugin: libs.plugins.dokka.get().pluginId
 
@@ -68,6 +70,10 @@ subprojects {
         testRuntimeOnly libs.junitEngine
 
         testRuntimeOnly libs.logback
+    }
+
+    gitProperties {
+        gitPropertiesName = "${rootProject.name}-${project.name}-version.properties"
     }
 
     detekt {

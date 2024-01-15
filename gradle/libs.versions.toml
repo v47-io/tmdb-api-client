@@ -1,6 +1,7 @@
 [versions]
 detekt = "1.23.4"
 dokka = "1.9.10"
+git-properties = "2.4.1"
 jackson = "2.16.1"
 junit-jupiter = "5.10.1"
 kotlin = "1.9.22"
@@ -52,6 +53,7 @@ springWebflux = { module = "org.springframework:spring-webflux", version.ref = "
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+gitProperties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlinPluginAllopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }

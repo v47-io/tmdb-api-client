@@ -37,10 +37,15 @@ package io.v47.tmdb.http.impl
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.converters.multi.FromMono
-import io.v47.tmdb.http.*
+import io.v47.tmdb.http.HttpClient
+import io.v47.tmdb.http.HttpMethod
+import io.v47.tmdb.http.HttpRequest
+import io.v47.tmdb.http.HttpResponse
+import io.v47.tmdb.http.TypeInfo
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
+import io.v47.tmdb.utils.ReadLibraryVersionUtil.readLibraryVersion
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -52,6 +57,10 @@ import reactor.core.publisher.Mono
 import java.util.concurrent.Flow
 
 internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpClient {
+    companion object {
+        private val VERSION = readLibraryVersion("http-client-spring-webflux")
+    }
+
     private val om = ObjectMapper().apply {
         findAndRegisterModules()
     }
@@ -146,6 +155,7 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
                 else
                     MediaType.APPLICATION_OCTET_STREAM_VALUE
             )
+            .header("User-Agent", "tmdb-api-client/$VERSION (http-client-spring-webflux)")
     }
 
     private fun createErrorResponse(t: HttpClientErrorException): ErrorResponse {

@@ -47,6 +47,7 @@ import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
 import io.v47.tmdb.http.utils.toArgument
+import io.v47.tmdb.utils.ReadLibraryVersionUtil.readLibraryVersion
 import mutiny.zero.flow.adapters.AdaptersToFlow
 import java.net.URLEncoder
 import java.util.concurrent.Flow
@@ -58,6 +59,11 @@ internal class MnHttpClientImpl(
     private val rawClient: MnHttpClient,
     private val basePath: String = ""
 ) : HttpClient {
+    companion object {
+        @JvmStatic
+        private val VERSION = readLibraryVersion("http-client-micronaut")
+    }
+
     private val byteBufferArgument = Argument.of(ByteBuffer::class.java)
     private val imageErrorRegex = Regex("""<h\d>(.+?)</h\d>""", RegexOption.IGNORE_CASE)
 
@@ -145,6 +151,7 @@ internal class MnHttpClientImpl(
                 else
                     MediaType.APPLICATION_OCTET_STREAM
             )
+            .header("User-Agent", "tmdb-api-client/$VERSION (http-client-micronaut)")
 
     private fun HttpRequest.createUri(): String {
         val uriSB = StringBuilder(basePath)

@@ -40,6 +40,7 @@ import io.v47.tmdb.http.*
 import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.http.api.toErrorResponse
+import io.v47.tmdb.utils.ReadLibraryVersionUtil.readLibraryVersion
 import java.net.URI
 import java.net.URLEncoder
 import java.util.concurrent.Flow
@@ -53,6 +54,9 @@ internal class Java11HttpClientImpl(
 ) : HttpClient {
     companion object {
         private const val OK = 200
+
+        @JvmStatic
+        private val VERSION = readLibraryVersion("http-client-java11")
     }
 
     private val uriVariableRegex = Regex("""\{(\w+)}""", RegexOption.IGNORE_CASE)
@@ -138,6 +142,11 @@ internal class Java11HttpClientImpl(
                         "application/json"
                     else
                         "application/octet-stream"
+                )
+
+                header(
+                    "User-Agent",
+                    "tmdb-api-client/$VERSION (http-client-java11)"
                 )
             }.build()
 
