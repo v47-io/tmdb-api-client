@@ -35,6 +35,8 @@
 package io.v47.tmdb.api
 
 import io.smallrye.mutiny.Multi
+import io.smallrye.mutiny.Uni
+import io.v47.tmdb.http.HttpClient
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.HttpMethod
 import io.v47.tmdb.http.TypeInfo
@@ -46,35 +48,38 @@ import io.v47.tmdb.model.Height
 import io.v47.tmdb.model.ImageSize
 import io.v47.tmdb.model.Original
 import io.v47.tmdb.model.Width
-import org.slf4j.LoggerFactory
 import java.util.concurrent.Flow
+import java.util.concurrent.atomic.AtomicReference
 
 class ImagesApi internal constructor(
     private val httpClientFactory: HttpClientFactory,
-    configuration: Configuration
+    private val configurationProvider: () -> Uni<Configuration>
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)!!
-
-    private val imageDlClient = (configuration.images.secureBaseUrl ?: configuration.images.baseUrl)
-        ?.let { httpClientFactory.createHttpClient(it.trimEnd('/')) }
-        ?: run {
-            log.warn("Image download not possible: The system configuration doesn't provide a base URL!")
-            null
-        }
-
     private val byteArrayTypeInfo = TypeInfo.Simple(ByteArray::class.java)
 
-    val available
-        get() = imageDlClient != null
+    private val imageDlClient = AtomicReference<HttpClient>()
+
+    private fun requireClient(): Uni<HttpClient> =
+        imageDlClient.get()
+            ?.let { Uni.createFrom().item(it) }
+            ?: configurationProvider()
+                .map { config ->
+                    imageDlClient.updateAndGet { existingClient ->
+                        existingClient ?: (config.images.secureBaseUrl ?: config.images.baseUrl)
+                            ?.let { httpClientFactory.createHttpClient(it.trimEnd('/')) }
+                        ?: error("Image download not possible: The system configuration doesn't provide a base URL!")
+                    }
+                }
 
     @Suppress("ThrowsCount")
     fun download(imagePath: String, size: ImageSize = Original): Flow.Publisher<ByteArray> {
         require(size is Width || size is Height || size is Original) { "Invalid size: $size" }
 
-        val actualSize = if (imagePath.endsWith(".svg", ignoreCase = true))
-            Original
-        else
-            size
+        val actualSize =
+            if (imagePath.endsWith(".svg", ignoreCase = true))
+                Original
+            else
+                size
 
         val request = DefaultHttpRequest(
             HttpMethod.Get,
@@ -85,14 +90,18 @@ class ImagesApi internal constructor(
             )
         )
 
-        return Multi
-            .createFrom()
-            .publisher(
-                requireClient().execute(
-                    request,
-                    byteArrayTypeInfo
-                )
-            )
+        return requireClient()
+            .toMulti()
+            .flatMap { client ->
+                Multi
+                    .createFrom()
+                    .publisher(
+                        client.execute(
+                            request,
+                            byteArrayTypeInfo
+                        )
+                    )
+            }
             .flatMap { resp ->
                 @Suppress("MagicNumber")
                 when {
@@ -118,15 +127,4 @@ class ImagesApi internal constructor(
                 }
             }
     }
-
-    internal fun close() {
-        imageDlClient?.close()
-    }
-
-    private fun requireClient() =
-        imageDlClient
-            ?: throw IllegalArgumentException(
-                "Cannot download image: The system " +
-                        "configuration doesn't provide a base URL!"
-            )
 }

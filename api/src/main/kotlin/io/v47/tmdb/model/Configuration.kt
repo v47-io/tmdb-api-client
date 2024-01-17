@@ -77,6 +77,9 @@ object Original : ImageSize(), Serializable {
     override val value = Int.MAX_VALUE
 
     override fun toString() = "original"
+
+    @Suppress("unused")
+    private fun readResolve(): Any = Original
 }
 
 data class Country(

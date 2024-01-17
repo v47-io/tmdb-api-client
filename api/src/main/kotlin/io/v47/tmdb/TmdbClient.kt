@@ -62,7 +62,6 @@ import io.v47.tmdb.api.TvSeasonsApi
 import io.v47.tmdb.api.key.TmdbApiKeyProvider
 import io.v47.tmdb.http.HttpClientFactory
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.Configuration
 import io.v47.tmdb.utils.OpenTmdbClient
 
 /**
@@ -71,7 +70,7 @@ import io.v47.tmdb.utils.OpenTmdbClient
  */
 @OpenTmdbClient
 class TmdbClient private constructor(
-    private val httpClientFactory: HttpClientFactory,
+    httpClientFactory: HttpClientFactory,
     httpExecutor: HttpExecutor
 ) {
     /**
@@ -97,20 +96,6 @@ class TmdbClient private constructor(
     constructor (httpClientFactory: HttpClientFactory, apiKeyProvider: TmdbApiKeyProvider) :
             this(httpClientFactory, HttpExecutor(httpClientFactory, apiKeyProvider))
 
-    private var _cachedSystemConfiguration: Configuration? = null
-
-    /**
-     * Provides a variant of [ConfigurationApi.system] which is cached as runtime to reduce network
-     * requests for a resource that won't often change.
-     */
-    val cachedSystemConfiguration: Configuration
-        get() {
-            if (_cachedSystemConfiguration == null)
-                initialize()
-
-            return requireCachedSystemConfiguration()
-        }
-
     val authentication = AuthenticationApi(httpExecutor)
     val certifications = CertificationsApi(httpExecutor)
     val changes = ChangesApi(httpExecutor)
@@ -122,16 +107,7 @@ class TmdbClient private constructor(
     val find = FindApi(httpExecutor)
     val genres = GenresApi(httpExecutor)
     val guestSession = GuestSessionApi(httpExecutor)
-
-    private var _images: ImagesApi? = null
-    val images: ImagesApi
-        get() {
-            if (_images == null)
-                initialize()
-
-            return _images ?: error("_images not set")
-        }
-
+    val images = ImagesApi(httpClientFactory) { Uni.createFrom().publisher(configuration.system()) }
     val keyword = KeywordApi(httpExecutor)
     val list = ListApi(httpExecutor)
     val movie = MoviesApi(httpExecutor)
@@ -144,44 +120,4 @@ class TmdbClient private constructor(
     val tvEpisode = TvEpisodesApi(httpExecutor)
     val tvEpisodeGroup = TvEpisodeGroupsApi(httpExecutor)
     val tvSeason = TvSeasonsApi(httpExecutor)
-
-    private fun initialize() {
-        synchronized(this) {
-            if (_cachedSystemConfiguration == null) {
-                Uni
-                    .createFrom()
-                    .publisher(configuration.system())
-                    .onItem()
-                    .invoke { config ->
-                        _cachedSystemConfiguration = config
-                        _images = ImagesApi(
-                            httpClientFactory,
-                            requireCachedSystemConfiguration()
-                        )
-                    }
-                    .onFailure().recoverWithNull()
-                    .await().indefinitely()
-            }
-        }
-    }
-
-    private fun requireCachedSystemConfiguration() =
-        _cachedSystemConfiguration
-            ?: error("_cachedSystemConfiguration not set")
-
-    fun refreshCachedConfiguration(): Uni<Unit> =
-        Uni
-            .createFrom()
-            .publisher(configuration.system())
-            .onItem()
-            .invoke { systemConfig ->
-                synchronized(this) {
-                    _cachedSystemConfiguration = systemConfig
-
-                    _images?.close()
-                    _images = ImagesApi(httpClientFactory, systemConfig)
-                }
-            }
-            .onFailure().recoverWithNull()
-            .map { }
 }
