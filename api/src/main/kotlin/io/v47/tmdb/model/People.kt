@@ -78,7 +78,10 @@ data class PersonExternalIds(
     val tvrageId: Int?,
     val twitterId: String?,
     override val id: Int?,
-    val instagramId: String?
+    val instagramId: String?,
+    val youtubeId: String?,
+    val tiktokId: String?,
+    val wikidataId: String?
 ) : TmdbType(), TmdbIntId
 
 data class PersonImages(
@@ -153,6 +156,7 @@ data class PeoplePopular(
         val knownFor: List<MovieTvPersonListResult> = emptyList(),
         val knownForDepartment: String?,
         val name: String?,
+        val originalName: String?,
         val gender: Gender?,
         val popularity: Double?
     ) : TmdbType(), TmdbIntId

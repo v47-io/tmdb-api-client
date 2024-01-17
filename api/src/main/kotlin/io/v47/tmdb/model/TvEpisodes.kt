@@ -46,6 +46,7 @@ data class TvEpisodeDetails(
     val overview: String?,
     override val id: Int?,
     val mediaType: MediaType?,
+    val episodeType: TvEpisodeType?,
     val productionCode: String?,
     val runtime: Int?,
     val seasonNumber: String?,
@@ -93,7 +94,8 @@ data class TvEpisodeExternalIds(
     val freebaseMid: String?,
     val freebaseId: String?,
     val tvdbId: Int?,
-    val tvrageId: Int?
+    val tvrageId: Int?,
+    val wikidataId: String?
 ) : TmdbType(), TmdbIntId
 
 data class TvEpisodeImages(
@@ -110,3 +112,7 @@ data class TvEpisodeVideos(
     override val id: Int?,
     val results: List<VideoListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
+
+enum class TvEpisodeType {
+    Standard, MidSeason, Finale
+}

@@ -37,12 +37,16 @@ package io.v47.tmdb.jackson.mixins
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal interface ListDetailsMixin {
     @get:JsonProperty("iso_639_1")
     val language: LanguageCode?
+
+    @get:JsonProperty("iso_3166_1")
+    val country: CountryCode?
 }
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)

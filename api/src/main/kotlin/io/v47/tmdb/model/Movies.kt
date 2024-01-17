@@ -119,7 +119,8 @@ data class MovieExternalIds(
     val imdbId: String?,
     val facebookId: String?,
     val instagramId: String?,
-    val twitterId: String?
+    val twitterId: String?,
+    val wikidataId: String?
 ) : TmdbType(), TmdbIntId
 
 data class MovieImages(

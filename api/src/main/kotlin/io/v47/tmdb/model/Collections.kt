@@ -53,6 +53,7 @@ data class CollectionDetails(
         override val id: Int?,
         val originalLanguage: LanguageCode?,
         val originalTitle: String?,
+        val mediaType: MediaType?,
         val overview: String?,
         val releaseDate: LocalDate?,
         val posterPath: String?,

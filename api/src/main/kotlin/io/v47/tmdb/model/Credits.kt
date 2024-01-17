@@ -116,7 +116,9 @@ data class CreditMediaTvEpisode(
     val showId: Int?,
     val stillPath: String?,
     val voteAverage: Double?,
-    val voteCount: Long?
+    val voteCount: Long?,
+    val mediaType: MediaType?,
+    val episodeType: TvEpisodeType?
 ) : TmdbType(), TmdbIntId
 
 data class CreditMediaTvSeason(
@@ -127,7 +129,9 @@ data class CreditMediaTvSeason(
     val overview: String?,
     val posterPath: String?,
     val seasonNumber: Int?,
-    val showId: Int?
+    val showId: Int?,
+    val mediaType: MediaType?,
+    val voteAverage: Double?
 ) : TmdbType(), TmdbIntId
 
 data class CreditPerson(

@@ -149,7 +149,8 @@ data class TvShowExternalIds(
     val tvrageId: Int?,
     val facebookId: String?,
     val instagramId: String?,
-    val twitterId: String?
+    val twitterId: String?,
+    val wikidataId: String?
 ) : TmdbType(), TmdbIntId
 
 data class TvShowImages(

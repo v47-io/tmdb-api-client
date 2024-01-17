@@ -48,6 +48,7 @@ data class TvSeasonDetails(
     val seasonNumber: Int?,
     val showId: Int?,
     val episodeCount: Int?,
+    val voteAverage: Double?,
 
     // append to response
     val changes: TvSeasonChanges?,
@@ -90,7 +91,8 @@ data class TvSeasonExternalIds(
     val freebaseMid: String?,
     val freebaseId: String?,
     val tvdbId: Int?,
-    val tvrageId: Int?
+    val tvrageId: Int?,
+    val wikidataId: String?
 ) : TmdbType(), TmdbIntId
 
 data class TvSeasonImages(

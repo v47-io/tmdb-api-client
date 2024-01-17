@@ -34,6 +34,7 @@
  */
 package io.v47.tmdb.model
 
+import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
 data class ListDetails(
@@ -44,9 +45,13 @@ data class ListDetails(
     val items: List<MovieListResult> = emptyList(),
     val itemCount: Int?,
     val language: LanguageCode?,
+    val country: CountryCode?,
     val listType: String?,
     val name: String?,
-    val posterPath: String?
+    val posterPath: String?,
+    val totalResults: Int?,
+    val totalPages: Int?,
+    val page: Int?
 ) : TmdbType(), TmdbStringId
 
 data class ItemStatus(
