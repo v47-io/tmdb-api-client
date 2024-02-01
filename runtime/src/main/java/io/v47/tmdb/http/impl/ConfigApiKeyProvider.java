@@ -35,12 +35,12 @@
 package io.v47.tmdb.http.impl;
 
 import io.v47.tmdb.api.key.TmdbApiKeyProvider;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 @Default
-@ApplicationScoped
+@Singleton
 public class ConfigApiKeyProvider implements TmdbApiKeyProvider {
     private final String apiKey;
 

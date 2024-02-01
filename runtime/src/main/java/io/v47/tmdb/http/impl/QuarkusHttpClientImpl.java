@@ -70,11 +70,16 @@ public class QuarkusHttpClientImpl implements HttpClient {
     private static final Pattern uriVariablePattern = Pattern.compile("\\{(\\w+)}", Pattern.CASE_INSENSITIVE);
     private static final Pattern imageErrorPattern = Pattern.compile("<h\\d>(.+?)</h\\d>", Pattern.CASE_INSENSITIVE);
 
+    @NotNull
     private final String baseUrl;
+    @NotNull
     private final WebClient client;
+    @NotNull
     private final ObjectMapper objectMapper;
 
-    public QuarkusHttpClientImpl(String baseUrl, WebClient client, ObjectMapper objectMapper) {
+    public QuarkusHttpClientImpl(@NotNull String baseUrl,
+                                 @NotNull WebClient client,
+                                 @NotNull ObjectMapper objectMapper) {
         this.baseUrl = baseUrl;
         this.client = client;
         this.objectMapper = objectMapper;
@@ -135,23 +140,12 @@ public class QuarkusHttpClientImpl implements HttpClient {
     }
 
     private static HttpMethod extractHttpMethod(HttpRequest request) {
-        HttpMethod method = null;
-        switch (request.getMethod()) {
-            case Get:
-                method = HttpMethod.GET;
-                break;
-            case Post:
-                method = HttpMethod.POST;
-                break;
-            case Put:
-                method = HttpMethod.PUT;
-                break;
-            case Delete:
-                method = HttpMethod.DELETE;
-                break;
-        }
-
-        return method;
+        return switch (request.getMethod()) {
+            case Get -> HttpMethod.GET;
+            case Post -> HttpMethod.POST;
+            case Put -> HttpMethod.PUT;
+            case Delete -> HttpMethod.DELETE;
+        };
     }
 
     private URL createUri(HttpRequest request) {

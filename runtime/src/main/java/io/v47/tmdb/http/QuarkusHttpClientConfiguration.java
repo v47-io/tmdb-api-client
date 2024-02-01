@@ -39,32 +39,22 @@ import io.v47.tmdb.TmdbClient;
 import io.v47.tmdb.api.key.TmdbApiKeyProvider;
 import io.v47.tmdb.http.impl.HttpClientFactoryImpl;
 import io.vertx.mutiny.core.Vertx;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
 import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class QuarkusHttpClientConfiguration {
-    private final Vertx vertx;
-    private final ObjectMapper objectMapper;
-
-    @Inject
-    public QuarkusHttpClientConfiguration(Vertx vertx, ObjectMapper objectMapper) {
-        this.vertx = vertx;
-        this.objectMapper = objectMapper;
+    @Produces
+    @Default
+    @Singleton
+    public HttpClientFactory httpClientFactory(Vertx vertx, ObjectMapper objectMapper) {
+        return new HttpClientFactoryImpl(vertx, objectMapper);
     }
 
     @Produces
     @Default
-    @ApplicationScoped
-    public HttpClientFactory httpClientFactory() {
-        return new HttpClientFactoryImpl(this.vertx, this.objectMapper);
-    }
-
-    @Produces
-    @Default
-    @ApplicationScoped
+    @Singleton
     public TmdbClient tmdbClient(HttpClientFactory httpClientFactory, TmdbApiKeyProvider apiKeyProvider) {
         return new TmdbClient(httpClientFactory, apiKeyProvider);
     }

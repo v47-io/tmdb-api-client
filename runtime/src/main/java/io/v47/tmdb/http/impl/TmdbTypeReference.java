@@ -40,7 +40,7 @@ import io.v47.tmdb.http.TypeInfo;
 import java.lang.reflect.Type;
 
 class TmdbTypeReference<T> extends TypeReference<T> {
-    private Type type;
+    private final Type type;
 
     public TmdbTypeReference(TypeInfo typeInfo) {
         type = typeInfo.getFullType();

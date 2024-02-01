@@ -42,7 +42,9 @@ import io.smallrye.config.ConfigMapping;
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface TmdbClientConfig {
     /**
-     * Specify the TMDb API Key used to authenticate requests.
+     * The TMDB API Key used to authenticate requests.
+     * <p>
+     * You can get it here after logging in <a href="https://www.themoviedb.org/settings/api">TMDB Account Settings Page</a>
      */
     String apiKey();
 }
