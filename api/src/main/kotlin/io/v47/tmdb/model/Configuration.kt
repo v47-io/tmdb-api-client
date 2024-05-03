@@ -54,32 +54,37 @@ data class Configuration(
 }
 
 @Suppress("SerialVersionUIDInSerializableClass")
-sealed class ImageSize : Serializable {
-    abstract val value: Int
-}
+sealed interface ImageSize : Serializable {
+    val value: Int
 
-@Suppress("SerialVersionUIDInSerializableClass")
-data class Width(override val value: Int) : ImageSize(), Comparable<Width>, Serializable {
-    override fun compareTo(other: Width) = value.compareTo(other.value)
+    data class Width(override val value: Int) : ImageSize, Comparable<Width> {
+        init {
+            require(value >= 0) { "Width must be >= 0" }
+        }
 
-    override fun toString() = "w$value"
-}
+        override fun compareTo(other: Width) = value.compareTo(other.value)
 
-@Suppress("SerialVersionUIDInSerializableClass")
-data class Height(override val value: Int) : ImageSize(), Comparable<Height>, Serializable {
-    override fun compareTo(other: Height) = value.compareTo(other.value)
+        override fun toString() = "w$value"
+    }
 
-    override fun toString() = "h$value"
-}
+    data class Height(override val value: Int) : ImageSize, Comparable<Height> {
+        init {
+            require(value >= 0) { "Height must be >= 0" }
+        }
 
-@Suppress("SerialVersionUIDInSerializableClass")
-object Original : ImageSize(), Serializable {
-    override val value = Int.MAX_VALUE
+        override fun compareTo(other: Height) = value.compareTo(other.value)
 
-    override fun toString() = "original"
+        override fun toString() = "h$value"
+    }
 
-    @Suppress("unused")
-    private fun readResolve(): Any = Original
+    data object Original : ImageSize {
+        override val value = Int.MAX_VALUE
+
+        override fun toString() = "original"
+
+        @Suppress("unused")
+        private fun readResolve(): Any = Original
+    }
 }
 
 data class Country(

@@ -1,7 +1,7 @@
 /**
  * The Clear BSD License
  *
- * Copyright (c) 2023, the tmdb-api-client authors
+ * Copyright (c) 2024, the tmdb-api-client authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,26 +32,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.api
+package io.v47.tmdb.utils
 
-import io.v47.tmdb.TmdbClient
-import io.v47.tmdb.http.Java11HttpClientFactory
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
+import io.v47.tmdb.model.ImageSize
+import io.v47.tmdb.utils.ImageSizeUtil.findClosestHeight
+import io.v47.tmdb.utils.ImageSizeUtil.findClosestWidth
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractTmdbTest {
-    protected lateinit var client: TmdbClient
+class ImageSizeUtilTest {
+    private val sizes: List<ImageSize> =
+        listOf(
+            ImageSize.Width(100),
+            ImageSize.Height(100),
+            ImageSize.Width(1000),
+            ImageSize.Height(1000),
+            ImageSize.Width(2000),
+            ImageSize.Height(2000)
+        )
 
-    @BeforeAll
-    fun setup() {
-        val apiKey = System.getProperty("tmdb.api-key") ?: System.getenv("API_KEY")
-        if (apiKey.isNullOrBlank())
-            throw IllegalArgumentException(
-                "Missing api key: You can provide the key either as a system " +
-                        "property called 'tmdb.api-key' or as an environment variable called 'API_KEY'"
-            )
+    @Test
+    fun `it should return the closest width`() {
+        assertEquals(ImageSize.Width(100), sizes.findClosestWidth(50))
+        assertEquals(ImageSize.Width(100), sizes.findClosestWidth(150, forceSelectHigher = false))
+        assertEquals(ImageSize.Width(1000), sizes.findClosestWidth(150))
+        assertEquals(ImageSize.Original, sizes.findClosestWidth(4000))
+    }
 
-        client = TmdbClient(Java11HttpClientFactory(), apiKey)
+    @Test
+    fun `it should return the closest height`() {
+        assertEquals(ImageSize.Height(100), sizes.findClosestHeight(50))
+        assertEquals(ImageSize.Height(100), sizes.findClosestHeight(150, forceSelectHigher = false))
+        assertEquals(ImageSize.Height(1000), sizes.findClosestHeight(150))
+        assertEquals(ImageSize.Original, sizes.findClosestHeight(4000))
     }
 }

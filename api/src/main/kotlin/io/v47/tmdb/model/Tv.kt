@@ -115,7 +115,8 @@ data class TvShowContentRatings(
 ) : TmdbType(), TmdbIntId {
     data class Rating(
         val rating: String?,
-        val country: CountryCode?
+        val country: CountryCode?,
+        val descriptors: List<String>?
     ) : TmdbType()
 }
 

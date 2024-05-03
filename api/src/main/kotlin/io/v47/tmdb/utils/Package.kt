@@ -34,12 +34,6 @@
  */
 package io.v47.tmdb.utils
 
-import io.v47.tmdb.model.Height
-import io.v47.tmdb.model.ImageSize
-import io.v47.tmdb.model.Original
-import io.v47.tmdb.model.Width
-import java.util.*
-
 /**
  * The range of valid page numbers for paginated API methods: 1 through 1000 (inclusive)
  */
@@ -47,7 +41,7 @@ import java.util.*
 private val pageRange = 1..1000
 
 @Suppress("MagicNumber")
-private val ratingRange = 0.5 .. 10.0
+private val ratingRange = 0.5..10.0
 
 /**
  * Checks if the specified page number is in the range of valid numbers,
@@ -60,27 +54,3 @@ internal fun checkPage(page: Int) =
 
 internal fun checkRating(rating: Double) =
     require(rating in ratingRange) { "Invalid rating: Must be between 0.5 and 10.0 inclusive." }
-
-fun List<ImageSize>.findClosestWidth(width: Int, forceSelectHigher: Boolean = true): ImageSize {
-    val widthList = asSequence().filterIsInstance<Width>().sortedBy { it.value }.toList()
-    val selectedIndex = Collections.binarySearch(widthList, Width(width))
-
-    return if (selectedIndex < 0 || selectedIndex >= widthList.size)
-        Original
-    else if (forceSelectHigher && widthList[selectedIndex].value < width)
-        widthList.getOrElse(selectedIndex + 1) { Original }
-    else
-        widthList[selectedIndex]
-}
-
-fun List<ImageSize>.findClosestHeight(height: Int, forceSelectHigher: Boolean = true): ImageSize {
-    val heightList = asSequence().filterIsInstance<Height>().sortedBy { it.value }.toList()
-    val selectedIndex = Collections.binarySearch(heightList, Height(height))
-
-    return if (selectedIndex < 0 || selectedIndex >= heightList.size)
-        Original
-    else if (forceSelectHigher && heightList[selectedIndex].value < height)
-        heightList.getOrElse(selectedIndex + 1) { Original }
-    else
-        heightList[selectedIndex]
-}

@@ -38,10 +38,7 @@ import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
-import io.v47.tmdb.model.Height
 import io.v47.tmdb.model.ImageSize
-import io.v47.tmdb.model.Original
-import io.v47.tmdb.model.Width
 
 internal class ImageSizeDeserializer : StdScalarDeserializer<ImageSize>(ImageSize::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ImageSize {
@@ -49,7 +46,7 @@ internal class ImageSizeDeserializer : StdScalarDeserializer<ImageSize>(ImageSiz
 
         val str = rawString.trim(' ', '"').lowercase()
         return if (str == "original")
-            Original
+            ImageSize.Original
         else {
             val firstChar = str.firstOrNull()
             if (firstChar != 'w' && firstChar != 'h')
@@ -63,9 +60,9 @@ internal class ImageSizeDeserializer : StdScalarDeserializer<ImageSize>(ImageSiz
                 .getOrThrow()
 
             if (firstChar == 'w')
-                Width(actualInt)
+                ImageSize.Width(actualInt)
             else
-                Height(actualInt)
+                ImageSize.Height(actualInt)
         }
     }
 

@@ -47,6 +47,7 @@ data class MovieDetails(
     val homepage: String?,
     override val id: Int?,
     val imdbId: String?,
+    val originCountry: List<CountryCode>?,
     val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     val overview: String?,
@@ -148,7 +149,8 @@ data class MovieReleaseDates(
             val language: LanguageCode?,
             val note: String?,
             val releaseDate: LocalDate?,
-            val type: Release?
+            val type: Release?,
+            val descriptors: List<String>?
         ) : TmdbType()
     }
 }

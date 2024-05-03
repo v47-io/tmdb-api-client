@@ -1,7 +1,7 @@
 /**
  * The Clear BSD License
  *
- * Copyright (c) 2023, the tmdb-api-client authors
+ * Copyright (c) 2024, the tmdb-api-client authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,26 +32,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.api
+package io.v47.tmdb.utils
 
-import io.v47.tmdb.TmdbClient
-import io.v47.tmdb.http.Java11HttpClientFactory
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
+import io.v47.tmdb.model.ImageSize
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractTmdbTest {
-    protected lateinit var client: TmdbClient
+object ImageSizeUtil {
+    @JvmOverloads
+    @JvmStatic
+    fun <T : ImageSize> List<T>.findClosestWidth(width: Int, forceSelectHigher: Boolean = true): ImageSize {
+        val widthList = asSequence()
+            .filterIsInstance<ImageSize.Width>()
+            .sortedBy { it.value }.toList()
 
-    @BeforeAll
-    fun setup() {
-        val apiKey = System.getProperty("tmdb.api-key") ?: System.getenv("API_KEY")
-        if (apiKey.isNullOrBlank())
-            throw IllegalArgumentException(
-                "Missing api key: You can provide the key either as a system " +
-                        "property called 'tmdb.api-key' or as an environment variable called 'API_KEY'"
-            )
+        val selectedIndex = widthList.indexOfLast { it.value < width }
 
-        client = TmdbClient(Java11HttpClientFactory(), apiKey)
+        return getClosestSize(width, forceSelectHigher, widthList, selectedIndex)
+    }
+
+    @JvmOverloads
+    @JvmStatic
+    fun <T : ImageSize> List<T>.findClosestHeight(height: Int, forceSelectHigher: Boolean = true): ImageSize {
+        val heightList = asSequence()
+            .filterIsInstance<ImageSize.Height>()
+            .sortedBy { it.value }
+            .toList()
+
+        val selectedIndex = heightList.indexOfLast { it.value < height }
+
+        return getClosestSize(height, forceSelectHigher, heightList, selectedIndex)
+    }
+
+    private fun getClosestSize(
+        value: Int,
+        forceSelectHigher: Boolean,
+        sizeList: List<ImageSize>,
+        selectedIndex: Int
+    ) = when {
+        selectedIndex < 0 -> sizeList.getOrElse(0) { ImageSize.Original }
+        selectedIndex >= sizeList.size -> ImageSize.Original
+
+        forceSelectHigher && sizeList[selectedIndex].value < value ->
+            sizeList.getOrElse(selectedIndex + 1) { ImageSize.Original }
+
+        else -> sizeList[selectedIndex]
     }
 }

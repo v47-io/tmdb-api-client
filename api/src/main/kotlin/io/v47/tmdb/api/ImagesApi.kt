@@ -44,10 +44,7 @@ import io.v47.tmdb.http.api.ErrorResponse
 import io.v47.tmdb.http.api.ErrorResponseException
 import io.v47.tmdb.http.impl.DefaultHttpRequest
 import io.v47.tmdb.model.Configuration
-import io.v47.tmdb.model.Height
 import io.v47.tmdb.model.ImageSize
-import io.v47.tmdb.model.Original
-import io.v47.tmdb.model.Width
 import java.util.concurrent.Flow
 import java.util.concurrent.atomic.AtomicReference
 
@@ -72,12 +69,10 @@ class ImagesApi internal constructor(
                 }
 
     @Suppress("ThrowsCount")
-    fun download(imagePath: String, size: ImageSize = Original): Flow.Publisher<ByteArray> {
-        require(size is Width || size is Height || size is Original) { "Invalid size: $size" }
-
+    fun download(imagePath: String, size: ImageSize = ImageSize.Original): Flow.Publisher<ByteArray> {
         val actualSize =
             if (imagePath.endsWith(".svg", ignoreCase = true))
-                Original
+                ImageSize.Original
             else
                 size
 

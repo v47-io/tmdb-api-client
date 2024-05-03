@@ -39,12 +39,11 @@ import org.junit.jupiter.api.Test
 class TestKotlin {
     @Test
     fun `it should create a TmdbClient using the invoke operator`() {
-        val apiKey = System.getProperty("tmdb.apiKey") ?: System.getenv("API_KEY")
+        val apiKey = System.getProperty("tmdb.api-key") ?: System.getenv("API_KEY")
         if (apiKey.isNullOrBlank())
             throw IllegalArgumentException(
-                "Missing api key: You have to provide a valid TMDB API key " +
-                        "that relates to a linked application. You can provide the key either as a system " +
-                        "property called 'tmdb.apiKey' or as an environment variable called 'API_KEY'"
+                "Missing api key: You can provide the key either as a system " +
+                        "property called 'tmdb.api-key' or as an environment variable called 'API_KEY'"
             )
 
         StandaloneTmdbClient(apiKey)

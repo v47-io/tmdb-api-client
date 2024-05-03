@@ -51,7 +51,7 @@ internal class NotFoundErrorResponseTest : AbstractTckTest("https://api.themovie
         val request = DefaultHttpRequest(
             HttpMethod.Get,
             "/3/company/{companyId}",
-            mapOf("companyId" to 0),
+            mapOf("companyId" to Int.MAX_VALUE),
             mapOf("api_key" to listOf(apiKey))
         )
 
