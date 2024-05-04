@@ -14,7 +14,6 @@ dependencies {
 
     testImplementation project(':http-client-java11')
 
-    testRuntimeOnly libs.mnHttpClient
     testRuntimeOnly libs.jacksonModuleKotlin
     testRuntimeOnly libs.logback
 }

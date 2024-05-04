@@ -2,9 +2,7 @@ dependencies {
     compileOnly libs.jacksonDatabind
 
     testImplementation project(':api')
-    testImplementation project(':http-client-micronaut')
 
-    testRuntimeOnly libs.mnHttpClient
     testImplementation libs.jacksonModuleKotlin
     testRuntimeOnly libs.logback
 }

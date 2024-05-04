@@ -66,7 +66,6 @@ using an API-Key, including images.
 
 Various integrations with application frameworks are also available (`artifactId`):
 
-- Micronaut (`http-client-micronaut`)
 - Spring Boot Webflux (`spring-boot-starter`)
 - [Quarkus][tmdb-api-client-quarkus] (`quarkus`)
 

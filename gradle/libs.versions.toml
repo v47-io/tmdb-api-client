@@ -7,9 +7,7 @@ junit-jupiter = "5.10.2"
 kotlin = "1.9.23"
 license = "0.16.1"
 logback = "1.5.6"
-micronaut = "4.4.7"
 mutiny = "2.6.0"
-mutiny-zero = "1.1.0"
 nvi18n = "1.29"
 release = "3.0.2"
 remal-gradle-plugins = "1.9.2"
@@ -27,16 +25,8 @@ junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref =
 
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
-mnGraal = { module = "io.micronaut:micronaut-graal", version.ref = "micronaut" }
-mnInject = { module = "io.micronaut:micronaut-inject-java", version.ref = "micronaut" }
-mnHttpClient = { module = "io.micronaut:micronaut-http-client", version.ref = "micronaut" }
-mnJacksonDatabind = { module = "io.micronaut:micronaut-jackson-databind", version.ref = "micronaut" }
-mnHttpServerNetty = { module = "io.micronaut:micronaut-http-server-netty", version.ref = "micronaut" }
-mnRuntime = { module = "io.micronaut:micronaut-runtime", version.ref = "micronaut" }
-
 mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
 mutinyReactor = { module = "io.smallrye.reactive:mutiny-reactor", version.ref = "mutiny" }
-mutinyZeroFlowAdapters = { module = "io.smallrye.reactive:mutiny-zero-flow-adapters", version.ref = "mutiny-zero" }
 
 nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
 
