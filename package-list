@@ -14,8 +14,6 @@ io.v47.tmdb.http.api
 io.v47.tmdb.jackson
 module:http-client-java11
 io.v47.tmdb.http
-module:http-client-micronaut
-io.v47.tmdb.http
 module:http-client-spring-webflux
 io.v47.tmdb.http
 module:http-client-tck
