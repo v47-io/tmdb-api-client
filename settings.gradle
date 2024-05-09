@@ -2,7 +2,6 @@ rootProject.name = 'tmdb-api-client'
 
 include 'core',
         'http-client-tck',
-        'http-client-micronaut',
         'http-client-spring-webflux',
         'spring-boot-starter',
         'api',
