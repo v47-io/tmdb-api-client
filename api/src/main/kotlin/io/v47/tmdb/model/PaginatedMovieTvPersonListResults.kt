@@ -34,6 +34,10 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class PaginatedMovieTvPersonListResults(
     override val page: Int?,
     override val results: List<MovieTvPersonListResult> = emptyList(),

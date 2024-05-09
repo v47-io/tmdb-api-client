@@ -34,11 +34,17 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.Instant
 import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvShowDetails(
     val adult: Boolean?,
     val backdropPath: String?,
@@ -58,6 +64,7 @@ data class TvShowDetails(
     val numberOfEpisodes: Int?,
     val numberOfSeasons: Int?,
     val originCountry: List<CountryCode> = emptyList(),
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalName: String?,
     val overview: String?,
@@ -99,10 +106,12 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
         val items: List<ChangeItem> = emptyList()
     ) : TmdbType()
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ChangeItem(
         override val id: String?,
         val action: String?,
         val time: String?,
+        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
@@ -115,6 +124,7 @@ data class TvShowContentRatings(
 ) : TmdbType(), TmdbIntId {
     data class Rating(
         val rating: String?,
+        @JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val descriptors: List<String>?
     ) : TmdbType()
@@ -130,6 +140,7 @@ data class TvShowEpisodeGroups(
     override val id: Int?,
     val results: List<TvShowEpisodeGroup> = emptyList()
 ) : TmdbType(), TmdbIntId {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class TvShowEpisodeGroup(
         override val id: String?,
         val name: String?,
@@ -141,6 +152,7 @@ data class TvShowEpisodeGroups(
     ) : TmdbType(), TmdbStringId
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvShowExternalIds(
     override val id: Int?,
     val imdbId: String?,
@@ -166,6 +178,7 @@ data class TvShowKeywords(
     val results: List<Keyword> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvShowReview(
     override val id: String?,
     val url: String?,
@@ -180,6 +193,7 @@ data class TvShowScreenedTheatrically(
     override val id: Int?,
     val results: List<ScreenedResult> = emptyList()
 ) : TmdbType(), TmdbIntId {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ScreenedResult(
         override val id: Int?,
         val seasonNumber: Int?,
@@ -196,3 +210,77 @@ data class TvShowVideos(
     override val id: Int?,
     val results: List<VideoListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class TvListResult(
+    val posterPath: String?,
+    val popularity: Double?,
+    override val id: Int?,
+    val backdropPath: String?,
+    val voteAverage: Double?,
+    val overview: String?,
+    val firstAirDate: LocalDate?,
+    val networks: List<TvListNetwork> = emptyList(),
+    val originCountry: List<String> = emptyList(),
+    val genreIds: List<Int> = emptyList(),
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?,
+    val voteCount: Int?,
+    val rating: Double?,
+    val name: String?,
+    val originalName: String?,
+    override val mediaType: MediaType?,
+    val adult: Boolean?,
+) : TmdbType(), MovieTvPersonListResult {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+    data class TvListNetwork(
+        val id: Long?,
+        val logo: TvListNetworkLogo?,
+        val name: String?,
+        val originCountry: String?
+    ) : TmdbType() {
+        @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+        data class TvListNetworkLogo(
+            val path: String?,
+            val aspectRatio: Double?
+        ) : TmdbType()
+    }
+}
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class TvEpisodeListResult(
+    val airDate: LocalDate?,
+    val episodeNumber: Int?,
+    val name: String?,
+    val overview: String?,
+    override val id: Int?,
+    val productionCode: String?,
+    val runtime: Int?,
+    val seasonNumber: String?,
+    val showId: Int?,
+    val stillPath: String?,
+    val voteAverage: Double?,
+    val voteCount: Int?,
+    val rating: Double?,
+) : TmdbType(), TmdbIntId
+
+@Suppress("EnumEntryName", "EnumNaming")
+enum class TvShowType {
+    Scripted,
+    Reality,
+    Documentary,
+    News,
+    `Talk Show`,
+    Miniseries,
+    Video
+}
+
+@Suppress("EnumEntryName", "EnumNaming")
+enum class TvShowStatus {
+    `Returning Series`,
+    Planned,
+    `In Production`,
+    Ended,
+    Canceled,
+    Pilot
+}

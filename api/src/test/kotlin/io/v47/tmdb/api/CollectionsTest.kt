@@ -50,7 +50,7 @@ class CollectionsTest : AbstractTmdbTest() {
 
         private const val PART_ID = 11
         private const val PART_ORIGINAL_TITLE = "Star Wars"
-        private val PART_RELEASE_DATE = LocalDate.parse("1977-05-25")!!
+        private val PART_RELEASE_DATE: LocalDate = LocalDate.parse("1977-05-25")
 
         private const val MANDARIN_COLLECTION_TITLE = "星球大战（系列）"
     }

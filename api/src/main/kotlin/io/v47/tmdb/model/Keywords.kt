@@ -34,11 +34,15 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+
 data class Keyword(
     override val id: Int?,
     val name: String?
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class KeywordMovies(
     override val id: Int?,
     override val page: Int?,

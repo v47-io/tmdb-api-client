@@ -34,10 +34,16 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieDetails(
     val adult: Boolean?,
     val backdropPath: String?,
@@ -48,6 +54,7 @@ data class MovieDetails(
     override val id: Int?,
     val imdbId: String?,
     val originCountry: List<CountryCode>?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     val overview: String?,
@@ -87,8 +94,10 @@ data class MovieAlternativeTitles(
     val titles: List<Title> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieChanges(
     override val page: Int?,
+    @JsonProperty("changes")
     override val results: List<Change> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
@@ -98,13 +107,16 @@ data class MovieChanges(
         val items: List<ChangeItem> = emptyList()
     ) : TmdbType()
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ChangeItem(
         override val id: String?,
         val action: String?,
         val time: String?,
+        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?,
+        @JsonProperty("iso_3166_1")
         val country: CountryCode?
     ) : TmdbType(), TmdbStringId
 }
@@ -115,6 +127,7 @@ data class MovieCredits(
     val crew: List<CreditListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieExternalIds(
     override val id: Int?,
     val imdbId: String?,
@@ -140,12 +153,16 @@ data class MovieReleaseDates(
     override val id: Int?,
     val results: List<ReleaseDates> = emptyList()
 ) : TmdbType(), TmdbIntId {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ReleaseDates(
+        @JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val releaseDates: List<MovieReleaseInfo> = emptyList()
     ) : TmdbType() {
+        @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
         data class MovieReleaseInfo(
             val certification: String?,
+            @JsonProperty("iso_639_1")
             val language: LanguageCode?,
             val note: String?,
             val releaseDate: LocalDate?,
@@ -165,6 +182,7 @@ data class MovieTranslations(
     val translations: List<TranslationListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieReviews(
     override val id: Int?,
     override val page: Int?,
@@ -173,6 +191,7 @@ data class MovieReviews(
     override val totalResults: Int?
 ) : TmdbType(), TmdbIntId, Paginated<ReviewDetails>
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieLists(
     override val id: Int?,
     override val page: Int?,
@@ -180,3 +199,49 @@ data class MovieLists(
     override val totalPages: Int?,
     override val totalResults: Int?
 ) : TmdbType(), TmdbIntId, Paginated<ListDetails>
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class MovieListResult(
+    val posterPath: String?,
+    val adult: Boolean?,
+    val overview: String?,
+    val releaseDate: LocalDate?,
+    val genreIds: List<Int> = emptyList(),
+    override val id: Int?,
+    val originalTitle: String?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?,
+    val title: String?,
+    val backdropPath: String?,
+    val popularity: Double?,
+    val voteCount: Int?,
+    val video: Boolean?,
+    val voteAverage: Double?,
+    val rating: Double?,
+    override val mediaType: MediaType?
+) : TmdbType(), TmdbIntId, MovieTvPersonListResult
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class PaginatedMovieListResultsWithDates(
+    override val id: Int?,
+    override val page: Int?,
+    override val results: List<MovieListResult> = emptyList(),
+    val dates: Dates?,
+    override val totalPages: Int?,
+    override val totalResults: Int?
+) : TmdbType(), TmdbIntId, Paginated<MovieListResult> {
+    data class Dates(
+        val maximum: LocalDate?,
+        val minimum: LocalDate?
+    ) : TmdbType()
+}
+
+@Suppress("EnumEntryName", "EnumNaming")
+enum class MovieStatus {
+    Rumored,
+    Planned,
+    `In Production`,
+    `Post Production`,
+    Released,
+    Canceled
+}

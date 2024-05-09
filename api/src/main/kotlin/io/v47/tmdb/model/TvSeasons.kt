@@ -34,9 +34,13 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvSeasonDetails(
     val airDate: LocalDate?,
     val episodes: List<TvEpisodeDetails> = emptyList(),
@@ -64,15 +68,18 @@ data class TvSeasonChanges(val changes: List<Change> = emptyList()) : TmdbType()
         val items: List<ChangeItem> = emptyList()
     ) : TmdbType()
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ChangeItem(
         override val id: String?,
         val action: String?,
         val time: String?,
         val value: Any?,
+        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val originalValue: Any?
     ) : TmdbType(), TmdbStringId
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ChangeValue(
         val episodeId: Int?,
         val episodeNumber: Int?
@@ -85,7 +92,7 @@ data class TvSeasonCredits(
     val crew: List<CreditListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
 
-
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvSeasonExternalIds(
     override val id: Int?,
     val freebaseMid: String?,

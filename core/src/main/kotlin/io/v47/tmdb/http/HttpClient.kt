@@ -34,14 +34,13 @@
  */
 package io.v47.tmdb.http
 
-import java.io.Closeable
 import java.util.concurrent.Flow
 
 interface HttpClientFactory {
     fun createHttpClient(baseUrl: String): HttpClient
 }
 
-interface HttpClient : Closeable {
+interface HttpClient {
     fun execute(
         request: HttpRequest,
         responseType: TypeInfo

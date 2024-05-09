@@ -204,6 +204,4 @@ internal class Java11HttpClientImpl(
             body(),
             objectMapper.typeFactory.constructType(typeInfo.fullType)
         )
-
-    override fun close() = Unit
 }

@@ -34,6 +34,10 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Find(
     val movieResults: List<MovieListResult> = emptyList(),
     val personResults: List<PersonListResult> = emptyList(),

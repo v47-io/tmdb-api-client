@@ -61,7 +61,7 @@ module of your choice to your project.
 
 ## Features
 
-This library provides access to the entire read-only API of TheMovieDb, authenticated
+This library provides access to the entire read-only API (v3) of TheMovieDb, authenticated
 using an API-Key, including images.
 
 Various integrations with application frameworks are also available (`artifactId`):

@@ -34,9 +34,17 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
+import java.io.Serializable
+import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class PersonDetails(
     val adult: Boolean?,
     val alsoKnownAs: List<String> = emptyList(),
@@ -70,6 +78,7 @@ data class PersonCredits(
     val crew: List<CrewMember> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class PersonExternalIds(
     val imdbId: String?,
     val facebookId: String?,
@@ -89,6 +98,7 @@ data class PersonImages(
     val profiles: List<ImageListResult> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class PersonTaggedImages(
     override val id: Int?,
     override val page: Int?,
@@ -96,11 +106,13 @@ data class PersonTaggedImages(
     override val totalPages: Int?,
     override val totalResults: Int?
 ) : TmdbType(), TmdbIntId, Paginated<PersonTaggedImages.TaggedImage> {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class TaggedImage(
         override val id: String?,
         val aspectRatio: Double?,
         val filePath: String?,
         val height: Int?,
+        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val voteAverage: Double?,
         val voteCount: Int?,
@@ -111,12 +123,15 @@ data class PersonTaggedImages(
     ) : TmdbType(), TmdbStringId
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class PersonTranslations(
     override val id: Int?,
     val translations: List<PersonTranslation> = emptyList()
 ) : TmdbType(), TmdbIntId {
     data class PersonTranslation(
+        @JsonProperty("iso_639_1")
         val language: LanguageCode?,
+        @JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val name: String?,
         val data: PersonTranslationData?,
@@ -131,11 +146,14 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
         val key: String?,
         val items: List<PersonChangeItem> = emptyList()
     ) : TmdbType() {
+        @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
         data class PersonChangeItem(
             override val id: String?,
             val action: String?,
             val time: String?,
+            @JsonProperty("iso_639_1")
             val language: LanguageCode?,
+            @JsonProperty("iso_3166_1")
             val country: CountryCode?,
             val value: Any?,
             val originalValue: Any?
@@ -143,12 +161,14 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
     }
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class PeoplePopular(
     override val page: Int?,
     override val results: List<PopularPerson>,
     override val totalPages: Int?,
     override val totalResults: Int?
 ) : TmdbType(), Paginated<PeoplePopular.PopularPerson> {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class PopularPerson(
         val profilePath: String?,
         val adult: Boolean?,
@@ -160,4 +180,112 @@ data class PeoplePopular(
         val gender: Gender?,
         val popularity: Double?
     ) : TmdbType(), TmdbIntId
+}
+
+interface MovieTvPersonListResult : TmdbIntId, Serializable {
+    override val id: Int?
+    val mediaType: MediaType?
+}
+
+interface IPerson : TmdbIntId {
+    val adult: Boolean?
+    val gender: Gender?
+    override val id: Int?
+    val name: String?
+    val profilePath: String?
+    val knownForDepartment: String?
+    val popularity: Double?
+    val originalName: String?
+}
+
+enum class Gender {
+    Unset,
+    Female,
+    Male,
+    Other
+}
+
+interface ICastMember : IPerson {
+    val character: String?
+}
+
+interface ICrewMember : IPerson {
+    val department: String?
+    val job: String?
+}
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class PersonListResult(
+    override val profilePath: String?,
+    override val adult: Boolean?,
+    override val gender: Gender?,
+    override val id: Int?,
+    override val mediaType: MediaType?,
+    val knownFor: List<MovieTvPersonListResult> = emptyList(),
+    override val knownForDepartment: String?,
+    val creditId: String?,
+    override val name: String?,
+    override val popularity: Double?,
+    override val originalName: String?
+) : TmdbType(), IPerson, MovieTvPersonListResult
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class CastMember(
+    override val id: Int?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?,
+    val episodeCount: Int?,
+    val overview: String?,
+    val originCountry: List<CountryCode> = emptyList(),
+    val originalName: String?,
+    val genreIds: List<Int> = emptyList(),
+    val name: String?,
+    val mediaType: MediaType?,
+    val posterPath: String?,
+    val firstAirDate: LocalDate?,
+    val voteAverage: Double?,
+    val voteCount: Int?,
+    val character: String?,
+    val backdropPath: String?,
+    val popularity: Double?,
+    val creditId: String?,
+    val originalTitle: String?,
+    val video: Boolean?,
+    val releaseDate: LocalDate?,
+    val title: String?,
+    val adult: Boolean?,
+    val order: Int?,
+) : TmdbType(), TmdbIntId
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class CrewMember(
+    override val id: Int?,
+    val department: String?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?,
+    val episodeCount: Int?,
+    val job: String?,
+    val overview: String?,
+    val originCountry: List<CountryCode> = emptyList(),
+    val originalName: String?,
+    val voteCount: Int?,
+    val name: String?,
+    val mediaType: MediaType?,
+    val popularity: Double?,
+    val creditId: String?,
+    val backdropPath: String?,
+    val firstAirDate: LocalDate?,
+    val voteAverage: Double?,
+    val genreIds: List<Int> = emptyList(),
+    val posterPath: String?,
+    val originalTitle: String?,
+    val video: Boolean?,
+    val title: String?,
+    val adult: Boolean?,
+    val releaseDate: LocalDate?
+) : TmdbType(), TmdbIntId
+
+enum class CreditType {
+    Cast,
+    Crew
 }

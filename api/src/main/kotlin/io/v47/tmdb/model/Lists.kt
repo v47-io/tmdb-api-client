@@ -34,9 +34,13 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ListDetails(
     val createdBy: String?,
     val description: String?,
@@ -44,7 +48,9 @@ data class ListDetails(
     override val id: String?,
     val items: List<MovieListResult> = emptyList(),
     val itemCount: Int?,
+    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val listType: String?,
     val name: String?,
@@ -54,51 +60,8 @@ data class ListDetails(
     val page: Int?
 ) : TmdbType(), TmdbStringId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ItemStatus(
     override val id: String?,
     val itemPresent: Boolean?
 ) : TmdbType(), TmdbStringId
-
-/*
-data class ListDetailsV4(
-    @JsonProperty("iso_639_1")
-    val language: LanguageCode?,
-    val id: Int?,
-    override val page: Int?,
-    @JsonProperty("iso_3166_1")
-    val country: CountryCode?,
-    override val totalResults: Int?,
-    val objectIds: Map<String, String> = emptyMap(),
-    val revenue: String?,
-    override val totalPages: Int?,
-    val name: String?,
-    val public: Boolean?,
-    val comments: Map<String, Any> = emptyMap(),
-    val sortBy: String?,
-    val description: String?,
-    val backdropPath: String?,
-    @JsonDeserialize(contentUsing = MovieTvPersonListResultDeserializer::class)
-    override val results: List<MovieTvPersonListResult> = emptyList(),
-    val averageRating: Double?,
-    val runtime: Int?,
-    val createdBy: CreatedBy?,
-    val posterPath: String?
-) : TmdbType(), Paginated<MovieTvPersonListResult> {
-
-    data class CreatedBy(
-        val gravatarHash: String?,
-        val name: String?,
-        val username: String?,
-        val id: String?
-    ) : TmdbType()
-}
-
-data class ItemStatusV4(
-    val mediaType: String?,
-    val success: Boolean?,
-    val statusMessage: String?,
-    val id: Int?,
-    val mediaId: Int?,
-    val statusCode: Int?
-) : TmdbType()
-*/

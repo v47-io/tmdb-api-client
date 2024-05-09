@@ -32,24 +32,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.jackson.mixins
+package io.v47.tmdb.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.LanguageCode
+data class GenreList(val genres: List<Genre> = emptyList()) : TmdbType()
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface TvSeasonDetailsMixin
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface TvSeasonChangesChangeItemMixin {
-    @get:JsonProperty("iso_639_1")
-    val language: LanguageCode?
-}
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface TvSeasonChangesChangeValueMixin
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface TvSeasonExternalIdsMixin
+data class Genre(
+    override val id: Int?,
+    val name: String?
+) : TmdbType(), TmdbIntId

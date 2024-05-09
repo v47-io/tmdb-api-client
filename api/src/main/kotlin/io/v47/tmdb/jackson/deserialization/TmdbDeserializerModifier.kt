@@ -45,7 +45,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 
-internal class EnumDeserializerModifier : BeanDeserializerModifier() {
+internal class TmdbDeserializerModifier : BeanDeserializerModifier() {
     override fun modifyEnumDeserializer(
         config: DeserializationConfig,
         type: JavaType,

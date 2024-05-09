@@ -109,7 +109,7 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
                                 )
                             )
                         else
-                            throw IllegalArgumentException("Not a HttpClientErrorException", t)
+                            Mono.error(IllegalArgumentException("Not an HttpClientErrorException", t))
                     } as Mono<HttpResponse<out Any>>
             )
     }
@@ -123,15 +123,16 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
             HttpMethod.Delete -> rawClient.delete()
         }
 
-        reqSpec.uri { uriBuilder ->
-            uriBuilder.path(url)
+        reqSpec
+            .uri { uriBuilder ->
+                uriBuilder.path(url)
 
-            query.forEach { (name, values) ->
-                uriBuilder.queryParam(name, values.joinToString(","))
+                query.forEach { (name, values) ->
+                    uriBuilder.queryParam(name, values.joinToString(","))
+                }
+
+                uriBuilder.build(uriVariables)
             }
-
-            uriBuilder.build(uriVariables)
-        }
             .accept(
                 if (jsonBody)
                     MediaType.APPLICATION_JSON
@@ -178,6 +179,4 @@ internal class WebfluxHttpClientImpl(private val rawClient: WebClient) : HttpCli
 
                 ErrorResponse(txt, status)
             }
-
-    override fun close() = Unit
 }

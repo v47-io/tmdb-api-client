@@ -32,55 +32,34 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.jackson.mixins
+package io.v47.tmdb.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
-import io.v47.tmdb.model.MovieChanges
+import java.time.Instant
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieDetailsMixin {
-    @get:JsonDeserialize(using = OriginalLanguageDeserializer::class)
-    val originalLanguage: LanguageCode?
-}
+data class ReviewDetails(
+    override val id: String?,
+    val author: String?,
+    val authorDetails: ReviewAuthorDetails?,
+    val content: String?,
+    @JsonProperty("iso_639_1")
+    val language: LanguageCode?,
+    val mediaId: Int?,
+    val mediaTitle: String?,
+    val mediaType: MediaType?,
+    val url: String?,
+    val createdAt: Instant?,
+    val updatedAt: Instant?,
+) : TmdbType(), TmdbStringId
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieChangesMixin {
-    @get:JsonProperty("changes")
-    val results: List<MovieChanges.Change>
-}
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieChangesChangeItemMixin {
-    @get:JsonProperty("iso_639_1")
-    val language: LanguageCode?
-
-    @get:JsonProperty("iso_3166_1")
-    val country: CountryCode?
-}
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieExternalIdsMixin
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieReleaseDatesReleaseDatesMixin {
-    @get:JsonProperty("iso_3166_1")
-    val country: CountryCode?
-}
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieReleaseDatesReleaseDatesMovieReleaseInfoMixin {
-    @get:JsonProperty("iso_639_1")
-    val language: LanguageCode?
-}
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieReviewsMixin
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-internal interface MovieListsMixin
+data class ReviewAuthorDetails(
+    val name: String?,
+    val username: String?,
+    val avatarPath: String?,
+    val rating: Double?
+) : TmdbType()

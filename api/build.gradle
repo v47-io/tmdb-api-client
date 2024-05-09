@@ -7,14 +7,15 @@ allOpen {
 dependencies {
     api project(':core')
 
-    compileOnly libs.jacksonDatabind
     api libs.nvI18n
 
+    implementation libs.jacksonDatabind
     implementation libs.mutiny
+
+    runtimeOnly libs.jacksonModuleKotlin
 
     testImplementation project(':http-client-java11')
 
-    testRuntimeOnly libs.jacksonModuleKotlin
     testRuntimeOnly libs.logback
 }
 

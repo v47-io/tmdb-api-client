@@ -34,10 +34,16 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CollectionDetails(
     override val id: Int?,
     val name: String?,
@@ -46,11 +52,13 @@ data class CollectionDetails(
     val backdropPath: String?,
     val parts: List<Part> = emptyList()
 ) : TmdbType(), TmdbIntId {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class Part(
         val adult: Boolean?,
         val backdropPath: String?,
         val genreIds: List<Int> = emptyList(),
         override val id: Int?,
+        @JsonDeserialize(using = OriginalLanguageDeserializer::class)
         val originalLanguage: LanguageCode?,
         val originalTitle: String?,
         val mediaType: MediaType?,
@@ -76,8 +84,11 @@ data class CollectionTranslations(
     val translations: List<CollectionTranslation> = emptyList()
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CollectionTranslation(
+    @JsonProperty("iso_3166_1")
     val country: CountryCode?,
+    @JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val name: String?,
     val englishName: String?,
@@ -89,3 +100,16 @@ data class CollectionTranslationData(
     val overview: String?,
     val homepage: String?
 ) : TmdbType()
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class CollectionInfo(
+    override val id: Int?,
+    val name: String?,
+    val originalName: String?,
+    val overview: String?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    val originalLanguage: LanguageCode?,
+    val posterPath: String?,
+    val backdropPath: String?,
+    val adult: Boolean?
+) : TmdbType(), TmdbIntId

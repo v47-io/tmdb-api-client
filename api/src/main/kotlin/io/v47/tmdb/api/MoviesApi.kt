@@ -42,6 +42,7 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.post
+import io.v47.tmdb.model.AppendRequest
 import io.v47.tmdb.model.MovieAlternativeTitles
 import io.v47.tmdb.model.MovieChanges
 import io.v47.tmdb.model.MovieCredits
@@ -80,9 +81,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
         http.getWithLanguage<MovieDetails>("/movie/{movieId}", language) {
             pathVar("movieId", movieId)
 
-            append.forEach { req ->
-                queryArg("append_to_response", req.value)
-            }
+            append()
         }
 
 
@@ -393,7 +392,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
 
 }
 
-enum class MovieRequest(internal val value: String) {
+enum class MovieRequest(override val value: String) : AppendRequest {
     AlternativeTitles("alternative_titles"),
     Changes("changes"),
     Credits("credits"),

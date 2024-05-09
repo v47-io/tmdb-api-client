@@ -34,11 +34,16 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.io.Serializable
 import java.time.LocalDate
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Credits(
     val creditType: CreditType?,
     val department: String?,
@@ -64,6 +69,7 @@ interface CreditMedia : TmdbIntId, Serializable {
     val voteCount: Long?
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditMediaMovie(
     override val adult: Boolean?,
     override val backdropPath: String?,
@@ -71,6 +77,7 @@ data class CreditMediaMovie(
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -83,6 +90,7 @@ data class CreditMediaMovie(
     override val voteCount: Long?
 ) : CreditMedia, TmdbType()
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditMediaTv(
     override val adult: Boolean?,
     override val backdropPath: String?,
@@ -94,6 +102,7 @@ data class CreditMediaTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,
@@ -104,6 +113,7 @@ data class CreditMediaTv(
     override val voteCount: Long?
 ) : CreditMedia, TmdbType()
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditMediaTvEpisode(
     val airDate: LocalDate?,
     val episodeNumber: Int?,
@@ -121,6 +131,7 @@ data class CreditMediaTvEpisode(
     val episodeType: TvEpisodeType?
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditMediaTvSeason(
     val airDate: LocalDate?,
     val episodeCount: Int?,
@@ -134,6 +145,7 @@ data class CreditMediaTvSeason(
     val voteAverage: Double?
 ) : TmdbType(), TmdbIntId
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditPerson(
     val adult: Boolean?,
     val gender: Gender?,
@@ -161,12 +173,14 @@ interface CreditPersonKnownFor : TmdbIntId, Serializable {
     val voteCount: Long?
 }
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditPersonKnownForMovie(
     override val adult: Boolean?,
     override val backdropPath: String?,
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -179,6 +193,7 @@ data class CreditPersonKnownForMovie(
     override val voteCount: Long?
 ) : CreditPersonKnownFor, TmdbType()
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CreditPersonKnownForTv(
     override val adult: Boolean?,
     override val backdropPath: String?,
@@ -188,6 +203,7 @@ data class CreditPersonKnownForTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
+    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,
@@ -196,3 +212,21 @@ data class CreditPersonKnownForTv(
     override val voteAverage: Double?,
     override val voteCount: Long?
 ) : CreditPersonKnownFor, TmdbType()
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class CreditListResult(
+    override val adult: Boolean?,
+    val castId: Int?,
+    override val character: String?,
+    override val knownForDepartment: String?,
+    override val popularity: Double?,
+    val creditId: String?,
+    override val department: String?,
+    override val gender: Gender?,
+    override val id: Int?,
+    override val job: String?,
+    override val name: String?,
+    override val originalName: String?,
+    val order: Int?,
+    override val profilePath: String?
+) : TmdbType(), ICastMember, ICrewMember

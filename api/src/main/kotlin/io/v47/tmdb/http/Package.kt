@@ -40,6 +40,7 @@ import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.impl.ApiVersion
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.TmdbRequest
+import io.v47.tmdb.model.AppendRequest
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
@@ -119,28 +120,6 @@ internal inline fun <reified T : Any> HttpExecutor.getWithPageAndLanguage(
         language?.let { queryArg("language", it.toString(), replace = true) }
     }
 
-@Suppress("MagicNumber")
-internal inline fun <reified T : Any> HttpExecutor.requestV4(
-    path: String,
-    block: TmdbRequestBuilder<T>.() -> Unit = {}
-) =
-    request {
-        apiVersion(ApiVersion.V4)
-        path(path)
-        responseType(tmdbTypeReference<T>().toTypeInfo())
-
-        block()
-    }
-
-internal inline fun <reified T : Any> HttpExecutor.getV4(
-    path: String,
-    block: TmdbRequestBuilder<T>.() -> Unit = {}
-) =
-    requestV4<T>(path) {
-        block()
-        method(HttpMethod.Get)
-    }
-
 internal inline fun <reified T : Any> HttpExecutor.post(
     path: String,
     requestEntity: Any,
@@ -155,19 +134,6 @@ internal inline fun <reified T : Any> HttpExecutor.post(
         block()
     }
 
-@Suppress("MagicNumber")
-internal inline fun <reified T : Any> HttpExecutor.postV4(
-    path: String,
-    requestEntity: Any,
-    block: TmdbRequestBuilder<T>.() -> Unit = {}
-) =
-    requestV4<T>(path) {
-        block()
-
-        method(HttpMethod.Post)
-        requestEntity(requestEntity)
-    }
-
 internal interface TmdbRequestBuilder<T : Any> {
     fun method(httpMethod: HttpMethod)
     fun apiVersion(apiVersion: ApiVersion)
@@ -177,6 +143,12 @@ internal interface TmdbRequestBuilder<T : Any> {
     fun requestEntity(requestEntity: Any?)
     fun responseType(responseType: TypeInfo)
     fun dropResponse()
+
+    operator fun <T : AppendRequest> Array<T>.invoke() {
+        forEach {
+            queryArg("append_to_response", it.value)
+        }
+    }
 }
 
 @Suppress("MagicNumber")

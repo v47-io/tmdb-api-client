@@ -40,6 +40,7 @@ import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.model.AppendRequest
 import io.v47.tmdb.model.PeoplePopular
 import io.v47.tmdb.model.PersonChanges
 import io.v47.tmdb.model.PersonCredits
@@ -67,9 +68,7 @@ class PeopleApi internal constructor(private val http: HttpExecutor) {
         http.getWithLanguage<PersonDetails>("/person/{personId}", language) {
             pathVar("personId", personId)
 
-            append.forEach { req ->
-                queryArg("append_to_response", req.value)
-            }
+            append()
         }
 
 
@@ -212,7 +211,7 @@ class PeopleApi internal constructor(private val http: HttpExecutor) {
         http.getWithPageAndLanguage<PeoplePopular>("/person/popular", page, language)
 }
 
-enum class PeopleRequest(internal val value: String) {
+enum class PeopleRequest(override val value: String) : AppendRequest {
     Changes("changes"),
     MovieCredits("movie_credits"),
     TvCredits("tv_credits"),

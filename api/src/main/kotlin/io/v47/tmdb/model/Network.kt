@@ -34,8 +34,11 @@
  */
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Network(
     override val id: Int,
     val logoPath: String?,

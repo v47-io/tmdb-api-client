@@ -39,6 +39,7 @@ import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.model.AppendRequest
 import io.v47.tmdb.model.TvSeasonChanges
 import io.v47.tmdb.model.TvSeasonCredits
 import io.v47.tmdb.model.TvSeasonDetails
@@ -73,9 +74,7 @@ class TvSeasonsApi internal constructor(private val http: HttpExecutor) {
             pathVar("tvId", tvId)
             pathVar("seasonNumber", seasonNumber)
 
-            append.forEach { req ->
-                queryArg("append_to_response", req.value)
-            }
+            append()
         }
 
     /**
@@ -189,7 +188,7 @@ class TvSeasonsApi internal constructor(private val http: HttpExecutor) {
 
 }
 
-enum class TvSeasonRequest(internal val value: String) {
+enum class TvSeasonRequest(override val value: String) : AppendRequest {
     Changes("changes"),
     Credits("credits"),
     ExternalIds("external_ids"),

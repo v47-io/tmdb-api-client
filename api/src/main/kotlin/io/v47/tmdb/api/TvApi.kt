@@ -42,6 +42,7 @@ import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.post
+import io.v47.tmdb.model.AppendRequest
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.Session
 import io.v47.tmdb.model.TvListResult
@@ -79,9 +80,7 @@ class TvApi internal constructor(private val http: HttpExecutor) {
         http.getWithLanguage<TvShowDetails>("/tv/{tvId}", language) {
             pathVar("tvId", tvId)
 
-            append.forEach { req ->
-                queryArg("append_to_response", req.value)
-            }
+            append()
         }
 
 
@@ -378,7 +377,7 @@ class TvApi internal constructor(private val http: HttpExecutor) {
         )
 }
 
-enum class TvRequest(internal val value: String) {
+enum class TvRequest(override val value: String) : AppendRequest {
     AlternativeTitles("alternative_titles"),
     Changes("changes"),
     ContentRatings("content_ratings"),
