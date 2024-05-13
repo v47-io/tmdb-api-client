@@ -36,10 +36,8 @@ package io.v47.tmdb.model
 
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import org.slf4j.LoggerFactory
-import java.io.Serializable
 
-@Suppress("SerialVersionUIDInSerializableClass")
-sealed class TmdbType(private vararg val ignoredProperties: String) : Serializable {
+sealed class TmdbType(private vararg val ignoredProperties: String) {
     @JsonAnySetter
     fun handleUnknownProperty(key: String, value: Any?) {
         val logger = LoggerFactory.getLogger(javaClass)!!

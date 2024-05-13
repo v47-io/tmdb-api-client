@@ -58,7 +58,6 @@ class TmdbApiModule : SimpleModule("TmdbApiModule") {
 
         addSerializer(ImageSizeSerializer())
     }
-
 }
 
 @SinceKotlin("1.3")

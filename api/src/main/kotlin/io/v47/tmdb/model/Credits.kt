@@ -40,7 +40,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
-import java.io.Serializable
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -54,7 +53,7 @@ data class Credits(
     val person: CreditPerson?
 ) : TmdbType(), TmdbStringId
 
-interface CreditMedia : TmdbIntId, Serializable {
+interface CreditMedia : TmdbIntId {
     val adult: Boolean?
     val backdropPath: String?
     val character: String?
@@ -159,7 +158,7 @@ data class CreditPerson(
     val popularity: Double?
 ) : TmdbType(), TmdbIntId
 
-interface CreditPersonKnownFor : TmdbIntId, Serializable {
+interface CreditPersonKnownFor : TmdbIntId {
     val adult: Boolean?
     val backdropPath: String?
     val genreIds: List<Int>

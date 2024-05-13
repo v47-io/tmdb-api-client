@@ -34,9 +34,12 @@
  */
 package io.v47.tmdb.http.api
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import io.v47.tmdb.TmdbClientException
 import io.v47.tmdb.http.HttpRequest
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class RawErrorResponse(
     val statusMessage: String,
     val statusCode: Int,

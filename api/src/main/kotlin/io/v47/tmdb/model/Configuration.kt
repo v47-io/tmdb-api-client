@@ -43,7 +43,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.ImageSizeDeserializer
 import io.v47.tmdb.jackson.serialization.ImageSizeSerializer
-import java.io.Serializable
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Configuration(
@@ -72,8 +71,7 @@ data class Configuration(
     ) : TmdbType()
 }
 
-@Suppress("SerialVersionUIDInSerializableClass")
-sealed interface ImageSize : Serializable {
+sealed interface ImageSize {
     val value: Int
 
     data class Width(override val value: Int) : ImageSize, Comparable<Width> {

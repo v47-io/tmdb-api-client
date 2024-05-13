@@ -41,7 +41,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.neovisionaries.i18n.CountryCode
 import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
-import java.io.Serializable
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -182,7 +181,7 @@ data class PeoplePopular(
     ) : TmdbType(), TmdbIntId
 }
 
-interface MovieTvPersonListResult : TmdbIntId, Serializable {
+interface MovieTvPersonListResult : TmdbIntId {
     override val id: Int?
     val mediaType: MediaType?
 }

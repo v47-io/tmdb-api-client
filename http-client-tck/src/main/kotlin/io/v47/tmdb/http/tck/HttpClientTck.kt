@@ -42,7 +42,6 @@ import io.v47.tmdb.http.tck.tests.NotFoundErrorResponseTest
 import io.v47.tmdb.http.tck.tests.ValidComplexResponseTest
 import io.v47.tmdb.http.tck.tests.ValidImageResponseTest
 import io.v47.tmdb.http.tck.tests.ValidSimpleResponseTest
-import java.io.Serializable
 
 /**
  * The TMDb API HttpClient TCK runner.
@@ -80,14 +79,13 @@ class HttpClientTck {
     }
 }
 
-@Suppress("SerialVersionUIDInSerializableClass")
-sealed class TckResult : Serializable {
-    object Success : TckResult(), Serializable
-    data class Failure(val failedTests: List<FailedTest>) : TckResult(), Serializable {
+sealed class TckResult {
+    data object Success : TckResult()
+    data class Failure(val failedTests: List<FailedTest>) : TckResult() {
         data class FailedTest(
             val name: String,
             val expectedValue: Any,
             val actualValue: Any?
-        ) : Serializable
+        )
     }
 }

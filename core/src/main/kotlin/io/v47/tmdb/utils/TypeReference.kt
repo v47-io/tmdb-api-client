@@ -42,9 +42,7 @@ import java.lang.reflect.WildcardType
 inline fun <reified T : Any> tmdbTypeReference() = object : TmdbTypeReference<T>() {}
 
 @Suppress("UnnecessaryAbstractClass")
-abstract class TmdbTypeReference<T : Any> protected constructor() :
-    Comparable<TmdbTypeReference<T>> {
-
+abstract class TmdbTypeReference<T : Any> protected constructor() : Comparable<TmdbTypeReference<T>> {
     val type: Type
 
     init {
