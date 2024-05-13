@@ -36,6 +36,7 @@ package io.v47.tmdb.http.quarkus;
 
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.IgnoreSplitPackageBuildItem;
+import io.quarkus.bootstrap.classloading.QuarkusClassLoader;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
@@ -43,9 +44,9 @@ import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
-import io.quarkus.deployment.builditem.nativeimage.ReflectiveHierarchyBuildItem;
 import io.quarkus.jackson.spi.ClassPathJacksonModuleBuildItem;
 import io.v47.tmdb.http.QuarkusHttpClientConfiguration;
+import io.v47.tmdb.http.api.RawErrorResponse;
 import io.v47.tmdb.http.impl.ConfigApiKeyProvider;
 import io.v47.tmdb.jackson.TmdbApiModule;
 import io.v47.tmdb.jackson.TmdbCoreModule;
@@ -59,8 +60,6 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 class QuarkusTmdbProcessor {
-    private static final DotName TMDB_TYPE = DotName.createSimple(TmdbType.class.getName());
-
     private static final String FEATURE = "tmdb-api-client";
 
     @BuildStep
@@ -81,25 +80,21 @@ class QuarkusTmdbProcessor {
 
     @BuildStep
     public void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
-        indexDependency.produce(new IndexDependencyBuildItem("com.neovisionaries", "nv-i18n"));
         indexDependency.produce(new IndexDependencyBuildItem("io.v47.tmdb-api-client", "api"));
         indexDependency.produce(new IndexDependencyBuildItem("io.v47.tmdb-api-client", "core"));
     }
 
     @BuildStep
     public void registerTmdbTypes(CombinedIndexBuildItem combinedIndex,
-                                  BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass,
                                   BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
-        Type tmdbType = Type.create(TMDB_TYPE, Type.Kind.CLASS);
-        reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(tmdbType)
-                                                                                   .serialization(true)
-                                                                                   .build());
+        reflectiveClass.produce(ReflectiveClassBuildItem.builder(RawErrorResponse.class).methods(true).build());
+        reflectiveClass.produce(ReflectiveClassBuildItem.builder(TmdbType.class).methods(true).build());
 
-        combinedIndex.getIndex().getAllKnownSubclasses(TMDB_TYPE).forEach(classInfo -> {
+        combinedIndex.getIndex().getAllKnownSubclasses(TmdbType.class).forEach(classInfo -> {
             Type jandexType = Type.create(classInfo.name(), Type.Kind.CLASS);
-            reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(jandexType)
-                                                                                       .serialization(true)
-                                                                                       .build());
+            reflectiveClass.produce(ReflectiveClassBuildItem.builder(jandexType.name().toString())
+                                                            .methods(true)
+                                                            .build());
         });
 
         combinedIndex.getIndex()
@@ -135,8 +130,7 @@ class QuarkusTmdbProcessor {
     }
 
     @BuildStep(onlyIf = IsTckActive.class)
-    public void registerTckClasses(BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass,
-                                   BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
+    public void registerTckClasses(BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
         List<String> tckClasses = Arrays.asList("io.v47.tmdb.http.tck.tests.AbstractTckTest",
                                                 "io.v47.tmdb.http.tck.tests.ValidComplexResponseTest",
                                                 "io.v47.tmdb.http.tck.tests.ValidSimpleResponseTest");
@@ -156,9 +150,9 @@ class QuarkusTmdbProcessor {
         tckSerializableClasses.forEach(name -> {
             Type jandexType = Type.create(DotName.createSimple(name), Type.Kind.CLASS);
 
-            reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(jandexType)
-                                                                                       .serialization(true)
-                                                                                       .build());
+            reflectiveClass.produce(ReflectiveClassBuildItem.builder(jandexType.name().toString())
+                                                            .methods(true)
+                                                            .build());
         });
     }
 
@@ -170,15 +164,7 @@ class QuarkusTmdbProcessor {
     static class IsTckActive implements BooleanSupplier {
         @Override
         public boolean getAsBoolean() {
-            ClassNotFoundException classNotFoundException = null;
-
-            try {
-                Class.forName("io.v47.tmdb.http.tck.HttpClientTck");
-            } catch (ClassNotFoundException x) {
-                classNotFoundException = x;
-            }
-
-            return classNotFoundException == null;
+            return QuarkusClassLoader.isClassPresentAtRuntime("io.v47.tmdb.http.tck.HttpClientTck");
         }
     }
 }

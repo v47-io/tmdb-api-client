@@ -39,6 +39,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
     <build>
