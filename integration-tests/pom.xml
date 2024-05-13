@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>quarkus-parent</artifactId>
-        <version>4.5.1-SNAPSHOT</version>
+        <version>4.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>quarkus-integration-tests</artifactId>
     <name>TMDb API Client :: integration-tests</name>
@@ -101,7 +101,7 @@
             </build>
             <properties>
                 <skipITs>false</skipITs>
-                <quarkus.package.type>native</quarkus.package.type>
+                <quarkus.native.enabled>true</quarkus.native.enabled>
             </properties>
         </profile>
     </profiles>

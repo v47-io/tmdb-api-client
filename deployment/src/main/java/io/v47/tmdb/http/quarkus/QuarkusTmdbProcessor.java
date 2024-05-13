@@ -89,8 +89,7 @@ class QuarkusTmdbProcessor {
     @BuildStep
     public void registerTmdbTypes(CombinedIndexBuildItem combinedIndex,
                                   BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass,
-                                  BuildProducer<ReflectiveClassBuildItem> reflectiveClass,
-                                  BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+                                  BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
         Type tmdbType = Type.create(TMDB_TYPE, Type.Kind.CLASS);
         reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(tmdbType)
                                                                                    .serialization(true)

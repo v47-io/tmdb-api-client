@@ -239,9 +239,4 @@ public class QuarkusHttpClientImpl implements HttpClient {
             return new ErrorResponse(msg, vxResponse.statusCode());
         }
     }
-
-    @Override
-    public void close() {
-        this.client.close();
-    }
 }
