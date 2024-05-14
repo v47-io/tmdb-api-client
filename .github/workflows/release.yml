@@ -29,7 +29,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: ./gradle.properties
-          property: version
+          properties: version
       - name: Publish to Central Repository
         run: ./gradlew publish releaseNexusRepositories
         env:

@@ -24,13 +24,11 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: ./gradle.properties
-          property: version
+          properties: version
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Build documentation
         run: ./gradlew dokkaHtmlMultiModule
-        env:
-          GRADLE_OPTS: -Xmx4096m -XX:MaxPermSize=768m
       - name: Deploy 🚀
         if: ${{ !endsWith(steps.version_property.outputs.value, '-SNAPSHOT') }}
         uses: JamesIves/github-pages-deploy-action@v4
