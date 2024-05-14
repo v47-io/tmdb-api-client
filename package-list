@@ -11,7 +11,6 @@ module:core
 io.v47.tmdb
 io.v47.tmdb.http
 io.v47.tmdb.http.api
-io.v47.tmdb.jackson
 module:http-client-java11
 io.v47.tmdb.http
 module:http-client-spring-webflux
