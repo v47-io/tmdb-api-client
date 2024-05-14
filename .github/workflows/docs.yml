@@ -13,24 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 17
       - name: Read library version
         id: version_property
-        uses: christian-draeger/read-properties@1.0.1
+        uses: christian-draeger/read-properties@1.1.1
         with:
           path: ./gradle.properties
           property: version
-      - name: Prepare environment
-        run: chmod +x ./gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Build documentation
-        uses: burrunan/gradle-cache-action@v1
-        with:
-          arguments: --console=plain dokkaHtmlMultiModule
+        run: ./gradlew dokkaHtmlMultiModule
         env:
           GRADLE_OPTS: -Xmx4096m -XX:MaxPermSize=768m
       - name: Deploy 🚀
