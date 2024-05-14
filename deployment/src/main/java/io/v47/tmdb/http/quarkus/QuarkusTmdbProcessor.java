@@ -49,7 +49,6 @@ import io.v47.tmdb.http.QuarkusHttpClientConfiguration;
 import io.v47.tmdb.http.api.RawErrorResponse;
 import io.v47.tmdb.http.impl.ConfigApiKeyProvider;
 import io.v47.tmdb.jackson.TmdbApiModule;
-import io.v47.tmdb.jackson.TmdbCoreModule;
 import io.v47.tmdb.model.TmdbType;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.Type;
@@ -74,7 +73,6 @@ class QuarkusTmdbProcessor {
 
     @BuildStep
     public void registerJacksonModules(BuildProducer<ClassPathJacksonModuleBuildItem> jacksonModules) {
-        jacksonModules.produce(new ClassPathJacksonModuleBuildItem(TmdbCoreModule.class.getName()));
         jacksonModules.produce(new ClassPathJacksonModuleBuildItem(TmdbApiModule.class.getName()));
     }
 
