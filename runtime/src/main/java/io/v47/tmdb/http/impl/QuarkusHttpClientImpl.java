@@ -151,7 +151,7 @@ public class QuarkusHttpClientImpl implements HttpClient {
     private URL createUri(HttpRequest request) {
         StringBuilder uriSB = new StringBuilder(this.baseUrl);
 
-        if (request.getUrl().startsWith("/"))
+        if (!request.getUrl().startsWith("/"))
             uriSB.append('/');
 
         uriSB.append(uriVariablePattern.matcher(request.getUrl()).replaceAll(mr -> {
