@@ -134,6 +134,7 @@ data class PersonTranslations(
         val country: CountryCode?,
         val name: String?,
         val data: PersonTranslationData?,
+        @JsonProperty("english_name")
         val englishName: String?
     ) : TmdbType() {
         data class PersonTranslationData(val biography: String?) : TmdbType()

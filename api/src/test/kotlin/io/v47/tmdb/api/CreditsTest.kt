@@ -42,11 +42,11 @@ class CreditsTest : AbstractTmdbTest() {
     companion object {
         const val TV_CREDIT_ID = "5bf57dad9251417c1d047265"
         const val TV_MEDIA_ID = 1403
-        const val TV_CHARACTER = """Elena 'Yo-Yo' Rodriguez"""
+        const val TV_CHARACTER = """Elena 'Yo-Yo' Rodriguez / Slingshot"""
 
         const val MOVIE_CREDIT_ID = "545d46a80e0a261fb3004e81"
         const val MOVIE_MEDIA_ID = 284053
-        const val MOVIE_CHARACTER = "Thor Odinson"
+        const val MOVIE_CHARACTER = "Thor"
     }
 
     @Test
