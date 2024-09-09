@@ -48,7 +48,8 @@ internal class OriginalLanguageDeserializer :
             val str = p.valueAsString
             val languageCode = LanguageCode.getByCode(str)
                 ?: CountryCode.getByAlpha2Code(str.uppercase())?.toLocale()
-                    ?.let { LanguageCode.valueOf(it.language) }
+                    ?.let { LanguageCode.entries.find { lc -> lc.name == it.language } }
+                ?: LanguageCode.undefined
 
             if (languageCode == LanguageCode.undefined)
                 null
