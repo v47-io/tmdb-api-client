@@ -1,19 +1,19 @@
 [versions]
-detekt = "1.23.6"
-dokka = "1.9.20"
+detekt = "1.23.7"
+dokka = "2.0.0-Beta"
 git-properties = "2.4.2"
-jackson = "2.17.2"
-junit-jupiter = "5.11.0"
-kotlin = "2.0.10"
+jackson = "2.18.2"
+junit-jupiter = "5.11.3"
+kotlin = "2.0.21"
 license = "0.16.1"
-logback = "1.5.7"
-mutiny = "2.6.2"
+logback = "1.5.12"
+mutiny = "2.7.0"
 nvi18n = "1.29"
 release = "3.0.2"
 remal-gradle-plugins = "1.9.2"
 slf4j = "2.0.16"
-spring-boot = "3.3.3"
-spring = "6.1.12"
+spring-boot = "3.4.0"
+spring = "6.2.0"
 
 [libraries]
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
@@ -43,6 +43,7 @@ springWebflux = { module = "org.springframework:spring-webflux", version.ref = "
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+dokkaJavadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 gitProperties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
