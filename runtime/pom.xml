@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>quarkus-parent</artifactId>
-        <version>4.9.0</version>
+        <version>4.9.1-SNAPSHOT</version>
     </parent>
     <artifactId>quarkus</artifactId>
     <name>TMDb API Client :: quarkus</name>
