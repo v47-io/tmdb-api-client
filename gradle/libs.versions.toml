@@ -1,39 +1,43 @@
 [versions]
 detekt = "1.23.7"
-dokka = "2.0.0-Beta"
+dokka = "2.0.0"
 git-properties = "2.4.2"
 jackson = "2.18.2"
-junit-jupiter = "5.11.3"
+junit-jupiter = "5.11.4"
 kotlin = "2.0.21"
 license = "0.16.1"
-logback = "1.5.12"
+logback = "1.5.16"
 mutiny = "2.7.0"
 nvi18n = "1.29"
-release = "3.0.2"
+release = "3.1.0"
 remal-gradle-plugins = "1.9.2"
 slf4j = "2.0.16"
-spring-boot = "3.4.0"
-spring = "6.2.0"
+spring-boot = "3.4.1"
+spring = "6.2.1"
 
 [libraries]
+# To be able to apply plugins in convention plugins
+plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+plugin-dokka = { module = "org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin", version.ref = "dokka" }
+plugin-git-properties = { module = "com.gorylenko.gradle-git-properties:gradle-git-properties", version.ref = "git-properties" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
+plugin-kotlin-spring = { module = "org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin", version.ref = "kotlin" }
+plugin-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "license" }
+plugin-release = { module = "net.researchgate.release:net.researchgate.release.gradle.plugin", version.ref = "release" }
+
+# All other deps
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jacksonModuleJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
-
 junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
-
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-
 mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
 mutinyReactor = { module = "io.smallrye.reactive:mutiny-reactor", version.ref = "mutiny" }
-
 nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
-
 remalGradlePlugins = { module = "name.remal:gradle-plugins", version.ref = "remal-gradle-plugins" }
-
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
-
 sbsTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 sbsWebflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
 springBootStarter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
