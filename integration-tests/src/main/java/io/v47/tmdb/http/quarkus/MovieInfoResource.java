@@ -75,46 +75,7 @@ public class MovieInfoResource {
                                                      Objects.requireNonNull(movieDetails.getReleaseDate()).getYear()));
     }
 
-    @SuppressWarnings("ClassCanBeRecord") // change back once Jackson 2.18.0 has been released
-    public static final class MovieInfo {
-        private final String imdbId;
-        private final String title;
-        private final int releaseYear;
-
-        public MovieInfo(String imdbId, String title, int releaseYear) {
-            this.imdbId = imdbId;
-            this.title = title;
-            this.releaseYear = releaseYear;
-        }
-
-        public String getImdbId() {
-            return imdbId;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public int getReleaseYear() {
-            return releaseYear;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this)
-                return true;
-            if (obj == null || obj.getClass() != this.getClass())
-                return false;
-            var that = (MovieInfo) obj;
-            return Objects.equals(this.imdbId, that.imdbId) && Objects.equals(this.title,
-                                                                              that.title) && this.releaseYear == that.releaseYear;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(imdbId, title, releaseYear);
-        }
-
+    public record MovieInfo(String imdbId, String title, int releaseYear) {
         @Override
         public String toString() {
             return "MovieInfo[" + "imdbId=" + imdbId + ", " + "title=" + title + ", " + "releaseYear=" + releaseYear + ']';
