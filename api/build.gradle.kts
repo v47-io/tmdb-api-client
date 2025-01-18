@@ -15,6 +15,7 @@ dependencies {
 
     implementation(libs.jacksonDatabind)
     implementation(libs.mutiny)
+    implementation(libs.slf4j)
 
     runtimeOnly(libs.jacksonModuleKotlin)
 

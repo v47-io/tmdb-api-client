@@ -79,8 +79,6 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.slf4j)
-
     testImplementation(libs.junitApi)
     testRuntimeOnly(libs.junitEngine)
     testRuntimeOnly(libs.logback)

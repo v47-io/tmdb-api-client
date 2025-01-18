@@ -66,7 +66,8 @@ internal class ValidComplexResponseTest : AbstractTckTest("https://api.themovied
                 CompanyAlternativeNames.AlternativeName("Walt Disney", ""),
                 CompanyAlternativeNames.AlternativeName("Walt Disney Productions", ""),
                 CompanyAlternativeNames.AlternativeName("华特迪士尼公司", ""),
-                CompanyAlternativeNames.AlternativeName("迪士尼影片公司", "")
+                CompanyAlternativeNames.AlternativeName("迪士尼影片公司", ""),
+                CompanyAlternativeNames.AlternativeName("和路狄士尼公司", "")
             )
         )
 
