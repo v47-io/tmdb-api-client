@@ -9,6 +9,7 @@ metadata:
     - api-client
     - reactive
     - web
+    - media
   categories:
     - web
     - reactive

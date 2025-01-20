@@ -1,7 +1,24 @@
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.getKaptConfigurationName
+
 plugins {
     id("tmdb-api-client.module")
 
+    kotlin("kapt")
+    kotlin("plugin.allopen")
+
     id("io.quarkus.extension")
+}
+
+configurations.getByName(getKaptConfigurationName(sourceSets.main.name)) {
+    extendsFrom(configurations.getByName(JavaPlugin.ANNOTATION_PROCESSOR_CONFIGURATION_NAME))
+}
+
+configurations.getByName(getKaptConfigurationName(sourceSets.test.name)) {
+    extendsFrom(configurations.getByName(JavaPlugin.TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME))
+}
+
+allOpen {
+    annotation("jakarta.enterprise.context.ApplicationScoped")
 }
 
 dependencies {
