@@ -28,8 +28,8 @@ dependencies {
     implementation(libs.tmdb.tck)
 }
 
-publishing {
-    publications {
-        clear() // not published
-    }
+afterEvaluate {
+    tasks
+        .filter { it.name.startsWith("publish") || "Publication" in it.name }
+        .forEach { it.enabled = false }
 }

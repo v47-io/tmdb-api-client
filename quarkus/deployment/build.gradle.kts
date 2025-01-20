@@ -14,7 +14,7 @@ configurations.getByName(getKaptConfigurationName(sourceSets.test.name)) {
 }
 
 dependencies {
-    implementation(enforcedPlatform(libs.quarkus.bom))
+    implementation(platform(libs.quarkus.bom))
 
     implementation(project(":quarkus:runtime"))
 

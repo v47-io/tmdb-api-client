@@ -22,7 +22,7 @@ allOpen {
 }
 
 dependencies {
-    implementation(enforcedPlatform(libs.quarkus.bom))
+    implementation(platform(libs.quarkus.bom))
 
     api(libs.tmdb.api)
 
