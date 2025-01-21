@@ -2,6 +2,9 @@ import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.getKa
 
 plugins {
     id("tmdb-api-client.module")
+    id("tmdb-api-client.publication")
+    id("tmdb-api-client.relocation")
+
     kotlin("kapt")
 }
 

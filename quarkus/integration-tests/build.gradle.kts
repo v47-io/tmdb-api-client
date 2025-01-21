@@ -27,9 +27,3 @@ dependencies {
     implementation(libs.rest.assured)
     implementation(libs.tmdb.tck)
 }
-
-afterEvaluate {
-    tasks
-        .filter { it.name.startsWith("publish") || "Publication" in it.name }
-        .forEach { it.enabled = false }
-}
