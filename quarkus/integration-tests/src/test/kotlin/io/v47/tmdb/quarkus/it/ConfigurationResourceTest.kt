@@ -32,9 +32,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
-import io.quarkus.test.junit.QuarkusIntegrationTest
+import io.quarkus.test.junit.QuarkusTest
+import io.restassured.RestAssured
+import io.v47.tmdb.model.Configuration
+import org.apache.http.HttpStatus
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Test
 
-@QuarkusIntegrationTest
-class TckResourceIT : TckResourceTest()
+@QuarkusTest
+open class ConfigurationResourceTest {
+    @Test
+    fun testGetConfiguration() {
+        val configuration = RestAssured
+            .get("/configuration")
+            .then()
+            .statusCode(HttpStatus.SC_OK)
+            .extract()
+            .body()
+            .`as`(Configuration::class.java)
+
+        assertFalse(configuration.images.backdropSizes.isEmpty())
+    }
+}

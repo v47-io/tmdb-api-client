@@ -32,7 +32,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
 import com.neovisionaries.i18n.LocaleCode
 import io.smallrye.mutiny.Uni

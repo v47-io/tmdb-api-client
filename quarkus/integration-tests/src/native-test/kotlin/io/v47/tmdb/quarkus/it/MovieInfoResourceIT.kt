@@ -32,59 +32,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.quarkus.test.junit.QuarkusTest
-import io.restassured.RestAssured
-import io.restassured.internal.mapping.Jackson2Mapper
-import io.v47.tmdb.http.quarkus.jackson.TckResultDeserializer
-import io.v47.tmdb.http.tck.TckResult
-import org.apache.http.HttpStatus
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import io.quarkus.test.junit.QuarkusIntegrationTest
+import io.v47.tmdb.quarkus.it.MovieInfoResourceTest
 
-@QuarkusTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-open class TckResourceTest {
-    private lateinit var jacksonObjectMapper: Jackson2Mapper
-
-    @BeforeAll
-    fun initObjectMapper() {
-        val objectMapper = ObjectMapper()
-        objectMapper.registerKotlinModule()
-        objectMapper.registerModule(
-            SimpleModule().addDeserializer(
-                TckResult::class.java,
-                TckResultDeserializer()
-            )
-        )
-
-        jacksonObjectMapper = Jackson2Mapper { _, _ -> objectMapper }
-    }
-
-    @Test
-    fun runTckTest() {
-        val result = RestAssured
-            .get("/run-tck-test")
-            .then()
-            .statusCode(HttpStatus.SC_OK)
-            .extract()
-            .body()
-            .`as`(TckResult::class.java, jacksonObjectMapper)
-
-        if (result is TckResult.Failure) {
-            result.failedTests.forEach { failedTest ->
-                assertEquals(
-                    failedTest.expectedValue,
-                    failedTest.actualValue,
-                    "Test " + failedTest.name + " failed"
-                )
-            }
-        }
-    }
-}
+@QuarkusIntegrationTest
+class MovieInfoResourceIT : MovieInfoResourceTest()

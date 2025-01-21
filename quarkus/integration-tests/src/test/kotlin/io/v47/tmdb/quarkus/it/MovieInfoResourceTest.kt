@@ -32,9 +32,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
-import io.quarkus.test.junit.QuarkusIntegrationTest
+import io.quarkus.test.junit.QuarkusTest
+import io.restassured.RestAssured
+import org.apache.http.HttpStatus
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-@QuarkusIntegrationTest
-class MovieInfoResourceIT : MovieInfoResourceTest()
+@QuarkusTest
+open class MovieInfoResourceTest {
+    @Test
+    fun testGetMovieInfo() {
+        val movieInfo = RestAssured
+            .get("/movie/284053")
+            .then()
+            .statusCode(HttpStatus.SC_OK)
+            .extract()
+            .body()
+            .`as`(MovieInfo::class.java)
+
+        assertEquals(
+            MovieInfo("tt3501632", "Thor: Tag der Entscheidung", 2017),
+            movieInfo
+        )
+    }
+}

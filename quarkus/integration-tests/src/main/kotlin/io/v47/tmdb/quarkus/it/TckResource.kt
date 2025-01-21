@@ -32,30 +32,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment.jackson
+package io.v47.tmdb.quarkus.it
 
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.deser.std.StdNodeBasedDeserializer
+import io.v47.tmdb.http.HttpClientFactory
+import io.v47.tmdb.http.tck.HttpClientTck
 import io.v47.tmdb.http.tck.TckResult
-import java.io.IOException
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.Produces
+import jakarta.ws.rs.core.MediaType
 
-class TckResultDeserializer : StdNodeBasedDeserializer<TckResult>(TckResult::class.java) {
-    @Throws(IOException::class)
-    override fun convert(root: JsonNode, ctxt: DeserializationContext): TckResult? {
-        val actualType =
-            if (root.hasNonNull("failedTests")) {
-                TckResult.Failure::class.java
-            } else {
-                TckResult.Success::class.java
-            }
+@Path("/run-tck-test")
+@Produces(MediaType.APPLICATION_JSON)
+class TckResource(private val httpClientFactory: HttpClientFactory) {
+    @GET
+    fun runTckTest(): TckResult {
+        val tck = HttpClientTck()
 
-        val jacksonType = ctxt.typeFactory.constructType(actualType)
-        val deserializer: JsonDeserializer<*> = ctxt.findRootValueDeserializer(jacksonType)
-        val nodeParser = root.traverse(ctxt.parser.codec)
-        nodeParser.nextToken()
-
-        return deserializer.deserialize(nodeParser, ctxt) as? TckResult
+        return tck.verify(this.httpClientFactory)
     }
 }

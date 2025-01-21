@@ -32,9 +32,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it.jackson
 
-import io.quarkus.test.junit.QuarkusIntegrationTest
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.deser.std.StdNodeBasedDeserializer
+import io.v47.tmdb.http.tck.TckResult
+import java.io.IOException
 
-@QuarkusIntegrationTest
-class ConfigurationResourceIT : ConfigurationResourceTest()
+class TckResultDeserializer : StdNodeBasedDeserializer<TckResult>(TckResult::class.java) {
+    @Throws(IOException::class)
+    override fun convert(root: JsonNode, ctxt: DeserializationContext): TckResult? {
+        val actualType =
+            if (root.hasNonNull("failedTests")) {
+                TckResult.Failure::class.java
+            } else {
+                TckResult.Success::class.java
+            }
+
+        val jacksonType = ctxt.typeFactory.constructType(actualType)
+        val deserializer: JsonDeserializer<*> = ctxt.findRootValueDeserializer(jacksonType)
+        val nodeParser = root.traverse(ctxt.parser.codec)
+        nodeParser.nextToken()
+
+        return deserializer.deserialize(nodeParser, ctxt) as? TckResult
+    }
+}

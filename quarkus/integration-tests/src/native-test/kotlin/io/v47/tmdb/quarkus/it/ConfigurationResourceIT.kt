@@ -32,23 +32,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
-import io.v47.tmdb.http.HttpClientFactory
-import io.v47.tmdb.http.tck.HttpClientTck
-import io.v47.tmdb.http.tck.TckResult
-import jakarta.ws.rs.GET
-import jakarta.ws.rs.Path
-import jakarta.ws.rs.Produces
-import jakarta.ws.rs.core.MediaType
+import io.quarkus.test.junit.QuarkusIntegrationTest
+import io.v47.tmdb.quarkus.it.ConfigurationResourceTest
 
-@Path("/run-tck-test")
-@Produces(MediaType.APPLICATION_JSON)
-class TckResource(private val httpClientFactory: HttpClientFactory) {
-    @GET
-    fun runTckTest(): TckResult {
-        val tck = HttpClientTck()
-
-        return tck.verify(this.httpClientFactory)
-    }
-}
+@QuarkusIntegrationTest
+class ConfigurationResourceIT : ConfigurationResourceTest()

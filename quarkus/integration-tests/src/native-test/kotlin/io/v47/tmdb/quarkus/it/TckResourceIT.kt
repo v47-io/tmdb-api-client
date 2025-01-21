@@ -32,20 +32,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus.deployment
+package io.v47.tmdb.quarkus.it
 
-import io.smallrye.mutiny.Uni
-import io.v47.tmdb.TmdbClient
-import io.v47.tmdb.model.Configuration
-import jakarta.ws.rs.GET
-import jakarta.ws.rs.Path
-import jakarta.ws.rs.Produces
-import jakarta.ws.rs.core.MediaType
+import io.quarkus.test.junit.QuarkusIntegrationTest
+import io.v47.tmdb.quarkus.it.TckResourceTest
 
-@Path("/configuration")
-@Produces(MediaType.APPLICATION_JSON)
-class ConfigurationResource(private val tmdbClient: TmdbClient) {
-    @GET
-    fun getConfiguration(): Uni<Configuration?> =
-        Uni.createFrom().publisher(tmdbClient.configuration.system())
-}
+@QuarkusIntegrationTest
+class TckResourceIT : TckResourceTest()
