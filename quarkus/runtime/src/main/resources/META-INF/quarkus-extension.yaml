@@ -1,0 +1,19 @@
+name: TMDb API Client
+description: Adds support for the TMDb API Client library
+metadata:
+  short-name: tmdb-api-client
+  keywords:
+    - tmdb
+    - themoviedb
+    - client
+    - api-client
+    - reactive
+    - web
+    - media
+  categories:
+    - web
+    - reactive
+  status: stable
+  guide: https://github.com/v47-io/tmdb-api-client-quarkus/blob/main/README.md
+  config:
+    - tmdb-client.
