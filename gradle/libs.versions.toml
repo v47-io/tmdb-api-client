@@ -9,6 +9,7 @@ license = "0.16.1"
 logback = "1.5.16"
 mutiny = "2.7.0"
 nvi18n = "1.29"
+quarkus = "3.17.7"
 release = "3.1.0"
 remal-gradle-plugins = "1.9.2"
 slf4j = "2.0.16"
@@ -24,6 +25,8 @@ plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 plugin-kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
 plugin-kotlin-spring = { module = "org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin", version.ref = "kotlin" }
 plugin-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "license" }
+plugin-quarkus = { module = "io.quarkus:gradle-application-plugin", version.ref = "quarkus" }
+plugin-quarkus-extension = { module = "io.quarkus.extension:gradle-extension-plugin", version.ref = "quarkus" }
 plugin-release = { module = "net.researchgate.release:net.researchgate.release.gradle.plugin", version.ref = "release" }
 
 # All other deps
@@ -36,7 +39,21 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
 mutinyReactor = { module = "io.smallrye.reactive:mutiny-reactor", version.ref = "mutiny" }
 nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
+quarkus-bom = { module = "io.quarkus:quarkus-bom", version.ref = "quarkus" }
+quarkus-arc = { module = "io.quarkus:quarkus-arc" }
+quarkus-arc-deployment = { module = "io.quarkus:quarkus-arc-deployment" }
+quarkus-jackson = { module = "io.quarkus:quarkus-jackson" }
+quarkus-jackson-deployment = { module = "io.quarkus:quarkus-jackson-deployment" }
+quarkus-junit5 = { module = "io.quarkus:quarkus-junit5" }
+quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin" }
+quarkus-kotlin-deployment = { module = "io.quarkus:quarkus-kotlin-deployment" }
+quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
+quarkus-rest-kotlin = { module = "io.quarkus:quarkus-rest-kotlin" }
+quarkus-vertx = { module = "io.quarkus:quarkus-vertx" }
+quarkus-vertx-deployment = { module = "io.quarkus:quarkus-vertx-deployment" }
 remalGradlePlugins = { module = "name.remal:gradle-plugins", version.ref = "remal-gradle-plugins" }
+rest-assured = { module = "io.rest-assured:rest-assured" }
+smallrye-mutiny-vertx-web-client = { module = "io.smallrye.reactive:smallrye-mutiny-vertx-web-client" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 sbsTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 sbsWebflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
@@ -45,13 +62,4 @@ springContext = { module = "org.springframework:spring-context", version.ref = "
 springWebflux = { module = "org.springframework:spring-webflux", version.ref = "spring" }
 
 [plugins]
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-dokkaJavadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
-gitProperties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlinPluginAllopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
-kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 license = { id = "com.github.hierynomus.license", version.ref = "license" }
-release = { id = "net.researchgate.release", version.ref = "release" }

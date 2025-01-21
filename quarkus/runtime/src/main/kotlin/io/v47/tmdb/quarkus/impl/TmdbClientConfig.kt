@@ -32,19 +32,5 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.impl
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
-
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
-    }
-}

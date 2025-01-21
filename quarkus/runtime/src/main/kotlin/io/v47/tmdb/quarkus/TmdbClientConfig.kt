@@ -32,19 +32,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import io.quarkus.runtime.annotations.ConfigPhase
+import io.quarkus.runtime.annotations.ConfigRoot
+import io.smallrye.config.ConfigMapping
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
-    }
+@ConfigMapping(prefix = "tmdb-api-client")
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
+interface TmdbClientConfig {
+    /**
+     * The TMDB API Key used to authenticate requests.
+     * <p>
+     * You can get it here after logging in:
+     * <a href="https://www.themoviedb.org/settings/api">TMDB Account Settings Page</a>
+     */
+    fun apiKey(): String
 }

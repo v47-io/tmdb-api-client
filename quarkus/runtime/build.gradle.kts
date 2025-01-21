@@ -26,7 +26,7 @@ allOpen {
 dependencies {
     implementation(platform(libs.quarkus.bom))
 
-    api(libs.tmdb.api)
+    api(project(":api"))
 
     implementation(libs.quarkus.arc)
     implementation(libs.quarkus.jackson)
@@ -37,6 +37,8 @@ dependencies {
 
     runtimeOnly(libs.jacksonModuleKotlin)
 }
+
+description = "Runtime module for the TMDB API client Quarkus extension"
 
 publishing {
     publications {

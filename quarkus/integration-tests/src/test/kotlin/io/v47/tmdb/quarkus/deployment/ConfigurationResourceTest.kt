@@ -1,7 +1,7 @@
-/**
+/*
  * The Clear BSD License
  *
- * Copyright (c) 2025, the tmdb-api-client authors
+ * Copyright (c) 2022, the tmdb-api-client authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,19 +32,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.deployment
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import io.quarkus.test.junit.QuarkusTest
+import io.restassured.RestAssured
+import io.v47.tmdb.model.Configuration
+import org.apache.http.HttpStatus
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Test
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
+@QuarkusTest
+open class ConfigurationResourceTest {
+    @Test
+    fun testGetConfiguration() {
+        val configuration = RestAssured
+            .get("/configuration")
+            .then()
+            .statusCode(HttpStatus.SC_OK)
+            .extract()
+            .body()
+            .`as`(Configuration::class.java)
+
+        assertFalse(configuration.images.backdropSizes.isEmpty())
     }
 }

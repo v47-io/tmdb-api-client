@@ -32,19 +32,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.impl
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.v47.tmdb.http.HttpClient
+import io.v47.tmdb.http.HttpClientFactory
+import io.vertx.mutiny.core.Vertx
+import io.vertx.mutiny.ext.web.client.WebClient
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.enterprise.inject.Default
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
-    }
+@Default
+@ApplicationScoped
+internal class HttpClientFactoryImpl(
+    private val vertx: Vertx,
+    private val objectMapper: ObjectMapper
+) : HttpClientFactory {
+    override fun createHttpClient(baseUrl: String): HttpClient =
+        QuarkusHttpClientImpl(baseUrl, WebClient.create(vertx), objectMapper)
 }

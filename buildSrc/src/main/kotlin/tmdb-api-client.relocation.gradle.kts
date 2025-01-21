@@ -32,19 +32,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+import internal.common
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+plugins {
+    `maven-publish`
+}
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
+publishing {
+    publications {
+        create<MavenPublication>("relocation") {
+            groupId = "io.v47.tmdb-api-client"
+            version = "${project.version}"
+
+            pom {
+                common(project)
+
+                distributionManagement {
+                    relocation {
+                        groupId = "${project.group}"
+                        artifactId = project.name
+                    }
+                }
+            }
         }
     }
 }

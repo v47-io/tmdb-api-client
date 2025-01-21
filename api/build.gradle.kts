@@ -1,5 +1,6 @@
 plugins {
     id("tmdb-api-client.module")
+    id("tmdb-api-client.publication")
 
     kotlin("plugin.allopen")
 }

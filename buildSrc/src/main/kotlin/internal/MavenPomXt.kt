@@ -34,17 +34,41 @@
  */
 package internal
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import org.gradle.api.Project
+import org.gradle.api.publish.maven.MavenPom
+import org.gradle.kotlin.dsl.assign
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
+private val Project.display
+    get() =
+        if ("quarkus" in path)
+            "Quarkus $name"
+        else
+            name
+
+internal fun MavenPom.common(project: Project) {
+    name = "TMDB API Client :: ${project.display}"
+    description = project.description
+    url = "https://github.com/v47-io/tmdb-api-client"
+
+    licenses {
+        license {
+            name = "BSD 3-Clause Clear License"
+            url = "https://spdx.org/licenses/BSD-3-Clause-Clear.html"
         }
+    }
+
+    developers {
+        developer {
+            id = "vemilyus"
+            name = "Alex Katlein"
+            email = "dev@vemilyus.com"
+        }
+    }
+
+    scm {
+        connection = "scm:git:https://github.com/v47-io/tmdb-api-client.git"
+        developerConnection =
+            "scm:git:ssh://git@github.com/v47-io/tmdb-api-client.git"
+        url = "https://github.com/v47-io/tmdb-api-client"
     }
 }

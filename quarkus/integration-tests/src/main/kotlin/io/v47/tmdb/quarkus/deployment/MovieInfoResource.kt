@@ -1,7 +1,7 @@
-/**
+/*
  * The Clear BSD License
  *
- * Copyright (c) 2025, the tmdb-api-client authors
+ * Copyright (c) 2022, the tmdb-api-client authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,19 +32,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.deployment
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import com.neovisionaries.i18n.LocaleCode
+import io.smallrye.mutiny.Uni
+import io.v47.tmdb.TmdbClient
+import io.v47.tmdb.api.MovieRequest
+import io.v47.tmdb.model.MovieDetails
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
+import jakarta.ws.rs.Produces
+import jakarta.ws.rs.core.MediaType
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
+@Path("/movie")
+@Produces(MediaType.APPLICATION_JSON)
+class MovieInfoResource(private val tmdbClient: TmdbClient) {
+    @GET
+    @Path("{id}")
+    fun getMovieInfo(@PathParam("id") id: Int): Uni<MovieInfo?>? =
+        Uni.createFrom()
+            .publisher<MovieDetails?>(
+                tmdbClient.movie
+                    .details(
+                        id,
+                        LocaleCode.de_DE,
+                        MovieRequest.Changes,
+                        MovieRequest.Credits,
+                        MovieRequest.Lists,
+                        MovieRequest.ReleaseDates
+                    )
+            )
+            .map { movieDetails: MovieDetails? ->
+                MovieInfo(
+                    movieDetails!!.imdbId,
+                    movieDetails.title,
+                    movieDetails.releaseDate!!.year
+                )
+            }
+}
+
+data class MovieInfo(val imdbId: String?, val title: String?, val releaseYear: Int) {
+    override fun toString(): String {
+        return "MovieInfo[imdbId=$imdbId, title=$title, releaseYear=$releaseYear]"
     }
 }

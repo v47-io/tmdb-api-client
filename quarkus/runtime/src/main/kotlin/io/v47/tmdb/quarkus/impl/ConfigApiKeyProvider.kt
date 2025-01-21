@@ -32,19 +32,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.impl
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import io.v47.tmdb.api.key.TmdbApiKeyProvider
+import io.v47.tmdb.quarkus.TmdbClientConfig
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.enterprise.inject.Default
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
-    }
+@Default
+@ApplicationScoped
+internal class ConfigApiKeyProvider(private val config: TmdbClientConfig) : TmdbApiKeyProvider {
+    override fun getApiKey() = config.apiKey()
 }

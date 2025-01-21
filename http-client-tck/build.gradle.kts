@@ -1,5 +1,6 @@
 plugins {
     id("tmdb-api-client.module")
+    id("tmdb-api-client.publication")
 }
 
 dependencies {
@@ -8,12 +9,4 @@ dependencies {
     implementation(libs.mutiny)
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            pom {
-                description = "TCK for TMDb HttpClient implementations"
-            }
-        }
-    }
-}
+description = "TCK for TMDb HttpClient implementations"

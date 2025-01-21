@@ -1,7 +1,7 @@
-/**
+/*
  * The Clear BSD License
  *
- * Copyright (c) 2025, the tmdb-api-client authors
+ * Copyright (c) 2022, the tmdb-api-client authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,19 +32,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package internal
+package io.v47.tmdb.quarkus.deployment
 
-import name.remal.gradle_plugins.plugins.publish.ossrh.RepositoryHandlerOssrhExtension
-import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
-import org.gradle.kotlin.dsl.withConvention
+import io.quarkus.test.junit.QuarkusTest
+import io.restassured.RestAssured
+import org.apache.http.HttpStatus
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-@Suppress("SpellCheckingInspection")
-internal fun RepositoryHandler.ossrh(block: MavenArtifactRepository.() -> Unit) {
-    @Suppress("DEPRECATION")
-    withConvention(RepositoryHandlerOssrhExtension::class) {
-        ossrh {
-            block()
-        }
+@QuarkusTest
+open class MovieInfoResourceTest {
+    @Test
+    fun testGetMovieInfo() {
+        val movieInfo = RestAssured
+            .get("/movie/284053")
+            .then()
+            .statusCode(HttpStatus.SC_OK)
+            .extract()
+            .body()
+            .`as`(MovieInfo::class.java)
+
+        assertEquals(
+            MovieInfo("tt3501632", "Thor: Tag der Entscheidung", 2017),
+            movieInfo
+        )
     }
 }

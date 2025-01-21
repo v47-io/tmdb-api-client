@@ -25,6 +25,8 @@ dependencies {
     implementation(libs.plugin.kotlin.allopen)
     implementation(libs.plugin.kotlin.spring)
     implementation(libs.plugin.license)
+    implementation(libs.plugin.quarkus)
+    implementation(libs.plugin.quarkus.extension)
     implementation(libs.plugin.release)
     implementation(libs.remalGradlePlugins)
 }

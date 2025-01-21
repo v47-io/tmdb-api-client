@@ -19,11 +19,18 @@ dependencies {
     implementation(enforcedPlatform(libs.quarkus.bom))
 
     implementation(project(":quarkus:runtime"))
+    implementation(project(":http-client-tck"))
 
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.quarkus.junit5)
     implementation(libs.quarkus.rest.jackson)
     implementation(libs.quarkus.rest.kotlin)
     implementation(libs.rest.assured)
-    implementation(libs.tmdb.tck)
+}
+
+afterEvaluate {
+    tasks
+        .asSequence()
+        .filter { it.name.contains("dokka", ignoreCase = true) }
+        .forEach { it.enabled = false }
 }

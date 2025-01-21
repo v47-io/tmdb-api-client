@@ -27,6 +27,8 @@ dependencies {
     implementation(libs.quarkus.vertx.deployment)
 }
 
+description = "Deployment module for the TMDB API client Quarkus extension"
+
 publishing {
     publications {
         named<MavenPublication>("relocation") {
