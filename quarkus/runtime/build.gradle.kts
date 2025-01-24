@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.getKaptConfigurationName
 
+group = "io.v47.tmdb-api-client.quarkus"
+
 plugins {
     id("tmdb-api-client.module")
     id("tmdb-api-client.publication")
-    id("tmdb-api-client.relocation")
+    id("tmdb-api-client.quarkus-relocation")
 
     kotlin("kapt")
     kotlin("plugin.allopen")
@@ -40,8 +42,16 @@ dependencies {
 
 description = "Runtime module for the TMDB API client Quarkus extension"
 
+quarkusExtension {
+    deploymentArtifact = "${project.group}:deployment:$version"
+}
+
 publishing {
     publications {
+        named<MavenPublication>("tmdbApiClient") {
+            groupId = "io.v47.tmdb-api-client.quarkus"
+        }
+
         named<MavenPublication>("relocation") {
             artifactId = "quarkus"
         }

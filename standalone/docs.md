@@ -4,7 +4,7 @@ Provides a straightforward way to create a [TmdbClient][io.v47.tmdb.TmdbClient] 
 that uses the [HttpClient][io.v47.tmdb.http.HttpClient] implementation from the `http-client-java11`
 module.
 
-This makes it independent of any framework like Spring or Micronaut.
+This makes it independent of any framework like Quarkus.
 
 To create a `TmdbClient` simply use the factory method (Java) or invoke operator (Kotlin):
 

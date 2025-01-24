@@ -32,20 +32,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package io.v47.tmdb.quarkus
+import internal.common
 
-import io.quarkus.runtime.annotations.ConfigPhase
-import io.quarkus.runtime.annotations.ConfigRoot
-import io.smallrye.config.ConfigMapping
+plugins {
+    `maven-publish`
+}
 
-@ConfigMapping(prefix = "tmdb-api-client")
-@ConfigRoot(phase = ConfigPhase.RUN_TIME)
-interface TmdbClientConfig {
-    /**
-     * The TMDB API Key used to authenticate requests.
-     * <p>
-     * You can get it here after logging in:
-     * <a href="https://www.themoviedb.org/settings/api">TMDB Account Settings Page</a>
-     */
-    fun apiKey(): String
+publishing {
+    publications {
+        create<MavenPublication>("relocation") {
+            groupId = "io.v47.tmdb-api-client"
+            version = "${project.version}"
+
+            pom {
+                common(project)
+
+                distributionManagement {
+                    relocation {
+                        groupId = "${project.group}.quarkus"
+                        artifactId = project.name
+                    }
+                }
+            }
+        }
+    }
 }

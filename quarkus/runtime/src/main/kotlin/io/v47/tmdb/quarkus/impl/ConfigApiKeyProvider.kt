@@ -35,12 +35,13 @@
 package io.v47.tmdb.quarkus.impl
 
 import io.v47.tmdb.api.key.TmdbApiKeyProvider
-import io.v47.tmdb.quarkus.TmdbClientConfig
+import io.v47.tmdb.quarkus.TmdbApiClientConfig
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.inject.Default
 
 @Default
 @ApplicationScoped
-internal class ConfigApiKeyProvider(private val config: TmdbClientConfig) : TmdbApiKeyProvider {
-    override fun getApiKey() = config.apiKey()
+internal class ConfigApiKeyProvider(private val config: TmdbApiClientConfig) : TmdbApiKeyProvider {
+    override fun getApiKey(): String =
+        config.apiKey().orElseThrow { IllegalStateException("TMDB API key not configured.") }
 }

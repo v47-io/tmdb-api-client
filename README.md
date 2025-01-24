@@ -15,12 +15,12 @@ Add the following dependency to your project:
 
 ```groovy
 // Gradle
-implementation 'io.v47.tmdb-api-client:standalone:4.10.1'
+implementation 'io.v47.tmdb-api-client:standalone:5.0.0'
 ```
 
 ```kotlin
 // Gradle Kotlin DSL
-implementation("io.v47.tmdb-api-client:standalone:4.10.1")
+implementation("io.v47.tmdb-api-client:standalone:5.0.0")
 ```
 
 ```xml
@@ -29,7 +29,7 @@ implementation("io.v47.tmdb-api-client:standalone:4.10.1")
     <dependency>
         <groupId>io.v47.tmdb-api-client</groupId>
         <artifactId>standalone</artifactId>
-        <version>4.10.1</version>
+        <version>5.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -64,16 +64,9 @@ module of your choice to your project.
 This library provides access to the entire read-only API (v3) of TheMovieDb, authenticated
 using an API-Key, including images.
 
-Various integrations with application frameworks are also available (`artifactId`):
+Various integrations with application frameworks are also available:
 
-- Spring Boot Webflux (`spring-boot-starter`)
-- [Quarkus][tmdb-api-client-quarkus] (`quarkus`)
-
-__All integrations except the Java 11 HttpClient based implementation (also standalone) and the Quarkus 
-client are deprecated and won't get any major updates except critical fixes ensuring they are secure 
-and test ok.__
-
-[tmdb-api-client-quarkus]: https://github.com/v47-io/tmdb-api-client-quarkus-ext
+- [Quarkus](./quarkus/README.md)
 
 Adding support for more frameworks is fairly trivial, only a small adapter needs to be
 implemented for the actual HTTP client. To make development easier a TCK is provided to
@@ -91,6 +84,7 @@ Automatically generated Kotlin docs are available [here](https://v47-io.github.i
 Requirements:
 
 - JDK 17
+- Docker (for Quarkus extension integration-tests)
 
 For local building and testing you need to configure a TMDb API-Key using
 the environment variable `API_KEY`.
@@ -99,4 +93,10 @@ Then you can simply run a complete build of all packages using this command:
 
 ```shell
 ./gradlew build
+```
+
+To also run the Quarkus integration tests in native mode use this command:
+
+```shell
+./gradlew build -Dquarkus.package.jar.enabled=false -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
 ```

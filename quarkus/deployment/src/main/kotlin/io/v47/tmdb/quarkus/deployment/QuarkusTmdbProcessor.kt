@@ -114,6 +114,8 @@ internal class QuarkusTmdbProcessor {
     fun ignoreSplitPackages() =
         IgnoreSplitPackageBuildItem(
             listOf(
+                "io.v47.tmdb.http",
+                "io.v47.tmdb.http.impl",
                 "io.v47.tmdb.utils",
                 "io.v47.tmdb.jackson",
                 "io.v47.tmdb.jackson.mixins",

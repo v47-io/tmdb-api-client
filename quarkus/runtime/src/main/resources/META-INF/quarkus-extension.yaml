@@ -14,6 +14,7 @@ metadata:
     - web
     - reactive
   status: stable
-  guide: https://github.com/v47-io/tmdb-api-client/quarkus/blob/main/README.md
+  guide: https://github.com/v47-io/tmdb-api-client/blob/main/quarkus/README.md
   config:
     - tmdb-api-client.
+artifact: "io.v47.tmdb-api-client.quarkus:runtime"
