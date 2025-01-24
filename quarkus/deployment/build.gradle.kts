@@ -29,16 +29,22 @@ dependencies {
     implementation(libs.quarkus.vertx.deployment)
 }
 
-description = "Deployment module for the TMDB API client Quarkus extension"
-
 publishing {
     publications {
         named<MavenPublication>("tmdbApiClient") {
             groupId = "io.v47.tmdb-api-client.quarkus"
+
+            pom {
+                description = "Deployment module for the TMDB API client Quarkus extension"
+            }
         }
 
         named<MavenPublication>("relocation") {
             artifactId = "quarkus-deployment"
+
+            pom {
+                description = "Deployment module for the TMDB API client Quarkus extension"
+            }
         }
     }
 }

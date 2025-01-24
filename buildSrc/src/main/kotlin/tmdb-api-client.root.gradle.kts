@@ -35,17 +35,38 @@
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import name.remal.gradle_plugins.dsl.extensions.withPlugin
 import net.researchgate.release.ReleaseExtension
+import java.util.*
+import java.util.Calendar.YEAR
 
 plugins {
     id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka-javadoc")
 }
 
 repositories {
     mavenCentral()
 }
 
+dependencies {
+    subprojects
+        .filterNot { it.path == ":quarkus" || it.name == "integration-tests" }
+        .forEach { subproject ->
+            dokka(project(subproject.path))
+        }
+}
+
 tasks.register("reportMerge", ReportMergeTask::class.java) {
     output = project.layout.buildDirectory.file("reports/detekt/merge.sarif")
+}
+
+dokka {
+    pluginsConfiguration {
+        val copyright = "Copyright (c) ${Calendar.getInstance().get(YEAR)} the tmdb-api-client authors"
+
+        html {
+            footerMessage = copyright
+        }
+    }
 }
 
 withPlugin("net.researchgate.release") {

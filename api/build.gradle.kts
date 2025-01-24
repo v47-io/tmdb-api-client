@@ -29,7 +29,7 @@ publishing {
     publications {
         named<MavenPublication>("tmdbApiClient") {
             pom {
-                description.set("The primary API of the TMDB API client")
+                description = "The primary API of the TMDB API client"
             }
         }
     }

@@ -47,7 +47,6 @@ private val Project.display
 
 internal fun MavenPom.common(project: Project) {
     name = "TMDB API Client :: ${project.display}"
-    description = project.description
     url = "https://github.com/v47-io/tmdb-api-client"
 
     licenses {
@@ -67,8 +66,7 @@ internal fun MavenPom.common(project: Project) {
 
     scm {
         connection = "scm:git:https://github.com/v47-io/tmdb-api-client.git"
-        developerConnection =
-            "scm:git:ssh://git@github.com/v47-io/tmdb-api-client.git"
+        developerConnection = "scm:git:ssh://git@github.com/v47-io/tmdb-api-client.git"
         url = "https://github.com/v47-io/tmdb-api-client"
     }
 }

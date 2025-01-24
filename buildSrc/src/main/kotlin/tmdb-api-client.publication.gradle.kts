@@ -46,7 +46,7 @@ plugins {
 val packageJavadoc = tasks.register("packageJavadoc", Jar::class.java) {
     archiveClassifier = "javadoc"
 
-    val dokkaJavadoc = tasks.getByName("dokkaJavadoc")
+    val dokkaJavadoc = tasks.getByName("dokkaGeneratePublicationJavadoc")
     dependsOn(dokkaJavadoc)
     from(dokkaJavadoc.outputs)
 }

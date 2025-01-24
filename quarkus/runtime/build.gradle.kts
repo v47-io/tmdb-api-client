@@ -40,8 +40,6 @@ dependencies {
     runtimeOnly(libs.jacksonModuleKotlin)
 }
 
-description = "Runtime module for the TMDB API client Quarkus extension"
-
 quarkusExtension {
     deploymentArtifact = "${project.group}:deployment:$version"
 }
@@ -50,10 +48,18 @@ publishing {
     publications {
         named<MavenPublication>("tmdbApiClient") {
             groupId = "io.v47.tmdb-api-client.quarkus"
+
+            pom {
+                description = "Runtime module for the TMDB API client Quarkus extension"
+            }
         }
 
         named<MavenPublication>("relocation") {
             artifactId = "quarkus"
+
+            pom {
+                description = "Runtime module for the TMDB API client Quarkus extension"
+            }
         }
     }
 }

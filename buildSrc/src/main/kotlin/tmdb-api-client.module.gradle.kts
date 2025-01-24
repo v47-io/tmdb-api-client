@@ -36,8 +36,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import name.remal.gradle_plugins.dsl.extensions.configure
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URI
 import java.util.*
 import java.util.Calendar.YEAR
 
@@ -51,6 +50,7 @@ plugins {
     id("com.gorylenko.gradle-git-properties")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka-javadoc")
 
     jacoco
 }
@@ -133,34 +133,38 @@ license {
     }
 }
 
-tasks.getByName<DokkaTaskPartial>("dokkaHtmlPartial") {
-    dokkaSourceSets {
-        configureEach {
-            perPackageOption {
-                matchingRegex = ".*\\.(impl|utils).*"
-                suppress.set(true)
+dokka {
+    moduleName = project.path.split(':').filterNot { it.isEmpty() }.joinToString(" - ")
+
+    dokkaSourceSets.main {
+        includes.from("$projectDir/docs.md")
+
+        perPackageOption {
+            matchingRegex = ".*\\.(impl|utils).*"
+            suppress = true
+        }
+
+        sourceLink {
+            localDirectory = file("src/main/kotlin")
+
+            val revision = "${project.version}".let { version ->
+                if (version.endsWith("-SNAPSHOT"))
+                    "main"
+                else
+                    "v$version"
             }
 
-            displayName = project.path.split(':').filterNot { it.isEmpty() }.joinToString(" - ")
-            moduleName = displayName
-
-            includes.from("$projectDir/docs.md")
+            val remotePath = project.path.split(':').filterNot { it.isBlank() }.joinToString("/")
+            remoteUrl = URI("https://github.com/v47-io/tmdb-api-client/blob/$revision/${remotePath}/src/main/kotlin")
+            remoteLineSuffix = "#L"
         }
     }
-}
 
-tasks.getByName<DokkaTask>("dokkaJavadoc") {
-    dokkaSourceSets {
-        configureEach {
-            perPackageOption {
-                matchingRegex = ".*\\.(impl|utils).*"
-                suppress = true
-            }
+    pluginsConfiguration {
+        val copyright = "Copyright (c) ${Calendar.getInstance().get(YEAR)} the tmdb-api-client authors"
 
-            displayName = project.path.split(':').filterNot { it.isEmpty() }.joinToString(" - ")
-            moduleName = displayName
-
-            includes.from("$projectDir/docs.md")
+        html {
+            footerMessage = copyright
         }
     }
 }

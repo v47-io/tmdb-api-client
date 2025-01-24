@@ -16,4 +16,12 @@ dependencies {
     testImplementation(project(":http-client-tck"))
 }
 
-description = "TMDb HttpClient implementation using the Java 11 HttpClient"
+publishing {
+    publications {
+        named<MavenPublication>("tmdbApiClient") {
+            pom {
+                description = "TMDb HttpClient implementation using the Java 11 HttpClient"
+            }
+        }
+    }
+}
