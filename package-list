@@ -13,11 +13,9 @@ io.v47.tmdb.http
 io.v47.tmdb.http.api
 module:http-client-java11
 io.v47.tmdb.http
-module:http-client-spring-webflux
-io.v47.tmdb.http
 module:http-client-tck
 io.v47.tmdb.http.tck
-module:spring-boot-starter
-io.v47.tmdb.autoconfigure
+module:quarkus - runtime
+io.v47.tmdb.quarkus
 module:standalone
 io.v47.tmdb
