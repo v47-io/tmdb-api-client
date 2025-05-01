@@ -77,11 +77,14 @@ repositories {
 }
 
 dependencies {
+    testImplementation(platform(libs.junitBom))
     testImplementation(libs.junitApi)
     testRuntimeOnly(libs.junitEngine)
+    testRuntimeOnly(libs.junitPlatformLauncher)
 }
 
 gitProperties {
+    dotGitDirectory = file("${rootProject.projectDir}/.git")
     gitPropertiesName = "${rootProject.name}-${project.name}-version.properties"
 }
 

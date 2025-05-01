@@ -1,20 +1,18 @@
 [versions]
-detekt = "1.23.7"
+detekt = "1.23.8"
 dokka = "2.0.0"
-git-properties = "2.4.2"
-jackson = "2.18.2"
-junit-jupiter = "5.11.4"
-kotlin = "2.0.21"
+git-properties = "2.5.0"
+jackson = "2.19.0"
+junit-jupiter = "5.12.2"
+kotlin = "2.1.20"
 license = "0.16.1"
-logback = "1.5.16"
-mutiny = "2.7.0"
+logback = "1.5.18"
+mutiny = "2.8.0"
 nvi18n = "1.29"
-quarkus = "3.17.7"
+quarkus = "3.22.1"
 release = "3.1.0"
 remal-gradle-plugins = "1.9.2"
-slf4j = "2.0.16"
-spring-boot = "3.4.1"
-spring = "6.2.1"
+slf4j = "2.0.17"
 
 [libraries]
 # To be able to apply plugins in convention plugins
@@ -33,11 +31,12 @@ plugin-release = { module = "net.researchgate.release:net.researchgate.release.g
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jacksonModuleJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
-junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
-junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junitApi = { module = "org.junit.jupiter:junit-jupiter-api" }
+junitBom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
+junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
-mutinyReactor = { module = "io.smallrye.reactive:mutiny-reactor", version.ref = "mutiny" }
 nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
 quarkus-bom = { module = "io.quarkus:quarkus-bom", version.ref = "quarkus" }
 quarkus-arc = { module = "io.quarkus:quarkus-arc" }
@@ -55,11 +54,6 @@ remalGradlePlugins = { module = "name.remal:gradle-plugins", version.ref = "rema
 rest-assured = { module = "io.rest-assured:rest-assured" }
 smallrye-mutiny-vertx-web-client = { module = "io.smallrye.reactive:smallrye-mutiny-vertx-web-client" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
-sbsTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-sbsWebflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
-springBootStarter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
-springContext = { module = "org.springframework:spring-context", version.ref = "spring" }
-springWebflux = { module = "org.springframework:spring-webflux", version.ref = "spring" }
 
 [plugins]
 license = { id = "com.github.hierynomus.license", version.ref = "license" }
