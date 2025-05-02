@@ -8,10 +8,10 @@ kotlin = "2.1.20"
 license = "0.16.1"
 logback = "1.5.18"
 mutiny = "2.8.0"
+ncmp-maven-publish = "0.31.0"
 nvi18n = "1.29"
 quarkus = "3.22.1"
 release = "3.1.0"
-remal-gradle-plugins = "1.9.2"
 slf4j = "2.0.17"
 
 [libraries]
@@ -26,6 +26,7 @@ plugin-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license
 plugin-quarkus = { module = "io.quarkus:gradle-application-plugin", version.ref = "quarkus" }
 plugin-quarkus-extension = { module = "io.quarkus.extension:gradle-extension-plugin", version.ref = "quarkus" }
 plugin-release = { module = "net.researchgate.release:net.researchgate.release.gradle.plugin", version.ref = "release" }
+plugin-ncmp-maven-publish = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "ncmp-maven-publish" }
 
 # All other deps
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
@@ -50,7 +51,6 @@ quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
 quarkus-rest-kotlin = { module = "io.quarkus:quarkus-rest-kotlin" }
 quarkus-vertx = { module = "io.quarkus:quarkus-vertx" }
 quarkus-vertx-deployment = { module = "io.quarkus:quarkus-vertx-deployment" }
-remalGradlePlugins = { module = "name.remal:gradle-plugins", version.ref = "remal-gradle-plugins" }
 rest-assured = { module = "io.rest-assured:rest-assured" }
 smallrye-mutiny-vertx-web-client = { module = "io.smallrye.reactive:smallrye-mutiny-vertx-web-client" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

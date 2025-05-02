@@ -25,12 +25,8 @@ dependencies {
     testRuntimeOnly(libs.logback)
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            pom {
-                description = "The primary API of the TMDB API client"
-            }
-        }
+mavenPublishing {
+    pom {
+        description = "The primary API of the TMDB API client"
     }
 }

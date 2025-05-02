@@ -10,12 +10,8 @@ dependencies {
     implementation(project(":http-client-java11"))
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            pom {
-                description = "Standalone TMDb API client package for framework-less access to TMDb"
-            }
-        }
+mavenPublishing {
+    pom {
+        description = "Standalone TMDb API client package for framework-less access to TMDb"
     }
 }

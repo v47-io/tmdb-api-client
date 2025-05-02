@@ -5,7 +5,6 @@ project.group = "io.v47.tmdb-api-client.quarkus"
 plugins {
     id("tmdb-api-client.module")
     id("tmdb-api-client.publication")
-    id("tmdb-api-client.quarkus-relocation")
 
     kotlin("kapt")
 }
@@ -29,22 +28,8 @@ dependencies {
     implementation(libs.quarkus.vertx.deployment)
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            groupId = "io.v47.tmdb-api-client.quarkus"
-
-            pom {
-                description = "Deployment module for the TMDB API client Quarkus extension"
-            }
-        }
-
-        named<MavenPublication>("relocation") {
-            artifactId = "quarkus-deployment"
-
-            pom {
-                description = "Deployment module for the TMDB API client Quarkus extension"
-            }
-        }
+mavenPublishing {
+    pom {
+        description = "Deployment module for the TMDB API client Quarkus extension"
     }
 }

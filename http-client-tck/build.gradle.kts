@@ -9,12 +9,8 @@ dependencies {
     implementation(libs.mutiny)
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            pom {
-                description = "TCK for TMDb HttpClient implementations"
-            }
-        }
+mavenPublishing {
+    pom {
+        description = "TCK for TMDb HttpClient implementations"
     }
 }

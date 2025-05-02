@@ -10,12 +10,8 @@ dependencies {
     testImplementation(libs.jacksonModuleKotlin)
 }
 
-publishing {
-    publications {
-        named<MavenPublication>("tmdbApiClient") {
-            pom {
-                description = "Core types and interfaces for the TMDB API client"
-            }
-        }
+mavenPublishing {
+    pom {
+        description = "Core types and interfaces for the TMDB API client"
     }
 }

@@ -22,7 +22,7 @@ jobs:
           distribution: graalvm-community
           java-version: 21
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Build and test using gradle
         run: ./gradlew build -Dquarkus.package.jar.enabled=false -Dquarkus.native.enabled=true
         env:
@@ -39,6 +39,8 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v4
       - name: Archive logs on failure
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4

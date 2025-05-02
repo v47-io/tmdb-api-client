@@ -33,7 +33,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import name.remal.gradle_plugins.dsl.extensions.withPlugin
 import net.researchgate.release.ReleaseExtension
 import java.util.*
 import java.util.Calendar.YEAR
@@ -69,6 +68,6 @@ dokka {
     }
 }
 
-withPlugin("net.researchgate.release") {
+project.pluginManager.withPlugin("net.researchgate.release") {
     extensions.getByType<ReleaseExtension>().tagTemplate = "v\$version"
 }

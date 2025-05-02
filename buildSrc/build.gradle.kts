@@ -28,7 +28,7 @@ dependencies {
     implementation(libs.plugin.quarkus)
     implementation(libs.plugin.quarkus.extension)
     implementation(libs.plugin.release)
-    implementation(libs.remalGradlePlugins)
+    implementation(libs.plugin.ncmp.maven.publish)
 }
 
 license {

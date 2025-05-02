@@ -34,7 +34,6 @@
  */
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import name.remal.gradle_plugins.dsl.extensions.configure
 import org.gradle.accessors.dm.LibrariesForLibs
 import java.net.URI
 import java.util.*
@@ -102,9 +101,7 @@ tasks.withType<Detekt> {
         sarif.required = true
     }
 
-    reportMerge.configure { mergeTask ->
-        mergeTask.input.from(sarifReportFile.get().asFile)
-    }
+    reportMerge.input.from(sarifReportFile.get().asFile)
 }
 
 jacoco {

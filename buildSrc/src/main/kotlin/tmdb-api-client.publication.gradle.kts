@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 /**
  * The Clear BSD License
  *
@@ -32,63 +34,54 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import internal.common
-import internal.ossrh
 
 plugins {
     `java-base`
-    `maven-publish`
 
-    signing
-    id("name.remal.maven-publish-ossrh")
+    id("com.vanniktech.maven.publish")
 }
 
-val packageJavadoc = tasks.register("packageJavadoc", Jar::class.java) {
-    archiveClassifier = "javadoc"
-
-    val dokkaJavadoc = tasks.getByName("dokkaGeneratePublicationJavadoc")
-    dependsOn(dokkaJavadoc)
-    from(dokkaJavadoc.outputs)
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
 }
 
-val packageSources = tasks.register("packageSources", Jar::class.java) {
-    archiveClassifier = "sources"
-    from(sourceSets.main.get().allSource)
-}
+afterEvaluate {
+    mavenPublishing {
+        coordinates("${project.group}", project.name, "${project.version}")
 
-artifacts {
-    add("archives", packageSources)
-}
+        pom {
+            name = "TMDB API Client :: ${project.display}"
+            url = "https://github.com/v47-io/tmdb-api-client"
 
-publishing {
-    publications {
-        create<MavenPublication>("tmdbApiClient") {
-            groupId = "${project.group}"
-            artifactId = project.name
-            version = "${project.version}"
-
-            from(components["java"])
-
-            artifact(packageJavadoc) { classifier = "javadoc" }
-            artifact(packageSources) { classifier = "sources" }
-
-            pom {
-                common(project)
-            }
-        }
-
-        val ossrhUser = project.findProperty("ossrhUser")?.toString() ?: System.getenv("OSSRH_USER")
-        val ossrhPass = project.findProperty("ossrhPass")?.toString() ?: System.getenv("OSSRH_PASS")
-
-        if (ossrhUser != null && ossrhPass != null) {
-            repositories {
-                ossrh {
-                    credentials {
-                        username = ossrhUser
-                        password = ossrhPass
-                    }
+            licenses {
+                license {
+                    name = "BSD 3-Clause Clear License"
+                    url = "https://spdx.org/licenses/BSD-3-Clause-Clear.html"
                 }
+            }
+
+            developers {
+                developer {
+                    id = "vemilyus"
+                    name = "Alex Katlein"
+                    email = "dev@vemilyus.com"
+                }
+            }
+
+            scm {
+                connection = "scm:git:https://github.com/v47-io/tmdb-api-client.git"
+                developerConnection = "scm:git:ssh://git@github.com/v47-io/tmdb-api-client.git"
+                url = "https://github.com/v47-io/tmdb-api-client"
             }
         }
     }
 }
+
+private val Project.display
+    get() =
+        if ("quarkus" in path)
+            "Quarkus $name"
+        else
+            name
+
