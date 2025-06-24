@@ -63,17 +63,11 @@ class FindApi internal constructor(private val http: HttpExecutor) {
     enum class ExternalSource(internal val value: String) {
         IMDb("imdb_id"),
         TVDB("tvdb_id"),
-
-        @Deprecated("Defunct or no longer available as a service")
-        Freebase("freebase_id"),
-
-        @Deprecated("Defunct or no longer available as a service")
-        FreebaseM("freebase_mid"),
-
-        @Deprecated("Defunct or no longer available as a service")
-        TVRage("tvrage_id"),
         Facebook("facebook_id"),
         Instagram("instagram_id"),
-        Twitter("twitter_id")
+        Twitter("twitter_id"),
+        TikTok("tiktok_id"),
+        Wikidata("wikidata_id"),
+        Youtube("youtube_id"),
     }
 }

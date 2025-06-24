@@ -373,7 +373,6 @@ class TvApi internal constructor(private val http: HttpExecutor) {
             path,
             page,
             language
-
         )
 }
 
