@@ -82,7 +82,7 @@ data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType(
         val time: String?,
         val value: Any?,
         val originalValue: Any?,
-        @JsonProperty("iso_639_1")
+        @param:JsonProperty("iso_639_1")
         val language: LanguageCode?
     ) : TmdbType(), TmdbStringId
 }

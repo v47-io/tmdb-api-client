@@ -45,7 +45,7 @@ import java.time.Instant
 
 data class Title(
     val title: String?,
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val type: String?
 ) : TmdbType()
@@ -61,7 +61,7 @@ data class ImageListResult(
     val fileType: String?,
     val height: Int?,
     override val id: String?,
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val voteAverage: Double?,
     val voteCount: Int?,
@@ -71,9 +71,9 @@ data class ImageListResult(
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class VideoListResult(
     override val id: String?,
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val key: String?,
     val name: String?,
@@ -86,9 +86,9 @@ data class VideoListResult(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TranslationListResult(
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val name: String?,
     val englishName: String?,

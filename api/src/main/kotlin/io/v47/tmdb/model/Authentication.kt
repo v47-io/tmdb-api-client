@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class GuestSession(
     val success: Boolean?,
-    @JsonProperty(value = "guest_session_id")
+    @param:JsonProperty(value = "guest_session_id")
     override val id: String,
     val expiresAt: String?
 ) : TmdbType(), TmdbStringId

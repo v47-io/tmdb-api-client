@@ -34,8 +34,9 @@
  */
 package io.v47.tmdb.model
 
-data class Certification(val certifications: Map<String, List<Certification>> = emptyMap()) :
-    TmdbType() {
+data class Certification(
+    val certifications: Map<String, List<Certification>> = emptyMap()
+) : TmdbType() {
     data class Certification(
         val certification: String?,
         val meaning: String?,

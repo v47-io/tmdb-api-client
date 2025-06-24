@@ -48,9 +48,9 @@ data class ListDetails(
     override val id: String?,
     val items: List<MovieListResult> = emptyList(),
     val itemCount: Int?,
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val listType: String?,
     val name: String?,

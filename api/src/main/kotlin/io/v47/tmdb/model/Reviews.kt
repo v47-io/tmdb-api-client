@@ -46,7 +46,7 @@ data class ReviewDetails(
     val author: String?,
     val authorDetails: ReviewAuthorDetails?,
     val content: String?,
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val mediaId: Int?,
     val mediaTitle: String?,

@@ -54,7 +54,7 @@ data class MovieDetails(
     override val id: Int?,
     val imdbId: String?,
     val originCountry: List<CountryCode>?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     val overview: String?,
@@ -97,7 +97,7 @@ data class MovieAlternativeTitles(
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class MovieChanges(
     override val page: Int?,
-    @JsonProperty("changes")
+    @param:JsonProperty("changes")
     override val results: List<Change> = emptyList(),
     override val totalPages: Int?,
     override val totalResults: Int?
@@ -112,11 +112,11 @@ data class MovieChanges(
         override val id: String?,
         val action: String?,
         val time: String?,
-        @JsonProperty("iso_639_1")
+        @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?,
-        @JsonProperty("iso_3166_1")
+        @param:JsonProperty("iso_3166_1")
         val country: CountryCode?
     ) : TmdbType(), TmdbStringId
 }
@@ -155,14 +155,14 @@ data class MovieReleaseDates(
 ) : TmdbType(), TmdbIntId {
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ReleaseDates(
-        @JsonProperty("iso_3166_1")
+        @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val releaseDates: List<MovieReleaseInfo> = emptyList()
     ) : TmdbType() {
         @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
         data class MovieReleaseInfo(
             val certification: String?,
-            @JsonProperty("iso_639_1")
+            @param:JsonProperty("iso_639_1")
             val language: LanguageCode?,
             val note: String?,
             val releaseDate: LocalDate?,
@@ -209,7 +209,7 @@ data class MovieListResult(
     val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     val originalTitle: String?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val title: String?,
     val backdropPath: String?,

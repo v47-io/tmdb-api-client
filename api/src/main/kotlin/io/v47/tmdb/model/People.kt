@@ -111,7 +111,7 @@ data class PersonTaggedImages(
         val aspectRatio: Double?,
         val filePath: String?,
         val height: Int?,
-        @JsonProperty("iso_639_1")
+        @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val voteAverage: Double?,
         val voteCount: Int?,
@@ -128,13 +128,13 @@ data class PersonTranslations(
     val translations: List<PersonTranslation> = emptyList()
 ) : TmdbType(), TmdbIntId {
     data class PersonTranslation(
-        @JsonProperty("iso_639_1")
+        @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
-        @JsonProperty("iso_3166_1")
+        @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val name: String?,
         val data: PersonTranslationData?,
-        @JsonProperty("english_name")
+        @param:JsonProperty("english_name")
         val englishName: String?
     ) : TmdbType() {
         data class PersonTranslationData(
@@ -155,9 +155,9 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
             override val id: String?,
             val action: String?,
             val time: String?,
-            @JsonProperty("iso_639_1")
+            @param:JsonProperty("iso_639_1")
             val language: LanguageCode?,
-            @JsonProperty("iso_3166_1")
+            @param:JsonProperty("iso_3166_1")
             val country: CountryCode?,
             val value: Any?,
             val originalValue: Any?
@@ -236,7 +236,7 @@ data class PersonListResult(
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CastMember(
     override val id: Int?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
     val overview: String?,
@@ -266,7 +266,7 @@ data class CastMember(
 data class CrewMember(
     override val id: Int?,
     val department: String?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
     val job: String?,

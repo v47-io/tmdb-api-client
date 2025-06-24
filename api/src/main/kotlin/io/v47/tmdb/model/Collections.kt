@@ -58,7 +58,7 @@ data class CollectionDetails(
         val backdropPath: String?,
         val genreIds: List<Int> = emptyList(),
         override val id: Int?,
-        @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+        @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
         val originalLanguage: LanguageCode?,
         val originalTitle: String?,
         val mediaType: MediaType?,
@@ -86,9 +86,9 @@ data class CollectionTranslations(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CollectionTranslation(
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val name: String?,
     val englishName: String?,
@@ -107,7 +107,7 @@ data class CollectionInfo(
     val name: String?,
     val originalName: String?,
     val overview: String?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val posterPath: String?,
     val backdropPath: String?,

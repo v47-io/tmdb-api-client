@@ -76,7 +76,7 @@ data class CreditMediaMovie(
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -101,7 +101,7 @@ data class CreditMediaTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,
@@ -179,7 +179,7 @@ data class CreditPersonKnownForMovie(
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -202,7 +202,7 @@ data class CreditPersonKnownForTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,

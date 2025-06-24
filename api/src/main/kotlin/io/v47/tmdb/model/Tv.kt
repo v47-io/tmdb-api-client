@@ -64,7 +64,7 @@ data class TvShowDetails(
     val numberOfEpisodes: Int?,
     val numberOfSeasons: Int?,
     val originCountry: List<CountryCode> = emptyList(),
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalName: String?,
     val overview: String?,
@@ -111,7 +111,7 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
         override val id: String?,
         val action: String?,
         val time: String?,
-        @JsonProperty("iso_639_1")
+        @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?
@@ -124,7 +124,7 @@ data class TvShowContentRatings(
 ) : TmdbType(), TmdbIntId {
     data class Rating(
         val rating: String?,
-        @JsonProperty("iso_3166_1")
+        @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val descriptors: List<String>?
     ) : TmdbType()
@@ -223,7 +223,7 @@ data class TvListResult(
     val networks: List<TvListNetwork> = emptyList(),
     val originCountry: List<String> = emptyList(),
     val genreIds: List<Int> = emptyList(),
-    @JsonDeserialize(using = OriginalLanguageDeserializer::class)
+    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val voteCount: Int?,
     val rating: Double?,

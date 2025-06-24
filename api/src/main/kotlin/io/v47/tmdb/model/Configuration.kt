@@ -53,20 +53,20 @@ data class Configuration(
     data class Images(
         val baseUrl: String?,
         val secureBaseUrl: String?,
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        @param:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @param:JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val backdropSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        @param:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @param:JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val logoSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        @param:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @param:JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val posterSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        @param:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @param:JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val profileSizes: List<ImageSize> = emptyList(),
-        @JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
-        @JsonSerialize(contentUsing = ImageSizeSerializer::class)
+        @param:JsonDeserialize(contentUsing = ImageSizeDeserializer::class)
+        @param:JsonSerialize(contentUsing = ImageSizeSerializer::class)
         val stillSizes: List<ImageSize> = emptyList()
     ) : TmdbType()
 }
@@ -106,7 +106,7 @@ sealed interface ImageSize {
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Country(
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val code: CountryCode?,
     val englishName: String?,
     val nativeName: String?,
@@ -120,14 +120,14 @@ data class Jobs(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Language(
-    @JsonProperty("iso_639_1")
+    @param:JsonProperty("iso_639_1")
     val code: LanguageCode?,
     val englishName: String?,
     val name: String
 ) : TmdbType()
 
 data class Timezones(
-    @JsonProperty("iso_3166_1")
+    @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val zones: List<String> = emptyList()
 ) : TmdbType()
