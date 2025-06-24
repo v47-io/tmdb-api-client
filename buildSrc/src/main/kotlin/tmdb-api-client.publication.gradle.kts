@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 /**
  * The Clear BSD License
  *
@@ -42,7 +40,7 @@ plugins {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
     signAllPublications()
 }
 
