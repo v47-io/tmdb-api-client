@@ -214,14 +214,14 @@ private class DiscoveryApiMovieQuery(
     }
 
     override fun primaryReleaseDate(range: ClosedRange<LocalDate>) {
-        if (range.start != LocalDate.MIN)
+        if (range.start.isAfter(LocalDate.MIN))
             target.queryArg(
                 "primary_release_date.gte",
                 range.start.format(dateFormat),
                 replace = true
             )
 
-        if (range.endInclusive != LocalDate.MAX)
+        if (range.endInclusive.isBefore(LocalDate.MAX))
             target.queryArg(
                 "primary_release_date.lte",
                 range.endInclusive.format(dateFormat),
@@ -230,10 +230,10 @@ private class DiscoveryApiMovieQuery(
     }
 
     override fun releaseDate(range: ClosedRange<LocalDate>) {
-        if (range.start != LocalDate.MIN)
+        if (range.start.isAfter(LocalDate.MIN))
             target.queryArg("release_date.gte", range.start.format(dateFormat), replace = true)
 
-        if (range.endInclusive != LocalDate.MAX)
+        if (range.endInclusive.isBefore(LocalDate.MAX))
             target.queryArg(
                 "release_date.lte",
                 range.endInclusive.format(dateFormat),
@@ -324,18 +324,18 @@ private class DiscoveryApiTvQuery(
     }
 
     override fun airDate(range: ClosedRange<LocalDate>) {
-        if (range.start != LocalDate.MIN)
+        if (range.start.isAfter(LocalDate.MIN))
             target.queryArg("air_date.gte", range.start.format(dateFormat), replace = true)
 
-        if (range.endInclusive != LocalDate.MAX)
+        if (range.endInclusive.isBefore(LocalDate.MAX))
             target.queryArg("air_date.lte", range.endInclusive.format(dateFormat), replace = true)
     }
 
     override fun firstAirDate(range: ClosedRange<LocalDate>) {
-        if (range.start != LocalDate.MIN)
+        if (range.start.isAfter(LocalDate.MIN))
             target.queryArg("first_air_date.gte", range.start.format(dateFormat), replace = true)
 
-        if (range.endInclusive != LocalDate.MAX)
+        if (range.endInclusive.isBefore(LocalDate.MAX))
             target.queryArg(
                 "first_air_date.lte",
                 range.endInclusive.format(dateFormat),
