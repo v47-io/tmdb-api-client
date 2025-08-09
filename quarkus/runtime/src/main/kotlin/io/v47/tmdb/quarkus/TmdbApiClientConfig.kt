@@ -44,7 +44,7 @@ import java.util.*
  * Runtime configuration for the [TmdbClient].
  */
 @ConfigMapping(prefix = "tmdb-api-client")
-@ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
 interface TmdbApiClientConfig {
     /**
      * The TMDB API Key used to authenticate requests.
