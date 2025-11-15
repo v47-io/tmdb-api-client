@@ -5,8 +5,11 @@
 ![GitHub][license-shield]
 
 [workflow-shield]: https://img.shields.io/github/actions/workflow/status/v47-io/tmdb-api-client/build.yml?branch=main
+
 [maven-shield]: https://img.shields.io/maven-central/v/io.v47.tmdb-api-client/api
+
 [maven-central]: https://central.sonatype.com/namespace/io.v47.tmdb-api-client
+
 [license-shield]: https://img.shields.io/github/license/v47-io/tmdb-api-client
 
 ## Usage

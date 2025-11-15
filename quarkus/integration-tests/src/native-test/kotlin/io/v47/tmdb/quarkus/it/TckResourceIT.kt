@@ -35,7 +35,6 @@
 package io.v47.tmdb.quarkus.it
 
 import io.quarkus.test.junit.QuarkusIntegrationTest
-import io.v47.tmdb.quarkus.it.TckResourceTest
 
 @QuarkusIntegrationTest
 class TckResourceIT : TckResourceTest()

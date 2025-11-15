@@ -38,6 +38,7 @@ import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class PeopleTest : AbstractTmdbTest() {
@@ -54,7 +55,7 @@ class PeopleTest : AbstractTmdbTest() {
         val details =
             person.details(
                 CHRIS_HEMSWORTH_ID,
-                append = PeopleRequest.values()
+                append = PeopleRequest.entries.toTypedArray()
             ).blockingFirst()
 
         assertEquals(CHRIS_HEMSWORTH_ID, details.id)
@@ -94,8 +95,10 @@ class PeopleTest : AbstractTmdbTest() {
     }
 
     @Test
+    @Disabled("Endpoint is deprecated in TMDB.")
     fun testGetTaggedImages() {
         assertTrue(
+            @Suppress("DEPRECATION")
             person.taggedImages(CHRIS_HEMSWORTH_ID)
                 .blockingFirst()
                 .results

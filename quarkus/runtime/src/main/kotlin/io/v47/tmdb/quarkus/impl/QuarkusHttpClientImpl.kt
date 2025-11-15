@@ -55,7 +55,7 @@ import io.vertx.mutiny.core.MultiMap
 import io.vertx.mutiny.core.buffer.Buffer
 import io.vertx.mutiny.ext.web.client.WebClient
 import io.vertx.mutiny.ext.web.codec.BodyCodec
-import java.net.URL
+import java.net.URI
 import java.net.URLEncoder
 import java.util.concurrent.Flow
 import io.vertx.core.http.HttpMethod as VxHttpMethod
@@ -159,7 +159,9 @@ internal class QuarkusHttpClientImpl(
                     }
                 }
             }
-        }.let(::URL)
+        }.let {
+            URI.create(it).toURL()
+        }
 
     private fun VxHttpResponse<Buffer>.mapHttpResponse(typeInfo: TypeInfo?) =
         DefaultHttpResponse(

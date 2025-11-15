@@ -63,6 +63,8 @@ data class ImageListResult(
     override val id: String?,
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @param:JsonProperty("iso_3166_1")
+    val country: CountryCode?,
     val voteAverage: Double?,
     val voteCount: Int?,
     val width: Int?

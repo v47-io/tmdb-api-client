@@ -47,6 +47,8 @@ import java.time.LocalDate
 data class CollectionDetails(
     override val id: Int?,
     val name: String?,
+    val originalName: String?,
+    val originalLanguage: LanguageCode?,
     val overview: String?,
     val posterPath: String?,
     val backdropPath: String?,

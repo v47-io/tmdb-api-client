@@ -172,6 +172,7 @@ class PeopleApi internal constructor(private val http: HttpExecutor) {
      * @param language A language code
      * @param page Specify which page to query
      */
+    @Deprecated("It is deprecated in TMDB")
     fun taggedImages(personId: Int, page: Int? = null, language: LocaleCode? = null) =
         http.getWithPageAndLanguage<PersonTaggedImages>(
             "/person/{personId}/tagged_images",

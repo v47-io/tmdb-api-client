@@ -43,6 +43,7 @@ import java.time.LocalDate
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TvSeasonDetails(
     val airDate: LocalDate?,
+    val networks: List<Network> = emptyList(),
     val episodes: List<TvEpisodeDetails> = emptyList(),
     val name: String?,
     val overview: String?,
