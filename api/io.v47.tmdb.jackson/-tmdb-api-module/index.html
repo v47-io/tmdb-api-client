@@ -1,22 +1,22 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>TmdbApiModule</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
-    <script>document.documentElement.classList.replace("no-js","js");</script>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-    if (storage == null) {
+      if (storage == null) {
         const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (osDarkSchemePreferred === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    } else {
+      } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    }
+      }
     </script>
 <script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
 <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
@@ -24,33 +24,31 @@
 <link href="../../../styles/main.css" rel="Stylesheet">
 <link href="../../../styles/prism.css" rel="Stylesheet">
 <link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
 <link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
 <script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
 <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
 <script type="text/javascript" src="../../../scripts/main.js" defer></script>
 <script type="text/javascript" src="../../../scripts/prism.js" async></script>
-<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
-<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
 <body>
-    <div class="root">
-    <nav class="navigation theme-dark" id="navigation-wrapper">
-<a class="library-name--link" href="../../../index.html">
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
                     tmdb-api-client
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">5.3.1
+        <div class="library-version" id="library-version">5.4.0
         </div>
         <div class="navigation-controls">
-        <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":api/main">jvm</button>
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":api/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
-                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
-                    <div class="dropdown--header"><span>Platform filter</span>
-                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
                         </button>
                     </div>
@@ -64,45 +62,47 @@
                 </ul>
                 <div class="dropdown--overlay"></div>
             </div>
-        </div>
+        </ul>
             <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
             </button>
             <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
                 API
             </div>
         </div>
-    </nav>
-        <div id="container">
-            <div class="sidebar" id="leftColumn">
-                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
-                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
-                        <div class="dropdown--header">
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
                             <span>
                                     tmdb-api-client
                             </span>
-                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
-                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
-                            </button>
-                        </div>
-                        <div class="sidebar--inner" id="sideMenu"></div>
-                    </ul>
-                    <div class="dropdown--overlay"></div>
-                </div>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
             </div>
-            <div id="main">
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
 <div class="main-content" data-page-type="classlike" id="content" pageids="api::io.v47.tmdb.jackson/TmdbApiModule///PointingToDeclaration//1081350600">
   <div class="breadcrumbs"><a href="../../index.html">api</a><span class="delimiter">/</span><a href="../index.html">io.v47.tmdb.jackson</a><span class="delimiter">/</span><span class="current">TmdbApiModule</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Tmdb</span><wbr><span>Api</span><wbr><span><span>Module</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TmdbApiModule</a> : <span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/v47-io/tmdb-api-client/blob/v5.3.1/api/src/main/kotlin/io/v47/tmdb/jackson/TmdbApiModule.kt#L50">source</a>)</span></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TmdbApiModule</a> : <span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/v47-io/tmdb-api-client/blob/v5.4.0/api/src/main/kotlin/io/v47/tmdb/jackson/TmdbApiModule.kt#L50">source</a>)</span></span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
-        <h2 class="">Constructors</h2>
+        <h2 class="tableheader">Constructors</h2>
         <div class="table"><a data-name="-654511196%2FConstructors%2F1081350600" anchor-label="TmdbApiModule" id="-654511196%2FConstructors%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-tmdb-api-module.html"><span>Tmdb</span><wbr><span>Api</span><wbr><span><span>Module</span></span></a></div>
@@ -118,10 +118,59 @@
           </div>
         </div>
       </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="26141009%2FProperties%2F1081350600" anchor-label="dependencies" id="26141009%2FProperties%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#26141009%2FProperties%2F1081350600"><span><span>dependencies</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="26141009%2FProperties%2F1081350600"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#26141009%2FProperties%2F1081350600">dependencies</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="com.fasterxml.jackson.databind/Module///PointingToDeclaration/">Module</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1391525799%2FProperties%2F1081350600" anchor-label="moduleName" id="-1391525799%2FProperties%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1391525799%2FProperties%2F1081350600"><span>module</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1391525799%2FProperties%2F1081350600"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#-1391525799%2FProperties%2F1081350600">moduleName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1724250949%2FProperties%2F1081350600" anchor-label="typeId" id="-1724250949%2FProperties%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1724250949%2FProperties%2F1081350600"><span>type</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1724250949%2FProperties%2F1081350600"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#-1724250949%2FProperties%2F1081350600">typeId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
+        <h2 class="tableheader">Functions</h2>
         <div class="table"><a data-name="837178688%2FFunctions%2F1081350600" anchor-label="addAbstractTypeMapping" id="837178688%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#837178688%2FFunctions%2F1081350600"><span>add</span><wbr><span>Abstract</span><wbr><span>Type</span><wbr><span><span>Mapping</span></span></a></div>
@@ -130,13 +179,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#837178688%2FFunctions%2F1081350600"><span class="token function">addAbstractTypeMapping</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt; </span><a href="index.html#837178688%2FFunctions%2F1081350600"><span class="token function">addAbstractTypeMapping</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">superType<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">subType<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#837178688%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="270269459%2FFunctions%2F1081350600" anchor-label="addDeserializer" id="270269459%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#270269459%2FFunctions%2F1081350600"><span>add</span><wbr><span><span>Deserializer</span></span></a></div>
@@ -145,13 +194,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#270269459%2FFunctions%2F1081350600"><span class="token function">addDeserializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonDeserializer///PointingToDeclaration/">JsonDeserializer</span><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt; </span><a href="index.html#270269459%2FFunctions%2F1081350600"><span class="token function">addDeserializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">deser<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonDeserializer///PointingToDeclaration/">JsonDeserializer</span><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#270269459%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="323282935%2FFunctions%2F1081350600" anchor-label="addKeyDeserializer" id="323282935%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#323282935%2FFunctions%2F1081350600"><span>add</span><wbr><span>Key</span><wbr><span><span>Deserializer</span></span></a></div>
@@ -160,13 +209,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#323282935%2FFunctions%2F1081350600"><span class="token function">addKeyDeserializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/KeyDeserializer///PointingToDeclaration/">KeyDeserializer</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#323282935%2FFunctions%2F1081350600"><span class="token function">addKeyDeserializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">deser<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/KeyDeserializer///PointingToDeclaration/">KeyDeserializer</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="623930058%2FFunctions%2F1081350600" anchor-label="addKeySerializer" id="623930058%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#623930058%2FFunctions%2F1081350600"><span>add</span><wbr><span>Key</span><wbr><span><span>Serializer</span></span></a></div>
@@ -175,13 +224,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#623930058%2FFunctions%2F1081350600"><span class="token function">addKeySerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt; </span><a href="index.html#623930058%2FFunctions%2F1081350600"><span class="token function">addKeySerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">ser<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><a href="index.html#623930058%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="893563401%2FFunctions%2F1081350600" anchor-label="addSerializer" id="893563401%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#157232034%2FFunctions%2F1081350600"><span>add</span><wbr><span><span>Serializer</span></span></a></div>
@@ -190,13 +239,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#157232034%2FFunctions%2F1081350600"><span class="token function">addSerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#-1683020301%2FFunctions%2F1081350600"><span class="token function">addSerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#157232034%2FFunctions%2F1081350600"><span class="token function">addSerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ser<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt; </span><a href="index.html#-1683020301%2FFunctions%2F1081350600"><span class="token function">addSerializer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">ser<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/JsonSerializer///PointingToDeclaration/">JsonSerializer</span><span class="token operator">&lt;</span><a href="index.html#-1683020301%2FFunctions%2F1081350600">T</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="1882941926%2FFunctions%2F1081350600" anchor-label="addValueInstantiator" id="1882941926%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#1882941926%2FFunctions%2F1081350600"><span>add</span><wbr><span>Value</span><wbr><span><span>Instantiator</span></span></a></div>
@@ -205,73 +254,28 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1882941926%2FFunctions%2F1081350600"><span class="token function">addValueInstantiator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.deser/ValueInstantiator///PointingToDeclaration/">ValueInstantiator</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1882941926%2FFunctions%2F1081350600"><span class="token function">addValueInstantiator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">beanType<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">inst<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.deser/ValueInstantiator///PointingToDeclaration/">ValueInstantiator</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1235839297%2FFunctions%2F1081350600" anchor-label="getDependencies" id="1235839297%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+<a data-name="1149274776%2FFunctions%2F1081350600" anchor-label="registerSubtypes" id="1149274776%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="index.html#1235839297%2FFunctions%2F1081350600"><span>get</span><wbr><span><span>Dependencies</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1235839297%2FFunctions%2F1081350600"></span>
+                  <div><a href="index.html#360921000%2FFunctions%2F1081350600"><span>register</span><wbr><span><span>Subtypes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1149274776%2FFunctions%2F1081350600"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1235839297%2FFunctions%2F1081350600"><span class="token function">getDependencies</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-iterable/index.html">MutableIterable</a><span class="token operator">&lt;</span><span data-unresolved-link="com.fasterxml.jackson.databind/Module///PointingToDeclaration/">Module</span><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="196480157%2FFunctions%2F1081350600" anchor-label="getModuleName" id="196480157%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="index.html#196480157%2FFunctions%2F1081350600"><span>get</span><wbr><span>Module</span><wbr><span><span>Name</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="196480157%2FFunctions%2F1081350600"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#196480157%2FFunctions%2F1081350600"><span class="token function">getModuleName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1958335231%2FFunctions%2F1081350600" anchor-label="getTypeId" id="1958335231%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="index.html#1958335231%2FFunctions%2F1081350600"><span>get</span><wbr><span>Type</span><wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1958335231%2FFunctions%2F1081350600"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1958335231%2FFunctions%2F1081350600"><span class="token function">getTypeId</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="2058489246%2FFunctions%2F1081350600" anchor-label="registerSubtypes" id="2058489246%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="index.html#939032904%2FFunctions%2F1081350600"><span>register</span><wbr><span><span>Subtypes</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2058489246%2FFunctions%2F1081350600"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#939032904%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.jsontype/NamedType///PointingToDeclaration/">NamedType</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-316536880%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-535846754%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-collection/index.html">MutableCollection</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#360921000%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>subtypes<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.jsontype/NamedType///PointingToDeclaration/">NamedType</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-2144113430%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>subtypes<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-535846754%2FFunctions%2F1081350600"><span class="token function">registerSubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">subtypes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="1119765636%2FFunctions%2F1081350600" anchor-label="setAbstractTypes" id="1119765636%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#1119765636%2FFunctions%2F1081350600"><span>set</span><wbr><span>Abstract</span><wbr><span><span>Types</span></span></a></div>
@@ -280,13 +284,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1119765636%2FFunctions%2F1081350600"><span class="token function">setAbstractTypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleAbstractTypeResolver///PointingToDeclaration/">SimpleAbstractTypeResolver</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1119765636%2FFunctions%2F1081350600"><span class="token function">setAbstractTypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">atr<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleAbstractTypeResolver///PointingToDeclaration/">SimpleAbstractTypeResolver</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-145899748%2FFunctions%2F1081350600" anchor-label="setDeserializerModifier" id="-145899748%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-145899748%2FFunctions%2F1081350600"><span>set</span><wbr><span>Deserializer</span><wbr><span><span>Modifier</span></span></a></div>
@@ -295,13 +299,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-145899748%2FFunctions%2F1081350600"><span class="token function">setDeserializerModifier</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.deser/BeanDeserializerModifier///PointingToDeclaration/">BeanDeserializerModifier</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-145899748%2FFunctions%2F1081350600"><span class="token function">setDeserializerModifier</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mod<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.deser/BeanDeserializerModifier///PointingToDeclaration/">BeanDeserializerModifier</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-1039626587%2FFunctions%2F1081350600" anchor-label="setDeserializers" id="-1039626587%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1039626587%2FFunctions%2F1081350600"><span>set</span><wbr><span><span>Deserializers</span></span></a></div>
@@ -310,13 +314,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1039626587%2FFunctions%2F1081350600"><span class="token function">setDeserializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleDeserializers///PointingToDeclaration/">SimpleDeserializers</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1039626587%2FFunctions%2F1081350600"><span class="token function">setDeserializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">d<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleDeserializers///PointingToDeclaration/">SimpleDeserializers</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-1598292879%2FFunctions%2F1081350600" anchor-label="setKeyDeserializers" id="-1598292879%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1598292879%2FFunctions%2F1081350600"><span>set</span><wbr><span>Key</span><wbr><span><span>Deserializers</span></span></a></div>
@@ -325,13 +329,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1598292879%2FFunctions%2F1081350600"><span class="token function">setKeyDeserializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleKeyDeserializers///PointingToDeclaration/">SimpleKeyDeserializers</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1598292879%2FFunctions%2F1081350600"><span class="token function">setKeyDeserializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">kd<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleKeyDeserializers///PointingToDeclaration/">SimpleKeyDeserializers</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-1767648144%2FFunctions%2F1081350600" anchor-label="setKeySerializers" id="-1767648144%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1767648144%2FFunctions%2F1081350600"><span>set</span><wbr><span>Key</span><wbr><span><span>Serializers</span></span></a></div>
@@ -340,13 +344,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1767648144%2FFunctions%2F1081350600"><span class="token function">setKeySerializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleSerializers///PointingToDeclaration/">SimpleSerializers</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1767648144%2FFunctions%2F1081350600"><span class="token function">setKeySerializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ks<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleSerializers///PointingToDeclaration/">SimpleSerializers</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-1467985955%2FFunctions%2F1081350600" anchor-label="setMixInAnnotation" id="-1467985955%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1467985955%2FFunctions%2F1081350600"><span>set</span><wbr><span>Mix</span><wbr><span>In</span><wbr><span><span>Annotation</span></span></a></div>
@@ -355,13 +359,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1467985955%2FFunctions%2F1081350600"><span class="token function">setMixInAnnotation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">p1<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1467985955%2FFunctions%2F1081350600"><span class="token function">setMixInAnnotation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">targetType<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">mixinClass<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="2082014301%2FFunctions%2F1081350600" anchor-label="setSerializerModifier" id="2082014301%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#2082014301%2FFunctions%2F1081350600"><span>set</span><wbr><span>Serializer</span><wbr><span><span>Modifier</span></span></a></div>
@@ -370,13 +374,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2082014301%2FFunctions%2F1081350600"><span class="token function">setSerializerModifier</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.ser/BeanSerializerModifier///PointingToDeclaration/">BeanSerializerModifier</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2082014301%2FFunctions%2F1081350600"><span class="token function">setSerializerModifier</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mod<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.ser/BeanSerializerModifier///PointingToDeclaration/">BeanSerializerModifier</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleModule///PointingToDeclaration/">SimpleModule</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-1999979707%2FFunctions%2F1081350600" anchor-label="setSerializers" id="-1999979707%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1999979707%2FFunctions%2F1081350600"><span>set</span><wbr><span><span>Serializers</span></span></a></div>
@@ -385,28 +389,28 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1999979707%2FFunctions%2F1081350600"><span class="token function">setSerializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleSerializers///PointingToDeclaration/">SimpleSerializers</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1999979707%2FFunctions%2F1081350600"><span class="token function">setSerializers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">s<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleSerializers///PointingToDeclaration/">SimpleSerializers</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="473440524%2FFunctions%2F1081350600" anchor-label="setupModule" id="473440524%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+<a data-name="342630082%2FFunctions%2F1081350600" anchor-label="setupModule" id="342630082%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="index.html#473440524%2FFunctions%2F1081350600"><span>setup</span><wbr><span><span>Module</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="473440524%2FFunctions%2F1081350600"></span>
+                  <div><a href="index.html#342630082%2FFunctions%2F1081350600"><span>setup</span><wbr><span><span>Module</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="342630082%2FFunctions%2F1081350600"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#473440524%2FFunctions%2F1081350600"><span class="token function">setupModule</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/Module.SetupContext///PointingToDeclaration/">Module.SetupContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#342630082%2FFunctions%2F1081350600"><span class="token function">setupModule</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind/Module.SetupContext///PointingToDeclaration/">Module.SetupContext</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="1750006251%2FFunctions%2F1081350600" anchor-label="setValueInstantiators" id="1750006251%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#1750006251%2FFunctions%2F1081350600"><span>set</span><wbr><span>Value</span><wbr><span><span>Instantiators</span></span></a></div>
@@ -415,22 +419,22 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1750006251%2FFunctions%2F1081350600"><span class="token function">setValueInstantiators</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleValueInstantiators///PointingToDeclaration/">SimpleValueInstantiators</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1750006251%2FFunctions%2F1081350600"><span class="token function">setValueInstantiators</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">svi<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.module/SimpleValueInstantiators///PointingToDeclaration/">SimpleValueInstantiators</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="615018226%2FFunctions%2F1081350600" anchor-label="version" id="615018226%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
-          <div class="table-row" data-filterable-current=":api/main" data-filterable-set=":api/main">
+<a data-name="-539897403%2FFunctions%2F1081350600" anchor-label="version" id="-539897403%2FFunctions%2F1081350600" data-filterable-set=":api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":api/main" data-filterable-set=":api/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="index.html#615018226%2FFunctions%2F1081350600"><span><span>version</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="615018226%2FFunctions%2F1081350600"></span>
+                  <div><a href="index.html#-539897403%2FFunctions%2F1081350600"><span><span>version</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-539897403%2FFunctions%2F1081350600"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#615018226%2FFunctions%2F1081350600"><span class="token function">version</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.core/Version///PointingToDeclaration/">Version</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-539897403%2FFunctions%2F1081350600"><span class="token function">version</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.core/Version///PointingToDeclaration/">Version</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -441,17 +445,21 @@
   </div>
 </div>
     <div class="footer">
-        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
-        <span>Copyright (c) 2025 the tmdb-api-client authors</span>
-        <span class="pull-right">
-            <span>Generated by </span>
-            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
-                <span>dokka</span>
-            </a>
-        </span>
-    </div>
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright (c) 2025 the tmdb-api-client authors</div>
+                </div>
             </div>
         </div>
     </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
