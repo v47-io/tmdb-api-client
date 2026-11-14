@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":http-client-tck"))
 
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.quarkus.junit5)
+    implementation(libs.quarkus.junit)
     implementation(libs.quarkus.rest.jackson)
     implementation(libs.quarkus.rest.kotlin)
     implementation(libs.rest.assured)

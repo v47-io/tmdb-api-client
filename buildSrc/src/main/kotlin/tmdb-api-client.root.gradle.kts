@@ -32,7 +32,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import dev.detekt.gradle.report.ReportMergeTask
 import net.researchgate.release.ReleaseExtension
 import java.util.*
 import java.util.Calendar.YEAR
@@ -55,7 +55,7 @@ dependencies {
 }
 
 tasks.register("reportMerge", ReportMergeTask::class.java) {
-    output = project.layout.buildDirectory.file("reports/detekt/merge.sarif")
+    output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
 dokka {

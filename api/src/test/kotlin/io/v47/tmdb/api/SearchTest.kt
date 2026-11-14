@@ -47,7 +47,7 @@ class SearchTest : AbstractTmdbTest() {
         const val THE_AVENGERS_COLLECTION_ID = 86311
 
         const val KEYWORD_QUERY = "slasher"
-        const val PROTOSLASHER_ID = 233450
+        const val SLASHER_ID = 12339
 
         const val MOVIE_QUERY = "star wars"
         const val MOVIE_QUERY_YEAR = 2015
@@ -77,7 +77,7 @@ class SearchTest : AbstractTmdbTest() {
     @Test
     fun testSearchKeywords() {
         val results = search.forKeywords(KEYWORD_QUERY).blockingFirst()
-        assertNotNull(results.results.find { it.id == PROTOSLASHER_ID })
+        assertNotNull(results.results.find { it.id == SLASHER_ID })
     }
 
     @Test

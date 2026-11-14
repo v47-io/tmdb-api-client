@@ -40,17 +40,16 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractTmdbTest {
+open class AbstractTmdbTest {
     protected lateinit var client: TmdbClient
 
     @BeforeAll
     fun setup() {
         val apiKey = System.getProperty("tmdb.api-key") ?: System.getenv("API_KEY")
-        if (apiKey.isNullOrBlank())
-            throw IllegalArgumentException(
-                "Missing api key: You can provide the key either as a system " +
-                        "property called 'tmdb.api-key' or as an environment variable called 'API_KEY'"
-            )
+        require(!apiKey.isNullOrBlank()) {
+            "Missing api key: You can provide the key either as a system " +
+                    "property called 'tmdb.api-key' or as an environment variable called 'API_KEY'"
+        }
 
         client = TmdbClient(Java11HttpClientFactory(), apiKey)
     }

@@ -1,22 +1,23 @@
 [versions]
-detekt = "1.23.8"
-dokka = "2.1.0"
-git-properties = "2.5.3"
-jackson = "2.20.1"
-junit-jupiter = "5.14.0"
-kotlin = "2.2.21"
+detekt = "2.0.0-alpha.6"
+dokka = "2.2.0"
+git-properties = "4.0.1"
+jackson = "2.21.8"
+junit-jupiter = "6.1.3"
+kotlin = "2.4.21"
+kotlin-runtime = "2.4.10"
 license = "0.16.1"
-logback = "1.5.21"
-mutiny = "3.0.1"
-ncmp-maven-publish = "0.35.0"
+logback = "1.6.6"
+mutiny = "3.3.0"
+ncmp-maven-publish = "0.37.0"
 nvi18n = "1.29"
-quarkus = "3.29.3"
-release = "3.1.0"
-slf4j = "2.0.17"
+quarkus = "3.40.1.2"
+release = "3.2.0"
+slf4j = "2.0.18"
 
 [libraries]
 # To be able to apply plugins in convention plugins
-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+plugin-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 plugin-dokka = { module = "org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin", version.ref = "dokka" }
 plugin-git-properties = { module = "com.gorylenko.gradle-git-properties:com.gorylenko.gradle-git-properties.gradle.plugin", version.ref = "git-properties" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -27,6 +28,7 @@ plugin-quarkus = { module = "io.quarkus:gradle-application-plugin", version.ref 
 plugin-quarkus-extension = { module = "io.quarkus.extension:gradle-extension-plugin", version.ref = "quarkus" }
 plugin-release = { module = "net.researchgate.release:net.researchgate.release.gradle.plugin", version.ref = "release" }
 plugin-ncmp-maven-publish = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "ncmp-maven-publish" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-runtime" }
 
 # All other deps
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
@@ -44,7 +46,7 @@ quarkus-arc = { module = "io.quarkus:quarkus-arc" }
 quarkus-arc-deployment = { module = "io.quarkus:quarkus-arc-deployment" }
 quarkus-jackson = { module = "io.quarkus:quarkus-jackson" }
 quarkus-jackson-deployment = { module = "io.quarkus:quarkus-jackson-deployment" }
-quarkus-junit5 = { module = "io.quarkus:quarkus-junit5" }
+quarkus-junit = { module = "io.quarkus:quarkus-junit" }
 quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin" }
 quarkus-kotlin-deployment = { module = "io.quarkus:quarkus-kotlin-deployment" }
 quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }

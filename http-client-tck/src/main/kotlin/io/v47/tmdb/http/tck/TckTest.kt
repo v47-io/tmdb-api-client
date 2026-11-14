@@ -40,7 +40,7 @@ internal interface TckTest {
     fun verify(httpClientFactory: HttpClientFactory): TckTestResult
 }
 
-internal sealed class TckTestResult {
-    object Success : TckTestResult()
-    data class Failure(val expectedValue: Any, val actualValue: Any?) : TckTestResult()
+internal sealed interface TckTestResult {
+    data object Success : TckTestResult
+    data class Failure(val expectedValue: Any, val actualValue: Any?) : TckTestResult
 }

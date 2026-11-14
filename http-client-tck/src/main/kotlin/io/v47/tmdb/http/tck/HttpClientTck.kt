@@ -79,9 +79,9 @@ class HttpClientTck {
     }
 }
 
-sealed class TckResult {
-    data object Success : TckResult()
-    data class Failure(val failedTests: List<FailedTest>) : TckResult() {
+sealed interface TckResult {
+    data object Success : TckResult
+    data class Failure(val failedTests: List<FailedTest>) : TckResult {
         data class FailedTest(
             val name: String,
             val expectedValue: Any,

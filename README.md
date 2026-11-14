@@ -92,6 +92,13 @@ Requirements:
 For local building and testing you need to configure a TMDb API-Key using
 the environment variable `API_KEY`.
 
+The Java 11 HTTP client compatibility test uses a local HTTP server and does not require an API key;
+tests that call TMDb and the full integration-test suite do. The Gradle wrapper is pinned to 9.7.0,
+the upper supported Gradle version for Kotlin 2.4.21. Quarkus uses the maintained 3.40 LTS line,
+and its BOM manages the Quarkus runtime dependencies without forced transitive overrides. The Kotlin
+Gradle plugin uses 2.4.21 while the Kotlin standard library follows Quarkus BOM version 2.4.10.
+Detekt uses `2.0.0-alpha.6` to avoid its Gradle 9 reporting API deprecation; this is a prerelease.
+
 Then you can simply run a complete build of all packages using this command:
 
 ```shell

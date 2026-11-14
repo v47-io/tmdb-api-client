@@ -63,11 +63,18 @@ class MovieInfoResource(private val tmdbClient: TmdbClient) {
                         MovieRequest.ReleaseDates
                     )
             )
-            .map { movieDetails: MovieDetails? ->
+            .map { nullableMovieDetails: MovieDetails? ->
+                val movieDetails = requireNotNull(nullableMovieDetails) {
+                    "Movie details response was empty"
+                }
+                val releaseDate = requireNotNull(movieDetails.releaseDate) {
+                    "Movie details response did not include a release date"
+                }
+
                 MovieInfo(
-                    movieDetails!!.imdbId,
+                    movieDetails.imdbId,
                     movieDetails.title,
-                    movieDetails.releaseDate!!.year
+                    releaseDate.year
                 )
             }
 }

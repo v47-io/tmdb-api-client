@@ -46,28 +46,7 @@ internal sealed class MediaTypeBasedDeserializer<T : Any>(
 ) : StdNodeBasedDeserializer<T>(clazz) {
 
     override fun convert(root: JsonNode, ctxt: DeserializationContext): T {
-        val targetType = if (mapping.isNotEmpty() && root.hasNonNull("media_type")) {
-            val mediaType = root.get("media_type").textValue().lowercase()
-            mapping[mediaType]
-                ?: throw JsonParseException(
-                    ctxt.parser, "Tried to parse ${clazz.simpleName}: " +
-                            "Invalid value for 'media_type': $mediaType"
-                )
-        } else {
-            customDetector
-                ?: throw JsonParseException(
-                    ctxt.parser, "Tried to parse ${clazz.simpleName}: " +
-                            "No custom type detector provided!"
-                )
-
-            val tmp = customDetector.invoke(root)
-                ?: throw JsonParseException(
-                    ctxt.parser, "Tried to parse: ${clazz.simpleName}: " +
-                            "Failed to detect type!"
-                )
-
-            tmp
-        }
+        val targetType = detectTargetType(root, ctxt)
 
         val jacksonType = ctxt.typeFactory.constructType(targetType)
         val deserializer = ctxt.findRootValueDeserializer(jacksonType)
@@ -76,5 +55,34 @@ internal sealed class MediaTypeBasedDeserializer<T : Any>(
 
         @Suppress("UNCHECKED_CAST")
         return deserializer.deserialize(nodeParser, ctxt) as T
+    }
+
+    private fun detectTargetType(root: JsonNode, ctxt: DeserializationContext): Class<*> =
+        if (mapping.isNotEmpty() && root.hasNonNull("media_type"))
+            mappedType(root, ctxt)
+        else
+            detectedType(root, ctxt)
+
+    private fun mappedType(root: JsonNode, ctxt: DeserializationContext): Class<*> {
+        val mediaType = root.get("media_type").textValue().lowercase()
+        return mapping[mediaType]
+            ?: throw JsonParseException(
+                ctxt.parser, "Tried to parse ${clazz.simpleName}: " +
+                        "Invalid value for 'media_type': $mediaType"
+            )
+    }
+
+    private fun detectedType(root: JsonNode, ctxt: DeserializationContext): Class<out T> {
+        val detector = customDetector
+            ?: throw JsonParseException(
+                ctxt.parser, "Tried to parse ${clazz.simpleName}: " +
+                        "No custom type detector provided!"
+            )
+
+        return detector.invoke(root)
+            ?: throw JsonParseException(
+                ctxt.parser, "Tried to parse: ${clazz.simpleName}: " +
+                        "Failed to detect type!"
+            )
     }
 }

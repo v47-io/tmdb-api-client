@@ -32,9 +32,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.report.ReportMergeTask
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.tasks.bundling.Jar
 import java.net.URI
 import java.util.*
 import java.util.Calendar.YEAR
@@ -47,7 +48,7 @@ plugins {
 
     id("com.github.hierynomus.license")
     id("com.gorylenko.gradle-git-properties")
-    id("io.gitlab.arturbosch.detekt")
+    id("dev.detekt")
     id("org.jetbrains.dokka")
     id("org.jetbrains.dokka-javadoc")
 
@@ -76,6 +77,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlin.stdlib)
     testImplementation(platform(libs.junitBom))
     testImplementation(libs.junitApi)
     testRuntimeOnly(libs.junitEngine)
@@ -87,6 +89,22 @@ gitProperties {
     gitPropertiesName = "${rootProject.name}-${project.name}-version.properties"
 }
 
+tasks.withType<Jar>().configureEach {
+    if (name == "sourcesJar") {
+        dependsOn(tasks.named("generateGitProperties"))
+    }
+}
+
+tasks.configureEach {
+    if (javaClass.superclass?.name in setOf(
+            "com.hierynomus.gradle.license.tasks.LicenseCheck",
+            "com.hierynomus.gradle.license.tasks.LicenseFormat"
+        )
+    ) {
+        dependsOn(tasks.named("generateGitProperties"))
+    }
+}
+
 detekt {
     source.setFrom("src/main/kotlin", "src/test/kotlin")
 }
@@ -95,17 +113,18 @@ val reportMerge: ReportMergeTask = rootProject.tasks["reportMerge"] as ReportMer
 
 tasks.withType<Detekt> {
     finalizedBy(reportMerge)
+    ignoreFailures.set(false)
 
     reports {
-        xml.required = true
-        sarif.required = true
+        checkstyle.required.set(true)
+        sarif.required.set(true)
     }
 
-    reportMerge.input.from(sarifReportFile.get().asFile)
+    reportMerge.input.from(reports.sarif.outputLocation)
 }
 
 jacoco {
-    toolVersion = "0.8.14"
+    toolVersion = "0.8.16"
 }
 
 tasks.test {

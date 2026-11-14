@@ -36,10 +36,10 @@ package io.v47.tmdb.http
 
 import java.lang.reflect.Type
 
-sealed class TypeInfo {
-    abstract val fullType: Type
+sealed interface TypeInfo {
+    val fullType: Type
 
-    data class Simple(val type: Class<*>) : TypeInfo() {
+    data class Simple(val type: Class<*>) : TypeInfo {
         override val fullType get() = type
     }
 
@@ -47,5 +47,5 @@ sealed class TypeInfo {
         val rawType: Class<*>,
         val typeArguments: List<TypeInfo>,
         override val fullType: Type
-    ) : TypeInfo()
+    ) : TypeInfo
 }
