@@ -82,3 +82,4 @@ fabric.properties
 !libs/*.jar
 **/src-gen
 **/resources-gen
+.junie
