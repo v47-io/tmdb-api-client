@@ -20,7 +20,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm-community
-          java-version: 25
+          version: '25.5'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
       - name: Build and test using gradle
