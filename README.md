@@ -86,7 +86,7 @@ Automatically generated Kotlin docs are available [here](https://v47-io.github.i
 
 Requirements:
 
-- JDK 17
+- JDK 21
 - Docker (for Quarkus extension integration-tests)
 
 For local building and testing you need to configure a TMDb API-Key using

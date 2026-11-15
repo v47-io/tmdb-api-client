@@ -195,7 +195,7 @@ internal class TmdbRequestBuilderImpl<T : Any> : TmdbRequestBuilder<T> {
 
     override fun dropResponse() {
         _dropResponse = true
-        _responseType = TypeInfo.Simple(java.lang.Object::class.java)
+        _responseType = TypeInfo.Simple(Any::class.java)
     }
 
     fun build(): TmdbRequest<T> {
