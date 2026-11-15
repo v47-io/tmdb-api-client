@@ -36,12 +36,13 @@
 
 package io.v47.tmdb.http
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.impl.ApiVersion
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.impl.TmdbRequest
 import io.v47.tmdb.model.AppendRequest
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.utils.checkPage
+import io.v47.tmdb.utils.requireLocaleCode
 import io.v47.tmdb.utils.tmdbTypeReference
 import io.v47.tmdb.utils.toTypeInfo
 import java.util.concurrent.Flow
@@ -86,7 +87,7 @@ internal inline fun <reified T : Any> HttpExecutor.getWithLanguage(
     get<T>(path) {
         block()
 
-        language?.let { queryArg("language", it.toString(), replace = true) }
+        language?.let { queryArg("language", requireLocaleCode(it.value), replace = true) }
     }
 
 internal inline fun <reified T : Any> HttpExecutor.getWithPage(
@@ -117,7 +118,7 @@ internal inline fun <reified T : Any> HttpExecutor.getWithPageAndLanguage(
             queryArg("page", it.toString(), replace = true)
         }
 
-        language?.let { queryArg("language", it.toString(), replace = true) }
+        language?.let { queryArg("language", requireLocaleCode(it.value), replace = true) }
     }
 
 internal inline fun <reified T : Any> HttpExecutor.post(

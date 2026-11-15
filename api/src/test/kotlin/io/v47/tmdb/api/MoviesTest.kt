@@ -34,8 +34,8 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.model.CountryCode
+import io.v47.tmdb.model.LanguageCode
 import io.v47.tmdb.model.Release
 import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -71,18 +71,19 @@ class MoviesTest : AbstractTmdbTest() {
         assertNotNull(details.alternativeTitles)
         assertEquals(
             THOR_RUSSIAN_TITLE,
-            details.alternativeTitles!!.titles.find { it.country == CountryCode.RU }?.title
+            details.alternativeTitles!!.titles.find { it.country == CountryCode.parse("RU") }?.title
         )
 
         val kungFuHustleDetails = movie.details(KUNG_FU_HUSTLE_ID).blockingFirst()
-        assertEquals(LanguageCode.zh, kungFuHustleDetails.originalLanguage)
+        // Preserve TMDb's original-language value instead of inferring zh from its country-like code.
+        assertEquals(LanguageCode.parse("cn"), kungFuHustleDetails.originalLanguage)
     }
 
     @Test
     fun testGetAlternativeTitles() {
         val altTitles = movie.alternativeTitles(
             THOR_RAGNAROK_ID,
-            CountryCode.RU
+            CountryCode.parse("RU")
         ).blockingFirst()
 
         assertEquals(1, altTitles.titles.size)
@@ -130,7 +131,7 @@ class MoviesTest : AbstractTmdbTest() {
         assertEquals(
             US_THEATRICAL_RELEASE_DATE,
             releaseDates.results
-                .find { it.country == CountryCode.US }
+                .find { it.country == CountryCode.parse("US") }
                 ?.releaseDates
                 ?.find { it.type == Release.Theatrical }
                 ?.releaseDate
@@ -150,7 +151,7 @@ class MoviesTest : AbstractTmdbTest() {
 
         assertEquals(
             LATVIAN_TRANSLATION_NAME,
-            translations.translations.find { it.country == CountryCode.LV }?.name
+            translations.translations.find { it.country == CountryCode.parse("LV") }?.name
         )
     }
 

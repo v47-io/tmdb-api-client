@@ -37,7 +37,6 @@ package io.v47.tmdb.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.LanguageCode
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -82,6 +81,7 @@ data class TvEpisodeChanges(val changes: List<Change> = emptyList()) : TmdbType(
         val time: String?,
         val value: Any?,
         val originalValue: Any?,
+        @get:JsonProperty("iso_639_1")
         @param:JsonProperty("iso_639_1")
         val language: LanguageCode?
     ) : TmdbType(), TmdbStringId

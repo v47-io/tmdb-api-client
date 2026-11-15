@@ -34,12 +34,13 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.AppendRequest
+import io.v47.tmdb.model.LanguageCode
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.TvSeasonChanges
 import io.v47.tmdb.model.TvSeasonCredits
 import io.v47.tmdb.model.TvSeasonDetails
@@ -47,6 +48,7 @@ import io.v47.tmdb.model.TvSeasonExternalIds
 import io.v47.tmdb.model.TvSeasonImages
 import io.v47.tmdb.model.TvSeasonVideos
 import io.v47.tmdb.utils.dateFormat
+import io.v47.tmdb.utils.requireLanguageCode
 import java.time.LocalDate
 
 class TvSeasonsApi internal constructor(private val http: HttpExecutor) {
@@ -157,14 +159,14 @@ class TvSeasonsApi internal constructor(private val http: HttpExecutor) {
         tvId: Int,
         seasonNumber: Int,
         language: LocaleCode? = null,
-        vararg includeLanguage: LocaleCode?
+        includeLanguage: List<LanguageCode?> = emptyList()
     ) =
         http.getWithLanguage<TvSeasonImages>("/tv/{tvId}/season/{seasonNumber}/images", language) {
             pathVar("tvId", tvId)
             pathVar("seasonNumber", seasonNumber)
 
             includeLanguage.toSet().forEach { lang ->
-                queryArg("include_image_language", lang?.toString() ?: "null")
+                queryArg("include_image_language", lang?.let { requireLanguageCode(it.value) } ?: "null")
             }
         }
 

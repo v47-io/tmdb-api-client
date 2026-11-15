@@ -34,7 +34,7 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LanguageCode
+import io.v47.tmdb.model.LanguageCode
 import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -81,7 +81,7 @@ class CollectionsTest : AbstractTmdbTest() {
     fun testGetCollectionTranslations() {
         val translations = client.collection.translations(COLLECTION_ID).blockingFirst()
 
-        val chineseTranslation = translations.translations.find { it.language == LanguageCode.zh }
+        val chineseTranslation = translations.translations.find { it.language == LanguageCode.parse("zh") }
         assertNotNull(chineseTranslation)
         assertEquals(chineseTranslation?.data?.title, MANDARIN_COLLECTION_TITLE)
     }

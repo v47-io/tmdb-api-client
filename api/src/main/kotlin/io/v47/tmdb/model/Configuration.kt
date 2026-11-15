@@ -39,8 +39,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
 import io.v47.tmdb.jackson.deserialization.ImageSizeDeserializer
 import io.v47.tmdb.jackson.serialization.ImageSizeSerializer
 
@@ -106,6 +104,7 @@ sealed interface ImageSize {
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Country(
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val code: CountryCode?,
     val englishName: String?,
@@ -120,6 +119,7 @@ data class Jobs(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class Language(
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val code: LanguageCode?,
     val englishName: String?,
@@ -127,6 +127,7 @@ data class Language(
 ) : TmdbType()
 
 data class Timezones(
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val zones: List<String> = emptyList()

@@ -37,9 +37,6 @@ package io.v47.tmdb.model
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -76,7 +73,6 @@ data class CreditMediaMovie(
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -101,7 +97,6 @@ data class CreditMediaTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,
@@ -179,7 +174,6 @@ data class CreditPersonKnownForMovie(
     override val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     override val mediaType: MediaType?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     override val overview: String?,
@@ -202,7 +196,6 @@ data class CreditPersonKnownForTv(
     override val mediaType: MediaType?,
     val name: String?,
     val originCountry: List<CountryCode> = emptyList(),
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     override val originalLanguage: LanguageCode?,
     val originalName: String?,
     override val overview: String?,

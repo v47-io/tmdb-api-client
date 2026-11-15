@@ -38,9 +38,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.Instant
 import java.time.LocalDate
 
@@ -64,7 +61,6 @@ data class TvShowDetails(
     val numberOfEpisodes: Int?,
     val numberOfSeasons: Int?,
     val originCountry: List<CountryCode> = emptyList(),
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalName: String?,
     val overview: String?,
@@ -111,6 +107,7 @@ data class TvShowChanges(val changes: List<Change> = emptyList()) : TmdbType() {
         override val id: String?,
         val action: String?,
         val time: String?,
+        @get:JsonProperty("iso_639_1")
         @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
@@ -124,6 +121,7 @@ data class TvShowContentRatings(
 ) : TmdbType(), TmdbIntId {
     data class Rating(
         val rating: String?,
+        @get:JsonProperty("iso_3166_1")
         @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val descriptors: List<String>?
@@ -221,9 +219,8 @@ data class TvListResult(
     val overview: String?,
     val firstAirDate: LocalDate?,
     val networks: List<TvListNetwork> = emptyList(),
-    val originCountry: List<String> = emptyList(),
+    val originCountry: List<CountryCode> = emptyList(),
     val genreIds: List<Int> = emptyList(),
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val voteCount: Int?,
     val rating: Double?,
@@ -237,7 +234,7 @@ data class TvListResult(
         val id: Long?,
         val logo: TvListNetworkLogo?,
         val name: String?,
-        val originCountry: String?
+        val originCountry: CountryCode?
     ) : TmdbType() {
         @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
         data class TvListNetworkLogo(

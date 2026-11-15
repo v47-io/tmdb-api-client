@@ -34,7 +34,7 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.utils.blockingFirst
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -56,7 +56,7 @@ class TvTest : AbstractTmdbTest() {
     fun testGetDetailsAndTranslationsVideos() {
         val details = tvShow.details(
             AGENTS_OF_SHIELD_ID,
-            language = LocaleCode.es_ES,
+            language = LocaleCode.parse("es-ES"),
             append = TvRequest.values()
         ).blockingFirst()
 

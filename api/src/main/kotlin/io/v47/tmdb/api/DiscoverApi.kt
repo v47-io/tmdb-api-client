@@ -34,9 +34,9 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.model.CountryCode
+import io.v47.tmdb.model.LanguageCode
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.http.TmdbRequestBuilder
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.impl.HttpExecutor
@@ -44,6 +44,9 @@ import io.v47.tmdb.model.MovieListResult
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.TvListResult
 import io.v47.tmdb.utils.checkPage
+import io.v47.tmdb.utils.requireCountryCode
+import io.v47.tmdb.utils.requireLanguageCode
+import io.v47.tmdb.utils.requireLocaleCode
 import io.v47.tmdb.utils.dateFormat
 import java.time.LocalDate
 import java.util.*
@@ -98,7 +101,6 @@ class DiscoverApi internal constructor(private val http: HttpExecutor) {
             DiscoveryApiTvQuery(this).block()
         }
 
-
     @Suppress("TooManyFunctions")
     interface MovieQuery {
         fun language(language: LocaleCode)
@@ -108,7 +110,7 @@ class DiscoverApi internal constructor(private val http: HttpExecutor) {
             direction: SortDirection = SortDirection.Ascending
         )
 
-        fun certificationCountry(certificationCountry: String)
+        fun certificationCountry(certificationCountry: CountryCode)
         fun certification(certification: String, upperBound: Boolean = false)
         fun includeAdult()
         fun includeVideo()
@@ -118,19 +120,15 @@ class DiscoverApi internal constructor(private val http: HttpExecutor) {
         fun releaseDate(range: ClosedRange<LocalDate>)
         fun voteCount(range: IntRange)
         fun voteAverage(range: ClosedRange<Double>)
-
         fun withCast(personId: Int)
         fun withCrew(personId: Int)
         fun withCompany(companyId: Int)
         fun withGenre(genreId: Int)
         fun withKeyword(keywordId: Int)
         fun withPerson(personId: Int)
-
         fun year(year: Int)
-
         fun withoutGenre(genreId: Int)
         fun withoutKeyword(keywordId: Int)
-
         fun runtime(range: IntRange)
         fun releaseType(releaseType: String)
         fun originalLanguage(language: LanguageCode)
@@ -143,7 +141,6 @@ class DiscoverApi internal constructor(private val http: HttpExecutor) {
             option: SortOption,
             direction: SortDirection = SortDirection.Ascending
         )
-
         fun airDate(range: ClosedRange<LocalDate>)
         fun firstAirDate(range: ClosedRange<LocalDate>)
         fun firstAirDateYear(year: Int)
@@ -152,15 +149,12 @@ class DiscoverApi internal constructor(private val http: HttpExecutor) {
         fun timezone(tz: TimeZone)
         fun voteCount(range: IntRange)
         fun voteAverage(range: ClosedRange<Double>)
-
         fun withCompany(companyId: Int)
         fun withGenre(genreId: Int)
         fun withKeyword(keywordId: Int)
         fun withNetwork(networkId: Int)
-
         fun withoutGenre(genreId: Int)
         fun withoutKeyword(keywordId: Int)
-
         fun runtime(range: IntRange)
         fun originalLanguage(language: LanguageCode)
         fun screenedTheatrically()
@@ -172,11 +166,27 @@ private class DiscoveryApiMovieQuery(
     private val target: TmdbRequestBuilder<PaginatedListResults<MovieListResult>>
 ) : DiscoverApi.MovieQuery {
     override fun language(language: LocaleCode) {
-        target.queryArg("language", language.toString(), replace = true)
+        target.queryArg("language", requireLocaleCode(language.value), replace = true)
     }
 
     override fun region(region: CountryCode) {
-        target.queryArg("region", region.alpha2, replace = true)
+        target.queryArg("region", requireCountryCode(region.value), replace = true)
+    }
+
+    override fun certificationCountry(certificationCountry: CountryCode) {
+        target.queryArg(
+            "certification_country",
+            requireCountryCode(certificationCountry.value),
+            replace = true
+        )
+    }
+
+    override fun originalLanguage(language: LanguageCode) {
+        target.queryArg(
+            "with_original_language",
+            requireLanguageCode(language.value),
+            replace = true
+        )
     }
 
     override fun sortBy(option: SortOption, direction: SortDirection) {
@@ -184,9 +194,6 @@ private class DiscoveryApiMovieQuery(
         target.queryArg("sort_by", "${option.value}.${direction.value}", replace = true)
     }
 
-    override fun certificationCountry(certificationCountry: String) {
-        target.queryArg("certification_country", certificationCountry, replace = true)
-    }
 
     override fun certification(certification: String, upperBound: Boolean) {
         target.queryArg(
@@ -305,9 +312,6 @@ private class DiscoveryApiMovieQuery(
         target.queryArg("with_release_type", releaseType, replace = true)
     }
 
-    override fun originalLanguage(language: LanguageCode) {
-        target.queryArg("with_original_language", language.toString(), replace = true)
-    }
 }
 
 @Suppress("TooManyFunctions")
@@ -315,7 +319,15 @@ private class DiscoveryApiTvQuery(
     private val target: TmdbRequestBuilder<PaginatedListResults<TvListResult>>
 ) : DiscoverApi.TvQuery {
     override fun language(language: LocaleCode) {
-        target.queryArg("language", language.toString(), replace = true)
+        target.queryArg("language", requireLocaleCode(language.value), replace = true)
+    }
+
+    override fun originalLanguage(language: LanguageCode) {
+        target.queryArg(
+            "with_original_language",
+            requireLanguageCode(language.value),
+            replace = true
+        )
     }
 
     override fun sortBy(option: SortOption, direction: SortDirection) {
@@ -412,9 +424,6 @@ private class DiscoveryApiTvQuery(
             target.queryArg("with_runtime.lte", range.last, replace = true)
     }
 
-    override fun originalLanguage(language: LanguageCode) {
-        target.queryArg("with_original_language", language.toString(), replace = true)
-    }
 
     override fun screenedTheatrically() {
         target.queryArg("screened_theatrically", true, replace = true)

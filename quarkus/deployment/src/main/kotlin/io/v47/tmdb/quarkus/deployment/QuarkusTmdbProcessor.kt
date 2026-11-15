@@ -46,6 +46,9 @@ import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem
 import io.quarkus.jackson.spi.ClassPathJacksonModuleBuildItem
 import io.v47.tmdb.http.api.RawErrorResponse
 import io.v47.tmdb.jackson.TmdbApiModule
+import io.v47.tmdb.model.CountryCode
+import io.v47.tmdb.model.LanguageCode
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.TmdbType
 import java.util.function.BooleanSupplier
 
@@ -88,6 +91,17 @@ internal class QuarkusTmdbProcessor {
                 .methods(true)
                 .build()
         )
+
+        listOf(LocaleCode::class.java, LanguageCode::class.java, CountryCode::class.java)
+            .forEach { codeClass ->
+                reflection.produce(
+                    ReflectiveClassBuildItem.builder(codeClass)
+                        .constructors(true)
+                        .methods(true)
+                        .fields(true)
+                        .build()
+                )
+            }
 
         index.index
             .getAllKnownSubclasses(TmdbType::class.java)

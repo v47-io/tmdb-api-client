@@ -36,15 +36,15 @@
 
 package io.v47.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
 import java.time.Instant
 
 data class Title(
     val title: String?,
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val type: String?
@@ -61,8 +61,10 @@ data class ImageListResult(
     val fileType: String?,
     val height: Int?,
     override val id: String?,
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val voteAverage: Double?,
@@ -73,8 +75,10 @@ data class ImageListResult(
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class VideoListResult(
     override val id: String?,
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val key: String?,
@@ -88,14 +92,28 @@ data class VideoListResult(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class TranslationListResult(
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val name: String?,
     val englishName: String?,
     val data: TranslationData?
 ) : TmdbType() {
+    @get:JsonIgnore
+    val locale: LocaleCode?
+        get() {
+            val language = language ?: return null
+            if (!language.isValid) return null
+
+            val country = country ?: return runCatching { language.toLocaleCode() }.getOrNull()
+            if (!country.isValid) return null
+
+            return runCatching { language.toLocaleCode(country) }.getOrNull()
+        }
+
     data class TranslationData(
         val name: String?,
         val title: String?,

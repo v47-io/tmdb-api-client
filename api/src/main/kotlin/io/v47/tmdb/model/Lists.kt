@@ -37,8 +37,6 @@ package io.v47.tmdb.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ListDetails(
@@ -48,8 +46,10 @@ data class ListDetails(
     override val id: String?,
     val items: List<MovieListResult> = emptyList(),
     val itemCount: Int?,
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
     val listType: String?,

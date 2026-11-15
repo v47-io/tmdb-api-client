@@ -38,9 +38,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -54,7 +51,6 @@ data class MovieDetails(
     override val id: Int?,
     val imdbId: String?,
     val originCountry: List<CountryCode>?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val originalTitle: String?,
     val overview: String?,
@@ -112,10 +108,12 @@ data class MovieChanges(
         override val id: String?,
         val action: String?,
         val time: String?,
+        @get:JsonProperty("iso_639_1")
         @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val value: Any?,
         val originalValue: Any?,
+        @get:JsonProperty("iso_3166_1")
         @param:JsonProperty("iso_3166_1")
         val country: CountryCode?
     ) : TmdbType(), TmdbStringId
@@ -155,6 +153,7 @@ data class MovieReleaseDates(
 ) : TmdbType(), TmdbIntId {
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class ReleaseDates(
+        @get:JsonProperty("iso_3166_1")
         @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val releaseDates: List<MovieReleaseInfo> = emptyList()
@@ -162,6 +161,7 @@ data class MovieReleaseDates(
         @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
         data class MovieReleaseInfo(
             val certification: String?,
+            @get:JsonProperty("iso_639_1")
             @param:JsonProperty("iso_639_1")
             val language: LanguageCode?,
             val note: String?,
@@ -209,7 +209,6 @@ data class MovieListResult(
     val genreIds: List<Int> = emptyList(),
     override val id: Int?,
     val originalTitle: String?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val title: String?,
     val backdropPath: String?,

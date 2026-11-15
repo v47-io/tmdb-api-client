@@ -38,9 +38,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -111,6 +108,7 @@ data class PersonTaggedImages(
         val aspectRatio: Double?,
         val filePath: String?,
         val height: Int?,
+        @get:JsonProperty("iso_639_1")
         @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
         val voteAverage: Double?,
@@ -128,8 +126,10 @@ data class PersonTranslations(
     val translations: List<PersonTranslation> = emptyList()
 ) : TmdbType(), TmdbIntId {
     data class PersonTranslation(
+        @get:JsonProperty("iso_639_1")
         @param:JsonProperty("iso_639_1")
         val language: LanguageCode?,
+        @get:JsonProperty("iso_3166_1")
         @param:JsonProperty("iso_3166_1")
         val country: CountryCode?,
         val name: String?,
@@ -155,8 +155,10 @@ data class PersonChanges(val changes: List<PersonChange> = emptyList()) : TmdbTy
             override val id: String?,
             val action: String?,
             val time: String?,
+            @get:JsonProperty("iso_639_1")
             @param:JsonProperty("iso_639_1")
             val language: LanguageCode?,
+            @get:JsonProperty("iso_3166_1")
             @param:JsonProperty("iso_3166_1")
             val country: CountryCode?,
             val value: Any?,
@@ -236,7 +238,6 @@ data class PersonListResult(
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CastMember(
     override val id: Int?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
     val overview: String?,
@@ -266,7 +267,6 @@ data class CastMember(
 data class CrewMember(
     override val id: Int?,
     val department: String?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val episodeCount: Int?,
     val job: String?,

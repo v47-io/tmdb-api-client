@@ -12,8 +12,6 @@ allOpen {
 dependencies {
     api(project(":core"))
 
-    api(libs.nvI18n)
-
     implementation(libs.jacksonDatabind)
     implementation(libs.mutiny)
     implementation(libs.slf4j)

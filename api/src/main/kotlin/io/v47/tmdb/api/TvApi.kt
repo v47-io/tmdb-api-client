@@ -34,7 +34,6 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.delete
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
@@ -43,6 +42,9 @@ import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.http.post
 import io.v47.tmdb.model.AppendRequest
+import io.v47.tmdb.model.LanguageCode
+import io.v47.tmdb.model.LocaleCode
+import io.v47.tmdb.utils.requireLanguageCode
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.Session
 import io.v47.tmdb.model.TvListResult
@@ -190,12 +192,16 @@ class TvApi internal constructor(private val http: HttpExecutor) {
      * @param language A language code
      * @param includeLanguage A list of language codes to filter the results
      */
-    fun images(tvId: Int, language: LocaleCode? = null, vararg includeLanguage: LocaleCode?) =
+    fun images(
+        tvId: Int,
+        language: LocaleCode? = null,
+        includeLanguage: List<LanguageCode?> = emptyList()
+    ) =
         http.getWithLanguage<TvShowImages>("/tv/{tvId}/images", language) {
             pathVar("tvId", tvId)
 
             includeLanguage.toSet().forEach { lang ->
-                queryArg("include_image_language", lang?.toString() ?: "null")
+                queryArg("include_image_language", lang?.let { requireLanguageCode(it.value) } ?: "null")
             }
         }
 

@@ -34,10 +34,10 @@
  */
 package io.v47.tmdb.quarkus.it
 
-import com.neovisionaries.i18n.LocaleCode
 import io.smallrye.mutiny.Uni
 import io.v47.tmdb.TmdbClient
 import io.v47.tmdb.api.MovieRequest
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.MovieDetails
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
@@ -56,7 +56,7 @@ class MovieInfoResource(private val tmdbClient: TmdbClient) {
                 tmdbClient.movie
                     .details(
                         id,
-                        LocaleCode.de_DE,
+                        LocaleCode.parse("de-DE"),
                         MovieRequest.Changes,
                         MovieRequest.Credits,
                         MovieRequest.Lists,

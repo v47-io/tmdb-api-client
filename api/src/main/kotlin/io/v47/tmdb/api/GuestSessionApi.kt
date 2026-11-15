@@ -34,11 +34,11 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.TmdbRequestBuilder
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.MovieListResult
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.Session
 import io.v47.tmdb.model.TvEpisodeListResult

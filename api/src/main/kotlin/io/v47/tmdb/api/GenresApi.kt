@@ -34,9 +34,9 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.GenreList
 
 class GenresApi internal constructor(private val http: HttpExecutor) {

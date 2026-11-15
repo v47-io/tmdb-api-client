@@ -40,7 +40,9 @@ import io.v47.tmdb.model.Configuration
 import io.v47.tmdb.model.Country
 import io.v47.tmdb.model.Jobs
 import io.v47.tmdb.model.Language
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.Timezones
+import java.util.concurrent.Flow
 
 class ConfigurationApi internal constructor(private val http: HttpExecutor) {
     /**
@@ -104,7 +106,8 @@ class ConfigurationApi internal constructor(private val http: HttpExecutor) {
      * translation project. You can view and contribute to that project
      * [here](https://www.localeapp.com/projects/8267)
      */
-    fun primaryTranslations() = http.get<List<String>>("/configuration/primary_translations")
+    fun primaryTranslations(): Flow.Publisher<List<LocaleCode>> =
+        http.get<List<LocaleCode>>("/configuration/primary_translations")
 
     /**
      * Get the list of timezones used throughout TMDb

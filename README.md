@@ -62,6 +62,56 @@ class MyClass {
 If you don't want to use the `standalone` module, just add the `api` module and the `http-client-*`
 module of your choice to your project.
 
+### Migrating locale and language codes
+
+Locale, language, and country values use distinct Kotlin inline types backed by strings:
+`LocaleCode`, `LanguageCode`, and `CountryCode`. Replace enum constants such as
+`LocaleCode.de_DE`, `LanguageCode.zh`, and `CountryCode.US` with validated factories:
+
+```kotlin
+val locale = LocaleCode.parse("de-DE")
+val language = LanguageCode.parse("zh")
+val country = CountryCode.parse("US")
+```
+
+The public constructors intentionally preserve raw response values and do not validate them;
+prefer `parse` or `parseOrNull` for caller input. Equality compares exact stored spelling, so
+normalization is explicit with `normalized()` and never changes request or response values
+implicitly. Malformed raw values remain lossless in models, while outgoing API calls reject them.
+
+`LocaleCode` exposes the base language, country, script, and region using `java.util.Locale`:
+
+```kotlin
+import java.util.Locale
+
+val tag = LocaleCode.parse("zh-Hant-TW")
+val baseLanguage = tag.language       // LanguageCode("zh")
+val country = tag.country             // CountryCode("TW")
+val script = tag.script               // "Hant"
+val region = tag.region               // "TW" (numeric regions are also retained)
+
+val composed = LanguageCode.parse("de").toLocaleCode(CountryCode.parse("DE"))
+val changedRegion = tag.withCountry(CountryCode.parse("CN"))
+val displayName = country?.displayName(Locale.FRENCH)
+val roundTrip = LocaleCode.fromLocale(Locale.CANADA_FRENCH)
+```
+
+Language and country codes validate syntax, not membership in a fixed ISO catalogue. A country
+never implies a language. Image filters accept language-only values and retain the special null
+fallback marker:
+
+```kotlin
+tmdbClient.movie.images(
+    movieId = 42,
+    includeLanguage = listOf(LanguageCode.parse("en"), null)
+)
+```
+
+The API remains Java-friendly where signatures do not contain these Kotlin inline types. Direct
+Java access to `LocaleCode`, `LanguageCode`, and `CountryCode` constructors, factories, model
+accessors, and endpoint filters is not guaranteed because JVM signatures may be name-mangled;
+use a Kotlin-facing adapter when exposing these operations to Java callers.
+
 ## Features
 
 This library provides access to the entire read-only API (v3) of TheMovieDb, authenticated
@@ -75,8 +125,10 @@ Adding support for more frameworks is fairly trivial, only a small adapter needs
 implemented for the actual HTTP client. To make development easier a TCK is provided to
 verify compatibility of the HTTP client adapter with the actual TMDb client.
 
-Even though this library is implemented using Kotlin it remains fully compatible with
-Java and exposes a Java-friendly reactive API.
+Even though this library is implemented using Kotlin it exposes a Java-friendly reactive API for
+methods without Kotlin inline-code parameters. The `LocaleCode`, `LanguageCode`, and `CountryCode`
+API is Kotlin-first; see [Migrating locale and language codes](#migrating-locale-and-language-codes)
+for the Java interoperability limitation.
 
 ## Documentation
 

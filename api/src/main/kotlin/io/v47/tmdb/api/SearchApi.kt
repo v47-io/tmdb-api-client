@@ -34,21 +34,11 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
-import io.v47.tmdb.model.CollectionInfo
-import io.v47.tmdb.model.CompanyInfo
-import io.v47.tmdb.model.Keyword
-import io.v47.tmdb.model.MovieListResult
-import io.v47.tmdb.model.MovieTvPersonListResult
-import io.v47.tmdb.model.Paginated
-import io.v47.tmdb.model.PaginatedListResults
-import io.v47.tmdb.model.PaginatedMovieTvPersonListResults
-import io.v47.tmdb.model.PersonListResult
-import io.v47.tmdb.model.TvListResult
+import io.v47.tmdb.model.*
+import io.v47.tmdb.utils.requireCountryCode
 import java.util.concurrent.Flow
 
 class SearchApi internal constructor(private val http: HttpExecutor) {
@@ -114,7 +104,7 @@ class SearchApi internal constructor(private val http: HttpExecutor) {
     ) {
         queryArg("query", query)
 
-        region?.let { queryArg("region", it.toString()) }
+        region?.let { queryArg("region", requireCountryCode(it.value)) }
         includeAdult?.let { queryArg("include_adult", it) }
         year?.let { queryArg("year", it) }
         primaryReleaseYear?.let { queryArg("primary_release_year", it) }
@@ -135,7 +125,7 @@ class SearchApi internal constructor(private val http: HttpExecutor) {
         ) {
             queryArg("query", query)
 
-            region?.let { queryArg("region", it.toString()) }
+            region?.let { queryArg("region", requireCountryCode(it.value)) }
             includeAdult?.let { queryArg("include_adult", it) }
         }
 
@@ -153,7 +143,7 @@ class SearchApi internal constructor(private val http: HttpExecutor) {
     ) {
         queryArg("query", query)
 
-        region?.let { queryArg("region", it.toString()) }
+        region?.let { queryArg("region", requireCountryCode(it.value)) }
         includeAdult?.let { queryArg("include_adult", it) }
     }
 

@@ -37,7 +37,6 @@ package io.v47.tmdb.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.LanguageCode
 import java.time.Instant
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -46,6 +45,7 @@ data class ReviewDetails(
     val author: String?,
     val authorDetails: ReviewAuthorDetails?,
     val content: String?,
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val mediaId: Int?,

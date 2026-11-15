@@ -42,8 +42,6 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
 
 internal class TmdbDeserializerModifier : BeanDeserializerModifier() {
     override fun modifyEnumDeserializer(
@@ -78,11 +76,8 @@ internal class TmdbDeserializerModifier : BeanDeserializerModifier() {
                 }
 
                 val uc = strVal.uppercase()
-                return enumConstants.find { it.name.uppercase() == uc } ?: when (rawClass) {
-                    CountryCode::class.java -> CountryCode.UNDEFINED
-                    LanguageCode::class.java -> LanguageCode.undefined
-                    else -> throw invalidFormatException(p, rawClass, strVal)
-                }
+                return enumConstants.find { it.name.uppercase() == uc }
+                    ?: throw invalidFormatException(p, rawClass, strVal)
             } else return enumConstants.find { it.ordinal == intVal }
                 ?: throw invalidFormatException(p, rawClass, strVal)
         }

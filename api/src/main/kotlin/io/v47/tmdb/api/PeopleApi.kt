@@ -34,13 +34,13 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.getWithPage
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.AppendRequest
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.PeoplePopular
 import io.v47.tmdb.model.PersonChanges
 import io.v47.tmdb.model.PersonCredits

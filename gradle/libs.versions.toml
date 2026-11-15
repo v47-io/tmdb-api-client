@@ -10,7 +10,6 @@ license = "0.16.1"
 logback = "1.6.6"
 mutiny = "3.3.0"
 ncmp-maven-publish = "0.37.0"
-nvi18n = "1.29"
 quarkus = "3.40.1.2"
 release = "3.2.0"
 slf4j = "2.0.18"
@@ -40,7 +39,6 @@ junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mutiny = { module = "io.smallrye.reactive:mutiny", version.ref = "mutiny" }
-nvI18n = { module = "com.neovisionaries:nv-i18n", version.ref = "nvi18n" }
 quarkus-bom = { module = "io.quarkus:quarkus-bom", version.ref = "quarkus" }
 quarkus-arc = { module = "io.quarkus:quarkus-arc" }
 quarkus-arc-deployment = { module = "io.quarkus:quarkus-arc-deployment" }

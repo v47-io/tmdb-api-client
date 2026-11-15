@@ -38,9 +38,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LanguageCode
-import io.v47.tmdb.jackson.deserialization.OriginalLanguageDeserializer
 import java.time.LocalDate
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
@@ -60,7 +57,6 @@ data class CollectionDetails(
         val backdropPath: String?,
         val genreIds: List<Int> = emptyList(),
         override val id: Int?,
-        @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
         val originalLanguage: LanguageCode?,
         val originalTitle: String?,
         val mediaType: MediaType?,
@@ -88,8 +84,10 @@ data class CollectionTranslations(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class CollectionTranslation(
+    @get:JsonProperty("iso_3166_1")
     @param:JsonProperty("iso_3166_1")
     val country: CountryCode?,
+    @get:JsonProperty("iso_639_1")
     @param:JsonProperty("iso_639_1")
     val language: LanguageCode?,
     val name: String?,
@@ -109,7 +107,6 @@ data class CollectionInfo(
     val name: String?,
     val originalName: String?,
     val overview: String?,
-    @param:JsonDeserialize(using = OriginalLanguageDeserializer::class)
     val originalLanguage: LanguageCode?,
     val posterPath: String?,
     val backdropPath: String?,

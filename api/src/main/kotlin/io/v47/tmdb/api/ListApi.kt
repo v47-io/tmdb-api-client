@@ -34,11 +34,11 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.ItemStatus
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.ListDetails
 
 class ListApi internal constructor(private val http: HttpExecutor) {

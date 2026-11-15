@@ -34,8 +34,7 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.CountryCode
-import com.neovisionaries.i18n.LocaleCode
+import io.v47.tmdb.model.CountryCode
 import io.v47.tmdb.http.delete
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithLanguage
@@ -56,11 +55,15 @@ import io.v47.tmdb.model.MovieReleaseDates
 import io.v47.tmdb.model.MovieReviews
 import io.v47.tmdb.model.MovieTranslations
 import io.v47.tmdb.model.MovieVideos
+import io.v47.tmdb.model.LanguageCode
+import io.v47.tmdb.model.LocaleCode
 import io.v47.tmdb.model.PaginatedListResults
 import io.v47.tmdb.model.PaginatedMovieListResultsWithDates
 import io.v47.tmdb.model.Session
 import io.v47.tmdb.utils.checkPage
 import io.v47.tmdb.utils.checkRating
+import io.v47.tmdb.utils.requireCountryCode
+import io.v47.tmdb.utils.requireLanguageCode
 import io.v47.tmdb.utils.dateFormat
 import io.v47.tmdb.utils.withSession
 import java.time.LocalDate
@@ -95,7 +98,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
         http.get<MovieAlternativeTitles>("/movie/{movieId}/alternative_titles") {
             pathVar("movieId", movieId)
 
-            country?.let { queryArg("country", country.toString()) }
+            country?.let { queryArg("country", requireCountryCode(country.value)) }
         }
 
 
@@ -165,12 +168,16 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
      * @param language A language code
      * @param includeLanguage A list of language codes to filter the results
      */
-    fun images(movieId: Int, language: LocaleCode? = null, vararg includeLanguage: LocaleCode?) =
+    fun images(
+        movieId: Int,
+        language: LocaleCode? = null,
+        includeLanguage: List<LanguageCode?> = emptyList()
+    ) =
         http.getWithLanguage<MovieImages>("/movie/{movieId}/images", language) {
             pathVar("movieId", movieId)
 
             includeLanguage.toSet().forEach { lang ->
-                queryArg("include_image_language", lang?.toString() ?: "null")
+                queryArg("include_image_language", lang?.let { requireLanguageCode(it.value) } ?: "null")
             }
         }
 
@@ -387,7 +394,7 @@ class MoviesApi internal constructor(private val http: HttpExecutor) {
         region: CountryCode? = null
     ) =
         http.getWithPageAndLanguage<PaginatedMovieListResultsWithDates>(path, page, language) {
-            region?.let { queryArg("region", it.toString()) }
+            region?.let { queryArg("region", requireCountryCode(it.value)) }
         }
 
 }

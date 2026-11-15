@@ -34,12 +34,12 @@
  */
 package io.v47.tmdb.api
 
-import com.neovisionaries.i18n.LocaleCode
 import io.v47.tmdb.http.get
 import io.v47.tmdb.http.getWithPageAndLanguage
 import io.v47.tmdb.http.impl.HttpExecutor
 import io.v47.tmdb.model.Keyword
 import io.v47.tmdb.model.KeywordMovies
+import io.v47.tmdb.model.LocaleCode
 
 class KeywordApi internal constructor(private val http: HttpExecutor) {
     fun details(keywordId: Int) =
